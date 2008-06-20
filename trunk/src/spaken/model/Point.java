@@ -1,7 +1,7 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-public class Point {
+public class Point extends Element {
 
 	private double x;
 	private double y;
