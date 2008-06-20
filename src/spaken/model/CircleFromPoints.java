@@ -1,13 +1,16 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-public class Circle extends Element {
+/**
+ * @author Martijn van Steenbergen
+ */
+public class CircleFromPoints extends Construction {
 
 	private Point distFrom;
 	private Point distTo;
 	private Point center;
 
-	public Circle(Point distFrom, Point distTo, Point center) {
+	public CircleFromPoints(Point distFrom, Point distTo, Point center) {
 		this.distFrom = distFrom;
 		this.distTo = distTo;
 		this.center = center;
@@ -23,6 +26,12 @@ public class Circle extends Element {
 
 	public Point getCenter() {
 		return center;
+	}
+
+	@Override
+	public void execute(Space space) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
