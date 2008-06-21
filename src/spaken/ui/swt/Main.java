@@ -11,7 +11,10 @@ public class Main {
 
     final Shell shell = new Shell(display);
     shell.setLayout(new FillLayout());
-    Composite composite = new Composite(shell, SWT.EMBEDDED);
+    //Composite inhoud = new Composite(shell, 0);
+    
+    createToolbox(shell);
+    SpakenCanvas canvas = new SpakenCanvas(shell);
     
     shell.open();
     while(!shell.isDisposed()) {
@@ -19,6 +22,17 @@ public class Main {
     }
 
     display.dispose ();
+  }
+  
+  
+  public static void createToolbox(Composite composite) {
+    ToolBar tools = new ToolBar(composite, SWT.VERTICAL);
+    
+    ToolItem item = new ToolItem(tools, SWT.RADIO);
+    item.setText("Passer");
+    
+    item = new ToolItem(tools, SWT.RADIO);
+    item.setText("Potlood");
   }
 
 } 
