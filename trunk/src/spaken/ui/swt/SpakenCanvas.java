@@ -10,18 +10,6 @@ public class SpakenCanvas extends Canvas {
   public SpakenCanvas(Composite parent) {
     super(parent, 0);
     addPaintListener(new PaintMe());
-    
-    //Space example = new Space();
-    //FixedPoint p1 = new FixedPoint(0,0);
-    //FixedPoint p2 = new FixedPoint(1,0);
-    //FixedPoint p3 = new FixedPoint(0,1);
-    //FixedPoint p4 = new FixedPoint(1,1);
-    //Line l1 = new Line(p1,p3);
-    //Line l2 = new Line(p2,p4);
-    //IntersectionPoint i = new IntersectionPoint(l1,l2);
-    //Circle c = new Circle(i, i, p1);
-    //IntersectionPoint[] js = IntersectionPoint.intersect(c, l1);  //always returns two elements
-    //example.addRecursively(c);
   }
   
   private class PaintMe implements PaintListener {
