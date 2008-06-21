@@ -57,7 +57,7 @@ desc 'Run SWT frontend'
 task :run => :compile
 
 task :run do
-  system? "#{JAVA} spaken.ui.swt.Main"
+  system "#{JAVA} spaken.ui.swt.Main"
 end
 
 
