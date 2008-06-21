@@ -12,7 +12,7 @@ def plak(links, rest)
 end
 
 # Cross-platform libraries
-LIBS = FileList[File.join('lib', 'java', '*')]
+LIBS = FileList[File.join('lib', 'java', RUBY_PLATFORM, '*')]
 
 # Native libraries
 #TODO: op een nuttiger manier platform-specifiek maken:
