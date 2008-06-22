@@ -2,10 +2,11 @@
 package spaken.model;
 
 /**
- * @author Martijn van Steenbergen
+ * Mogelijk een manier om 'acties' te modelleren die resulteren in punten,
+ * lijnen en dergelijke; vooralsnog niet heel hard nodig.
  */
-public abstract class Construction {
+public interface Construction {
 	
-	public abstract void execute(Space space);
+	public void execute(Space space);
 
 }
