@@ -1,10 +1,7 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-/**
- * @author Martijn van Steenbergen
- */
-public class FixedPoint extends Construction {
+public class FixedPoint implements Point {
 
 	private double x;
 	private double y;
@@ -28,11 +25,6 @@ public class FixedPoint extends Construction {
 
 	public void setY(double y) {
 		this.y = y;
-	}
-
-	public void execute(Space space) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

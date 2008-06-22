@@ -1,7 +1,7 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-public class Circle extends Element {
+public class Circle implements Element {
 
 	private Point distFrom;
 	private Point distTo;
