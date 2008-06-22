@@ -25,8 +25,11 @@ JAVA = "java -ea -cp #{CP.join ':'} #{plak '-Djava.library.path=', NATIVE_LIBS}"
 # Constueer javac-invocatie
 JAVAC = "javac -target 1.5 #{plak '-classpath ', LIBS} -sourcepath src -d target"
 
+# Laat deze info zien
+puts "JAVA=#{JAVA}"
+puts "JAVAC=#{JAVAC}"
+puts
 
-task :default => :compile
 
 
 ### Helper stuff
@@ -39,6 +42,10 @@ end
 
 
 ### Tasks
+
+# Default task
+task :default => :compile
+
 
 task :init do
   mkdir 'target' unless File.exists? 'target'
