@@ -4,44 +4,25 @@ public class Intersections {
   
   public static Point intersect(final Line l1, final Line l2) {
     return new Point() {
-      public double getCoor(boolean giveX) {
-        Point p1 = l1.getP1();
-        Point p2 = l1.getP2();
-        Point p3 = l2.getP1();
-        Point p4 = l2.getP2();
-        
-        double p1x = p1.getX();
-        double p2x = p2.getX();
-        double p3x = p3.getX();
-        double p4x = p4.getX();
-        double p1y = p1.getY();
-        double p2y = p2.getY();
-        double p3y = p3.getY();
-        double p4y = p4.getY();
+      public Pos getPos() {
+        Pos p1 = l1.getP1().getPos();
+        Pos p2 = l1.getP2().getPos();
+        Pos p3 = l2.getP1().getPos();
+        Pos p4 = l2.getP2().getPos();
         
         // formule van http://en.wikipedia.org/wiki/Line-line_intersection
+        // TODO        ^ even permalink van opzoeken
         
-        double a, b;
+        double u = p1.x * p2.y - p1.y * p2.x;
+        double v = p3.x * p4.y - p3.y * p4.x;
+        double w = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
         
-        if (giveX) {
-          a = p3x - p4x;
-          b = p1x - p2x;
-        } else {
-          a = p3y - p4y;
-          b = p1y - p2y;
-        }
+        double ax = p3.x - p4.x;
+        double bx = p1.x - p2.x;
+        double ay = p3.y - p4.y;
+        double by = p1.y - p2.y;
         
-        return ((p1x*p2y - p1y*p2x) * a - b * (p3x*p4y - p3y*p4x))
-             / ((p1x - p2x) * (p3y - p4y) - (p1y - p2y) * (p3x - p4x));
-      }
-      
-    
-      public double getX() {
-        return getCoor(true);
-      }
-      
-      public double getY() {
-        return getCoor(false);
+        return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
       }
     };
   }

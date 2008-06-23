@@ -2,9 +2,10 @@
 package spaken.model;
 
 public interface Point extends Element {
-
-	public double getX();
-
-	public double getY();
+  
+  /**
+   * @return The position of this <tt>Point</tt>.
+   */
+  public Pos getPos();
 	
 }

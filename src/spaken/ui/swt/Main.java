@@ -49,7 +49,7 @@ public class Main {
     Line l1 = new Line(p1,p2);
     Line l2 = new Line(p3,p4);
     
-    Point i = Intersections.intersect(l1, l2);
+    Pos i = Intersections.intersect(l1, l2).getPos();
     System.out.println("x=" + i.getX() + ", y=" + i.getY());
   }
 
