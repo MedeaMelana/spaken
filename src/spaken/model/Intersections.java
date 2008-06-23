@@ -10,8 +10,7 @@ public class Intersections {
         Pos p3 = l2.getP1().getPos();
         Pos p4 = l2.getP2().getPos();
         
-        // formule van http://en.wikipedia.org/wiki/Line-line_intersection
-        // TODO        ^ even permalink van opzoeken
+        // formule van http://en.wikipedia.org/w/index.php?title=Line-line_intersection&oldid=210305729
         
         double w = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
         
