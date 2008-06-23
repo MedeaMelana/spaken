@@ -6,6 +6,6 @@ public interface Point extends Element {
   /**
    * @return The position of this <tt>Point</tt>.
    */
-  public Pos getPos();
+  public Pos getPos() throws ImaginaryPointException;
 	
 }

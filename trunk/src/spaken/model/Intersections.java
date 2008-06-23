@@ -4,7 +4,7 @@ public class Intersections {
   
   public static Point intersect(final Line l1, final Line l2) {
     return new Point() {
-      public Pos getPos() {
+      public Pos getPos() throws ImaginaryPointException {
         Pos p1 = l1.getP1().getPos();
         Pos p2 = l1.getP2().getPos();
         Pos p3 = l2.getP1().getPos();
@@ -13,9 +13,14 @@ public class Intersections {
         // formule van http://en.wikipedia.org/wiki/Line-line_intersection
         // TODO        ^ even permalink van opzoeken
         
+        double w = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
+        
+        if (w == 0) {
+          throw new ImaginaryPointException();
+        }
+        
         double u = p1.x * p2.y - p1.y * p2.x;
         double v = p3.x * p4.y - p3.y * p4.x;
-        double w = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x);
         
         double ax = p3.x - p4.x;
         double bx = p1.x - p2.x;
