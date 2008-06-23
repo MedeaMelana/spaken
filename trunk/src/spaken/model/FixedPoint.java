@@ -10,6 +10,10 @@ public class FixedPoint implements Point {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public Pos getPos() {
+	  return new Pos(getX(), getY());
+	}
 
 	public double getX() {
 		return x;
