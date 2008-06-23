@@ -3,14 +3,18 @@ package spaken.model;
 
 public class Circle implements Element {
 
+	private Point center;
 	private Point distFrom;
 	private Point distTo;
-	private Point center;
 
-	public Circle(Point distFrom, Point distTo, Point center) {
+	public Circle(Point center, Point distFrom, Point distTo) {
+		this.center = center;
 		this.distFrom = distFrom;
 		this.distTo = distTo;
-		this.center = center;
+	}
+
+	public Point getCenter() {
+		return center;
 	}
 
 	public Point getDistFrom() {
@@ -19,10 +23,6 @@ public class Circle implements Element {
 
 	public Point getDistTo() {
 		return distTo;
-	}
-
-	public Point getCenter() {
-		return center;
 	}
 
 }

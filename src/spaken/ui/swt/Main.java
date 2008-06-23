@@ -50,8 +50,18 @@ public class Main {
     Line l2 = new Line(p3,p4);
     
     try {
-      Pos i = Intersections.intersect(l1, l2).getPos();
-      System.out.println("x=" + i.getX() + ", y=" + i.getY());
+      Point i = Intersections.intersect(l1, l2);
+      System.out.print("l1 and l2:     ");
+      System.out.println(i.getPos());
+      
+      Point i2 = new FixedPoint(1.2,2.2);
+      
+      Circle c = new Circle(i, i2, p3);
+      Point[] is = Intersections.intersect(c, l1);
+      System.out.print("circle and l1: ");
+      System.out.println(is[0].getPos());
+      System.out.print("               ");
+      System.out.println(is[1].getPos());
     } catch (ImaginaryPointException e) {
       System.out.println("<imaginary>");
     }
