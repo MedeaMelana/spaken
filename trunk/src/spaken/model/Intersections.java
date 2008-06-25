@@ -58,7 +58,7 @@ public class Intersections {
     
     public Pos getPos() throws ImaginaryPointException {
       Pos p1 = l.getP1().getPos();
-      Pos p2 = l.getP1().getPos();
+      Pos p2 = l.getP2().getPos();
       Pos cc = c.getCenter().getPos();
       Pos cf = c.getDistFrom().getPos();
       Pos ct = c.getDistTo().getPos();
@@ -66,6 +66,8 @@ public class Intersections {
       // transform line relative to center of circle
       p1 = p1.subtract(cc);
       p2 = p2.subtract(cc);
+      
+      // formule van http://mathworld.wolfram.com/Circle-LineIntersection.html
       
       double r = cf.distance(ct);
       
