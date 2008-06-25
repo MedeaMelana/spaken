@@ -76,23 +76,37 @@ public class Intersections {
       double dm = p1.x * p2.y - p2.x * p1.y;
       
       double c = dr*dr;
+      double disc = r*r * dr*dr - dm*dm;  //discriminant
       
-      if (c == 0) {
+      if (disc < 0 || c == 0) {
         // eigenlijk een ongeldige lijn, ofzo, maar goed, dat levert ook geen punt op
         throw new ImaginaryPointException();
       }
       
+      double discR = Math.sqrt(disc);
+      
       double a = dm * d.y;
-      double b = Math.signum(d.y) * d.x * Math.sqrt(r*r * dr*dr - dm*dm);
+      double b = sgn(d.y) * d.x * discR;
       
       double x = (a + mul * b) / c;
       
       a = -dm * d.x;
-      b = Math.abs(d.y) * Math.sqrt(r*r * dr*dr - dm*dm);
+      b = Math.abs(d.y) * discR;
       
       double y = (a + mul * b) / c;
       
       return new Pos(x, y).add(cc);
+    }
+  }
+  
+  public static double sgn(double v) {
+    // Math.signum, met één uitzondering:
+    //   signum(0) == 0
+    //      sgn(0) == -1
+    if (v < 0) {
+      return -1;
+    } else {
+      return 1;
     }
   }
   
