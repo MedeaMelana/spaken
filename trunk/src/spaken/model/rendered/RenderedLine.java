@@ -3,7 +3,7 @@ package spaken.model.rendered;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
-import spaken.model.Pos;
+import spaken.model.*;
 
 public class RenderedLine implements Rendered {
   
@@ -19,7 +19,11 @@ public class RenderedLine implements Rendered {
 
 	public void draw(Graphics2D g, double pixelSize) {
 	  Pos d = p2.subtract(p1);
-	  d = d.normalise().scale(VERY_LARGE_NUMBER);
+	  try {
+	    d = d.normalise().scale(VERY_LARGE_NUMBER);
+	  } catch (NullVectorException e) {
+	    d = Pos.ZERO;
+	  }
 	  Pos p1ext = p1.add(d);
 	  Pos p2ext = p2.subtract(d);
 	  
