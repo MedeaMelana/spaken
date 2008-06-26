@@ -8,7 +8,7 @@ public interface Tool {
 
 	public void install(SpaceCanvas spaceCanvas);
 
-	public void drawState(Graphics2D g);
+	public void drawState(Graphics2D g, double pixelSize);
 
 	public String getName();
 

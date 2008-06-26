@@ -19,10 +19,15 @@ public class RenderedPoint implements Rendered {
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		double s = pixelSize * 5;
-		Rectangle2D rect = new Rectangle2D.Double(pos.x - pixelSize * 1.5,
-				pos.y - pixelSize * 1.5, s, s);
-		g.setColor(derived ? Color.WHITE : FIXED_COLOR);
+		renderPoint(g, pixelSize, pos, derived ? Color.WHITE : FIXED_COLOR);
+	}
+
+	public static void renderPoint(Graphics2D g, double pixelSize, Pos pos,
+			Color fill) {
+		double s = pixelSize * 2.5;
+		Rectangle2D rect = new Rectangle2D.Double(pos.x - s, pos.y - s, 2 * s,
+				2 * s);
+		g.setColor(fill);
 		g.fill(rect);
 		g.setColor(Color.BLACK);
 		g.draw(rect);

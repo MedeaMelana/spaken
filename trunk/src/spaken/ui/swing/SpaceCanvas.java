@@ -44,6 +44,10 @@ public class SpaceCanvas extends JPanel {
 		for (Rendered r : space.render()) {
 			r.draw(g, 1);
 		}
+		
+		if (currentTool != null) {
+			currentTool.drawState(g, 1);
+		}
 	}
 
 	public Space getSpace() {
@@ -64,6 +68,7 @@ public class SpaceCanvas extends JPanel {
 		if (currentTool != null) {
 			currentTool.install(this);
 		}
+		refresh();
 	}
 
 	private void discardTool() {
