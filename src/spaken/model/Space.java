@@ -68,28 +68,27 @@ public class Space {
 	public Iterable<Point> getPoints() {
 		return new FilteredIterable<Element,Point>(getElements(), new ClassFilter<Point>(Point.class));
 	}
-
+	
 	public Point getPointAt(Pos pos, double distance) {
-		double d2 = distance * distance;
-		for (Point p : getPoints()) {
+		return getPointAt(pos, distance, getPoints());
+	}
+
+	public FixedPoint getFixedPointAt(Pos pos, double distance) {
+		return getPointAt(pos, distance, getFixedPoints());
+	}
+
+	private <P extends Point> P getPointAt(Pos pos, double distance, Iterable<P> points) {
+		double minD = distance * distance;
+		P minP = null;
+		for (P p : points) {
 			try {
-				if (p.getPos().distanceSquared(pos) < d2) {
-					return p;
+				if (p.getPos().distanceSquared(pos) < minD) {
+					minP = p;
 				}
 			} catch (ImaginaryPointException e) {
 			}
 		}
-		return null;
-	}
-
-	public FixedPoint getFixedPointAt(Pos pos, double distance) {
-		double d2 = distance * distance;
-		for (FixedPoint p : getFixedPoints()) {
-			if (p.getPos().distanceSquared(pos) < d2) {
-				return p;
-			}
-		}
-		return null;
+		return minP;
 	}
 
 	public Iterable<Rendered> render() {
