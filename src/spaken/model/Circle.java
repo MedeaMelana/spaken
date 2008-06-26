@@ -1,6 +1,9 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import spaken.model.rendered.Rendered;
+import spaken.model.rendered.RenderedCircle;
+
 public class Circle implements Element {
 
 	private Point center;
@@ -23,6 +26,11 @@ public class Circle implements Element {
 
 	public Point getDistTo() {
 		return distTo;
+	}
+
+	public Rendered render() throws ImaginaryPointException {
+		return new RenderedCircle(center.getPos(), distTo.getPos().distance(
+				distFrom.getPos()));
 	}
 
 }

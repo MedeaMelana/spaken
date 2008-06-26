@@ -1,6 +1,9 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import spaken.model.rendered.Rendered;
+import spaken.model.rendered.RenderedLine;
+
 public class Line implements Element {
 
 	private Point p1;
@@ -17,6 +20,10 @@ public class Line implements Element {
 
 	public Point getP2() {
 		return p2;
+	}
+
+	public Rendered render() throws ImaginaryPointException {
+		return new RenderedLine(p1.getPos(), p2.getPos());
 	}
 
 }
