@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 import spaken.model.*;
-import spaken.ui.swing.Colors;
+import spaken.ui.swing.DrawingConstants;
 
 public class RenderedLine implements Rendered {
   
@@ -28,7 +28,7 @@ public class RenderedLine implements Rendered {
 	  Pos p1ext = p1.add(d);
 	  Pos p2ext = p2.subtract(d);
 	  
-	  g.setColor(Colors.FOREGROUND);
+	  g.setColor(DrawingConstants.FOREGROUND);
 	  g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
 	}
 
