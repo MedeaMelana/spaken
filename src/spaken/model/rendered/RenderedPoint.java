@@ -10,23 +10,36 @@ import spaken.ui.swing.DrawingConstants;
 public class RenderedPoint implements Rendered {
 
 	private Pos pos;
+
 	private boolean derived;
 
-	public RenderedPoint(Pos pos, boolean derived) {
+	private Color color;
+
+	public RenderedPoint(Pos pos, boolean derived, Color color) {
 		this.pos = pos;
 		this.derived = derived;
+		this.color = color;
+	}
+
+	public RenderedPoint(Pos pos, boolean derived) {
+		this(pos, derived, null);
+	}
+
+	private Color getColor() {
+		if (color != null) {
+			return color;
+		} else if (derived) {
+			return DrawingConstants.BACKGROUND;
+		} else {
+			return DrawingConstants.CONTROLLABLE;
+		}
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		renderPoint(g, pixelSize, pos, derived ? DrawingConstants.BACKGROUND : DrawingConstants.CONTROLLABLE);
-	}
-
-	public static void renderPoint(Graphics2D g, double pixelSize, Pos pos,
-			Color fill) {
 		double s = DrawingConstants.POINT_SIZE / 2;
 		Rectangle2D rect = new Rectangle2D.Double(pos.x - s, pos.y - s, 2 * s,
 				2 * s);
-		g.setColor(fill);
+		g.setColor(getColor());
 		g.fill(rect);
 		g.setColor(DrawingConstants.FOREGROUND);
 		g.draw(rect);
