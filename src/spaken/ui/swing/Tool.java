@@ -10,4 +10,6 @@ public interface Tool {
 
 	public void drawState(Graphics2D g);
 
+	public String getName();
+
 }
