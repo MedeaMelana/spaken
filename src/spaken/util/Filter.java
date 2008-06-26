@@ -1,7 +1,8 @@
 package spaken.util;
 
-public interface Filter<T> {
+public interface Filter<A,B> {
 
-	public boolean accepts(T t);
+	public boolean accepts(A a);
+	public B map(A a);
 
 }

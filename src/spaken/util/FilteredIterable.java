@@ -2,26 +2,26 @@ package spaken.util;
 
 import java.util.Iterator;
 
-public class FilteredIterable<T> implements Iterable<T> {
+public class FilteredIterable<T,B> implements Iterable<B> {
 
 	private Iterable<? extends T> value;
-	private Filter<? super T> filter;
+	private Filter<? super T,B> filter;
 
 	public FilteredIterable(Iterable<? extends T> value,
-			Filter<? super T> filter) {
+			Filter<? super T,B> filter) {
 		this.value = value;
 		this.filter = filter;
 	}
 
-	public Iterator<T> iterator() {
+	public Iterator<B> iterator() {
 		return new FilteredIterator(value.iterator());
 	}
 
-	class FilteredIterator implements Iterator<T> {
+	class FilteredIterator implements Iterator<B> {
 
 		private Iterator<? extends T> iterator;
 
-		private T next;
+		private B next;
 
 		public FilteredIterator(Iterator<? extends T> iterator) {
 			this.iterator = iterator;
@@ -32,16 +32,17 @@ public class FilteredIterable<T> implements Iterable<T> {
 			return next != null;
 		}
 
-		public T next() {
-			T t = next;
+		public B next() {
+			B b = next;
 			fetchNext();
-			return t;
+			return b;
 		}
 
 		private void fetchNext() {
 			while (iterator.hasNext()) {
-				next = iterator.next();
-				if (filter.accepts(next)) {
+				T nxt = iterator.next();
+				if (filter.accepts(nxt)) {
+				  next = filter.map(nxt);
 					return;
 				}
 			}
