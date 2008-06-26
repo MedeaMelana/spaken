@@ -32,6 +32,7 @@ public class Intersections {
   }
   
   public static Point[] intersect(Circle c1, Circle c2) {
+    // http://mathworld.wolfram.com/Circle-CircleIntersection.html
     return new Point[2];
   }
 	

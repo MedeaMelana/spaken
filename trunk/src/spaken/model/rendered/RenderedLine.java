@@ -6,7 +6,9 @@ import java.awt.geom.Line2D;
 import spaken.model.Pos;
 
 public class RenderedLine implements Rendered {
-
+  
+  private static final double VERY_LARGE_NUMBER = Math.pow(10,6);
+  
 	private Pos p1;
 	private Pos p2;
 
@@ -16,7 +18,12 @@ public class RenderedLine implements Rendered {
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		g.draw(new Line2D.Double(p1.x, p1.y, p2.x, p2.y));
+	  Pos d = p2.subtract(p1);
+	  d = d.normalise().scale(VERY_LARGE_NUMBER);
+	  Pos p1ext = p1.add(d);
+	  Pos p2ext = p2.subtract(d);
+	  
+		g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
 	}
 
 }
