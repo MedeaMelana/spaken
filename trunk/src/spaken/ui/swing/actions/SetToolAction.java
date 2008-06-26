@@ -19,6 +19,11 @@ public class SetToolAction extends AbstractAction {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		Tool current = canvas.getTool();
+		
+		if (tool == current) {
+			tool.resetState();
+		}
 		canvas.setTool(tool);
 	}
 

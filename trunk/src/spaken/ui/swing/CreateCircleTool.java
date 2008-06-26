@@ -68,4 +68,12 @@ public class CreateCircleTool extends AbstractTool {
 		mouse = null;
 	}
 
+	@Override
+	public void resetState() {
+		super.resetState();
+		mouse = null;
+		distFrom = null;
+		distTo = null;
+	}
+
 }
