@@ -3,7 +3,7 @@ package spaken.model;
 public class Intersections {
   
   public static Point intersect(final Line l1, final Line l2) {
-    return new AbstractPoint() {
+    return new DerivedPoint() {
       public Pos getPos() throws ImaginaryPointException {
         Pos p1 = l1.getP1().getPos();
         Pos p2 = l1.getP2().getPos();
@@ -43,7 +43,7 @@ public class Intersections {
     return intersect(l, c);
   }
   
-  private static class LCIPoint extends AbstractPoint {
+  private static class LCIPoint extends DerivedPoint {
     private final Line l;
     private final Circle c;
     private final double mul;
