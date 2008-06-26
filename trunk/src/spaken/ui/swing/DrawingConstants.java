@@ -11,5 +11,5 @@ public class DrawingConstants {
 	public static final Color CONTROLLABLE = new Color(0x7f7fff);
 
 	public static final double POINT_SIZE = 5;
-	public static final double POINT_SELECT_SIZE = 25;
+	public static final double POINT_SELECT_SIZE = 10;
 }
