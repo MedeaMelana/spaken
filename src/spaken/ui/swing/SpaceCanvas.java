@@ -1,6 +1,7 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -23,6 +24,9 @@ public class SpaceCanvas extends JPanel {
 
 	public SpaceCanvas(Space space) {
 		this.space = space;
+		
+		setOpaque(true);
+		setBackground(Color.WHITE);
 	}
 
 	@Override
