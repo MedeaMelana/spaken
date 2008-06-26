@@ -28,7 +28,7 @@ public class SpaceCanvas extends JPanel {
 		this.space = space;
 
 		setOpaque(true);
-		setBackground(Color.WHITE);
+		setBackground(DrawingConstants.BACKGROUND);
 		
 		setTool(new PointMoveTool());
 	}

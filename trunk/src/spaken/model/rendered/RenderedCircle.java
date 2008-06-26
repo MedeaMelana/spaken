@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import spaken.model.Pos;
+import spaken.ui.swing.DrawingConstants;
 
 public class RenderedCircle implements Rendered {
 
@@ -13,7 +14,7 @@ public class RenderedCircle implements Rendered {
 	private Color color;
 
 	public RenderedCircle(Pos center, double radius) {
-		this(center, radius, Color.BLACK);
+		this(center, radius, DrawingConstants.FOREGROUND);
 	}
 
 	public RenderedCircle(Pos center, double radius, Color color) {
