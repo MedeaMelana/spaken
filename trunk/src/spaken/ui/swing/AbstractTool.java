@@ -65,8 +65,7 @@ public abstract class AbstractTool implements Tool, MouseListener,
 			return;
 		}
 		try {
-			RenderedPoint.renderPoint(g, pixelSize, p.getPos(),
-					DrawingConstants.HIGHLIGHT);
+			new RenderedPoint(p.getPos(), true, DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
 		} catch (ImaginaryPointException e) {
 			// Blah.
 		}
