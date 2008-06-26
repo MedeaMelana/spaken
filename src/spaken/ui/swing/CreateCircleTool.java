@@ -55,10 +55,10 @@ public class CreateCircleTool extends AbstractTool {
 		try {
 			if (distTo != null) {
 				new RenderedCircle(mouse, distTo.getPos().distance(
-						distFrom.getPos()), Color.GRAY).draw(g, pixelSize);
+						distFrom.getPos()), DrawingConstants.OUTLINE).draw(g, pixelSize);
 			} else if (distFrom != null) {
 				new RenderedCircle(mouse, distFrom.getPos().distance(mouse),
-						Color.GRAY).draw(g, pixelSize);
+						DrawingConstants.OUTLINE).draw(g, pixelSize);
 			}
 		} catch (ImaginaryPointException e) {
 		}
@@ -69,8 +69,7 @@ public class CreateCircleTool extends AbstractTool {
 			return;
 		}
 		try {
-			RenderedPoint.renderPoint(g, pixelSize, p.getPos(), new Color(
-					0xff7f7f));
+			RenderedPoint.renderPoint(g, pixelSize, p.getPos(), DrawingConstants.HIGHLIGHT);
 		} catch (ImaginaryPointException e) {
 			// Blah.
 		}
