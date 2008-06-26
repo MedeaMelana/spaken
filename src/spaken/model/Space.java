@@ -77,9 +77,7 @@ public class Space {
 		for (Element e : elements) {
 			try {
 				rs.add(e.render());
-			} catch (ImaginaryPointException e1) {
-				System.out.println(e1);
-			}
+			} catch (ImaginaryPointException e1) {}
 		}
 
 		Collections.sort(rs, new Comparator<Rendered>() {
