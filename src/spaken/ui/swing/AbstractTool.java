@@ -5,10 +5,15 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import spaken.model.ImaginaryPointException;
+import spaken.model.Point;
+import spaken.model.rendered.RenderedPoint;
+
 public abstract class AbstractTool implements Tool, MouseListener,
 		MouseMotionListener {
 
 	protected SpaceCanvas canvas;
+
 	private String name;
 
 	protected AbstractTool(String name) {
@@ -53,6 +58,18 @@ public abstract class AbstractTool implements Tool, MouseListener,
 	}
 
 	public void drawState(Graphics2D g, double pixelSize) {
+	}
+
+	protected void highlightPoint(Graphics2D g, double pixelSize, Point p) {
+		if (p == null) {
+			return;
+		}
+		try {
+			RenderedPoint.renderPoint(g, pixelSize, p.getPos(),
+					DrawingConstants.HIGHLIGHT);
+		} catch (ImaginaryPointException e) {
+			// Blah.
+		}
 	}
 
 }

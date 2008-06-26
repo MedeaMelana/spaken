@@ -4,16 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
 import spaken.model.*;
-import spaken.model.rendered.RenderedCircle;
+import spaken.model.rendered.*;
 
-public class CreateCircleTool extends AbstractTool {
+public class CreateLineTool extends AbstractTool {
 
-	private Point distFrom, distTo;
+	private Point p1;
 
 	private Pos mouse;
 
-	protected CreateCircleTool() {
-		super("Create Circle");
+	protected CreateLineTool() {
+		super("Create Line");
 	}
 
 	@Override
@@ -24,14 +24,11 @@ public class CreateCircleTool extends AbstractTool {
 		if (p == null) {
 			return;
 		}
-		if (distFrom == null) {
-			distFrom = p;
-		} else if (distTo == null) {
-			distTo = p;
+		if (p1 == null) {
+			p1 = p;
 		} else {
-			canvas.getSpace().add(new Circle(p, distFrom, distTo));
-			distFrom = null;
-			distTo = null;
+			canvas.getSpace().add(new Line(p1, p));
+			p1 = null;
 		}
 		canvas.refresh();
 	}
@@ -44,19 +41,14 @@ public class CreateCircleTool extends AbstractTool {
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
-		highlightPoint(g, pixelSize, distFrom);
-		highlightPoint(g, pixelSize, distTo);
+		highlightPoint(g, pixelSize, p1);
 		if (mouse == null) {
 			return;
 		}
 		try {
-			if (distTo != null) {
-				new RenderedCircle(mouse, distTo.getPos().distance(
-						distFrom.getPos()), DrawingConstants.OUTLINE).draw(g,
-						pixelSize);
-			} else if (distFrom != null) {
-				new RenderedCircle(mouse, distFrom.getPos().distance(mouse),
-						DrawingConstants.OUTLINE).draw(g, pixelSize);
+			if (p1 != null) {
+				new RenderedLine(p1.getPos(), mouse, DrawingConstants.OUTLINE)
+						.draw(g, pixelSize);
 			}
 		} catch (ImaginaryPointException e) {
 		}

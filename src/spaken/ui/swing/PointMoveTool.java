@@ -7,18 +7,18 @@ import spaken.model.Pos;
 
 public class PointMoveTool extends AbstractTool {
 
-	private static final double THRESHOLD = 25;
-
 	protected PointMoveTool() {
 		super("Move Point");
 	}
 
 	private FixedPoint dragging;
+
 	private Pos mouse;
 
 	public void mousePressed(MouseEvent e) {
 		mouse = new Pos(e.getX(), e.getY());
-		dragging = canvas.getSpace().getFixedPointAt(mouse, THRESHOLD);
+		dragging = canvas.getSpace().getFixedPointAt(mouse,
+				DrawingConstants.POINT_SELECT_SIZE);
 	}
 
 	@Override
