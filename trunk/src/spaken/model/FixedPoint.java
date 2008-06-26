@@ -1,7 +1,10 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-public class FixedPoint extends AbstractPoint {
+import spaken.model.rendered.Rendered;
+import spaken.model.rendered.RenderedPoint;
+
+public class FixedPoint implements Point {
 
 	private Pos pos;
 
@@ -35,6 +38,10 @@ public class FixedPoint extends AbstractPoint {
 
 	public void setY(double y) {
 		pos = pos.setY(y);
+	}
+
+	public Rendered render() throws ImaginaryPointException {
+		return new RenderedPoint(getPos(), false);
 	}
 
 }

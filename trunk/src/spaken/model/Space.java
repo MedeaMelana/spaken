@@ -26,9 +26,9 @@ public class Space {
 		FixedPoint p2 = new FixedPoint(200, 150);
 		Line l = new Line(p1, p2);
 
-		addElement(p1);
-		addElement(p2);
-		addElement(l);
+		add(p1);
+		add(p2);
+		add(l);
 	}
 
 	private void demo2() {
@@ -41,24 +41,21 @@ public class Space {
 		Line l2 = new Line(p3, p4);
 
 		Point i = Intersections.intersect(l1, l2);
-		
-	    Circle c = new Circle(i, i, p3);
-	    Point[] is = Intersections.intersect(c, l1);
 
-		addElement(p1);
-		addElement(p2);
-		addElement(p3);
-		addElement(p4);
-		addElement(l1);
-		addElement(l2);
-		addElement(i);
-		addElement(c);
-		addElement(is[0]);
-		addElement(is[1]);
+		Circle c = new Circle(i, i, p3);
+		Point[] is = Intersections.intersect(c, l1);
+
+		add(p1, p2, p3, p4);
+		add(l1, l2);
+		add(i);
+		add(c);
+		add(is);
 	}
 
-	public void addElement(Element e) {
-		elements.add(e);
+	public void add(Element... es) {
+		for (Element e : es) {
+			elements.add(e);
+		}
 	}
 
 	public Iterable<Element> getElements() {
