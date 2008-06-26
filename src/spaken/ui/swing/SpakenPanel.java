@@ -3,8 +3,14 @@ package spaken.ui.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.LinkedList;
+import java.util.List;
 
+import javax.swing.AbstractButton;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
 import spaken.ui.swing.actions.SetToolAction;
@@ -30,9 +36,22 @@ public class SpakenPanel extends JPanel {
 
 	private Component createToolbar() {
 		JToolBar bar = new JToolBar();
-		bar.add(new SetToolAction(canvas, new PointMoveTool()));
-		bar.add(new SetToolAction(canvas, new PointCreateTool()));
+		ButtonGroup bg = new ButtonGroup();
+		for (Tool tool : createTools()) {
+			Action a = new SetToolAction(canvas, tool);
+			AbstractButton b = new JToggleButton(a);
+			bg.add(b);
+			bar.add(b);
+		}
+		bg.setSelected(bg.getElements().nextElement().getModel(), true);
 		return bar;
+	}
+
+	private List<Tool> createTools() {
+		List<Tool> tools = new LinkedList<Tool>();
+		tools.add(new PointMoveTool());
+		tools.add(new PointCreateTool());
+		return tools;
 	}
 
 }
