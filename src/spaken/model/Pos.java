@@ -70,6 +70,20 @@ public class Pos {
 	public double size() {
 		return Math.sqrt(sizeSquared());
 	}
+	
+	public Pos scale(double s) {
+	  return new Pos(x * s, y * s);
+	}
+	
+	public Pos normalise() {
+	  double size = size();
+	  if (size == 0) {
+	    // TODO leuke Exception
+	    return null;
+	  } else {
+	    return new Pos(x / size, y / size);
+	  }
+	}
 
 	public String toString() {
 		return "(" + x + "," + y + ")";
