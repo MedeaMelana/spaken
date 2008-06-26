@@ -18,15 +18,19 @@ public class SpaceCanvas extends JPanel {
 
 	private Space space;
 
+	private Tool currentTool;
+
 	public SpaceCanvas() {
 		this(new Space());
 	}
 
 	public SpaceCanvas(Space space) {
 		this.space = space;
-		
+
 		setOpaque(true);
 		setBackground(Color.WHITE);
+		
+		setTool(new PointMoveTool());
 	}
 
 	@Override
@@ -40,6 +44,37 @@ public class SpaceCanvas extends JPanel {
 		for (Rendered r : space.render()) {
 			r.draw(g, 1);
 		}
+	}
+
+	public Space getSpace() {
+		return space;
+	}
+
+	public void setSpace(Space space) {
+		this.space = space;
+	}
+
+	public Tool getTool() {
+		return currentTool;
+	}
+
+	public void setTool(Tool currentTool) {
+		discardTool();
+		this.currentTool = currentTool;
+		if (currentTool != null) {
+			currentTool.install(this);
+		}
+	}
+
+	private void discardTool() {
+		if (currentTool != null) {
+			currentTool.uninstall(this);
+			currentTool = null;
+		}
+	}
+
+	public void refresh() {
+		repaint();
 	}
 
 }

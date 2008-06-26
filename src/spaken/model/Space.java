@@ -18,7 +18,7 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
-		demo();
+		demo2();
 	}
 
 	private void demo() {
@@ -31,12 +31,48 @@ public class Space {
 		addElement(l);
 	}
 
+	private void demo2() {
+		Point p1 = new FixedPoint(100, 100);
+		Point p2 = new FixedPoint(400, 400);
+		Point p3 = new FixedPoint(0, 300);
+		Point p4 = new FixedPoint(400, 100);
+
+		Line l1 = new Line(p1, p2);
+		Line l2 = new Line(p3, p4);
+
+		Point i = Intersections.intersect(l1, l2);
+		
+	    Circle c = new Circle(i, i, p3);
+	    Point[] is = Intersections.intersect(c, l1);
+
+		addElement(p1);
+		addElement(p2);
+		addElement(p3);
+		addElement(p4);
+		addElement(l1);
+		addElement(l2);
+		addElement(i);
+		addElement(c);
+		addElement(is[0]);
+		addElement(is[1]);
+	}
+
 	public void addElement(Element e) {
 		elements.add(e);
 	}
 
 	public Iterable<Element> getElements() {
 		return elements;
+	}
+
+	public Iterable<FixedPoint> getFixedPoints() {
+		List<FixedPoint> ps = new LinkedList<FixedPoint>();
+		for (Element e : getElements()) {
+			if (e instanceof FixedPoint) {
+				ps.add((FixedPoint) e);
+			}
+		}
+		return ps;
 	}
 
 	public Iterable<Rendered> render() {
