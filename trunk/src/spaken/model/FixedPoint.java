@@ -3,36 +3,38 @@ package spaken.model;
 
 public class FixedPoint extends AbstractPoint {
 
-	private double x;
-	private double y;
+	private Pos pos;
 
 	public FixedPoint(double x, double y) {
-		this.x = x;
-		this.y = y;
+		this(new Pos(x, y));
+	}
+
+	public FixedPoint(Pos pos) {
+		this.pos = pos;
 	}
 
 	public Pos getPos() {
-		return new Pos(getX(), getY());
+		return pos;
+	}
+
+	public void setPos(Pos pos) {
+		this.pos = pos;
 	}
 
 	public double getX() {
-		return x;
+		return pos.x;
 	}
 
 	public void setX(double x) {
-		this.x = x;
+		pos = pos.setX(x);
 	}
 
 	public double getY() {
-		return y;
+		return pos.y;
 	}
 
 	public void setY(double y) {
-		this.y = y;
+		pos = pos.setY(y);
 	}
-
-//	public Rendered render() throws ImaginaryPointException {
-//		return new RenderedPoint(getPos());
-//	}
 
 }
