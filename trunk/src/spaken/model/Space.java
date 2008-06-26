@@ -61,14 +61,12 @@ public class Space {
 		return elements;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Iterable<FixedPoint> getFixedPoints() {
-		return new FilteredIterable(getElements(), new ClassFilter(FixedPoint.class));
+		return new FilteredIterable<Element,FixedPoint>(getElements(), new ClassFilter<FixedPoint>(FixedPoint.class));
 	}
 	
-	@SuppressWarnings("unchecked")
-	public FilteredIterable<Point> getPoints() {
-		return new FilteredIterable(getElements(), new ClassFilter(Point.class));
+	public Iterable<Point> getPoints() {
+		return new FilteredIterable<Element,Point>(getElements(), new ClassFilter<Point>(Point.class));
 	}
 
 	public Point getPointAt(Pos pos, double distance) {
