@@ -4,6 +4,8 @@ package spaken.model;
  * An object of the <tt>Pos</tt> class represents a fixed position in space.
  */
 public class Pos {
+  public static final Pos ZERO = new Pos(0,0);
+  
 	public final double x, y;
 
 	public Pos(double x, double y) {
@@ -75,11 +77,10 @@ public class Pos {
 	  return new Pos(x * s, y * s);
 	}
 	
-	public Pos normalise() {
+	public Pos normalise() throws NullVectorException {
 	  double size = size();
 	  if (size == 0) {
-	    // TODO leuke Exception
-	    return null;
+	    throw new NullVectorException();
 	  } else {
 	    return new Pos(x / size, y / size);
 	  }
