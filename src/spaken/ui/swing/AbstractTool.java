@@ -52,7 +52,7 @@ public abstract class AbstractTool implements Tool, MouseListener,
 	public void mouseReleased(MouseEvent e) {
 	}
 
-	public void drawState(Graphics2D g) {
+	public void drawState(Graphics2D g, double pixelSize) {
 	}
 
 }
