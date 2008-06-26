@@ -3,7 +3,7 @@ package spaken.model;
 /**
  * An object of the <tt>Pos</tt> class represents a fixed position in space.
  */
-public class Pos implements Point {
+public class Pos {
   public final double x, y;
   
   public Pos(double x, double y) {

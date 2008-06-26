@@ -1,7 +1,7 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-public class FixedPoint implements Point {
+public class FixedPoint extends AbstractPoint {
 
 	private double x;
 	private double y;
@@ -10,9 +10,9 @@ public class FixedPoint implements Point {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	public Pos getPos() {
-	  return new Pos(getX(), getY());
+		return new Pos(getX(), getY());
 	}
 
 	public double getX() {
@@ -30,5 +30,9 @@ public class FixedPoint implements Point {
 	public void setY(double y) {
 		this.y = y;
 	}
+
+//	public Rendered render() throws ImaginaryPointException {
+//		return new RenderedPoint(getPos());
+//	}
 
 }
