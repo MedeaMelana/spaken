@@ -8,10 +8,9 @@ import java.util.List;
 
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
+import spaken.util.ClassFilter;
+import spaken.util.FilteredIterable;
 
-/**
- * @author Martijn van Steenbergen
- */
 public class Space {
 
 	private List<Element> elements;
@@ -62,14 +61,37 @@ public class Space {
 		return elements;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Iterable<FixedPoint> getFixedPoints() {
-		List<FixedPoint> ps = new LinkedList<FixedPoint>();
-		for (Element e : getElements()) {
-			if (e instanceof FixedPoint) {
-				ps.add((FixedPoint) e);
+		return new FilteredIterable(getElements(), new ClassFilter(FixedPoint.class));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public FilteredIterable<Point> getPoints() {
+		return new FilteredIterable(getElements(), new ClassFilter(Point.class));
+	}
+
+	public Point getPointAt(Pos pos, double distance) {
+		double d2 = distance * distance;
+		for (Point p : getPoints()) {
+			try {
+				if (p.getPos().distanceSquared(pos) < d2) {
+					return p;
+				}
+			} catch (ImaginaryPointException e) {
 			}
 		}
-		return ps;
+		return null;
+	}
+
+	public FixedPoint getFixedPointAt(Pos pos, double distance) {
+		double d2 = distance * distance;
+		for (FixedPoint p : getFixedPoints()) {
+			if (p.getPos().distanceSquared(pos) < d2) {
+				return p;
+			}
+		}
+		return null;
 	}
 
 	public Iterable<Rendered> render() {
