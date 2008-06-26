@@ -59,6 +59,9 @@ public abstract class AbstractTool implements Tool, MouseListener,
 
 	public void drawState(Graphics2D g, double pixelSize) {
 	}
+	
+	public void resetState() {
+	}
 
 	protected void highlightPoint(Graphics2D g, double pixelSize, Point p) {
 		if (p == null) {

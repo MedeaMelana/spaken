@@ -59,5 +59,12 @@ public class CreateLineTool extends AbstractTool {
 		super.uninstall(canvas);
 		mouse = null;
 	}
+	
+	@Override
+	public void resetState() {
+		super.resetState();
+		mouse = null;
+		p1 = null;
+	}
 
 }

@@ -12,4 +12,6 @@ public interface Tool {
 
 	public String getName();
 
+	public void resetState();
+
 }
