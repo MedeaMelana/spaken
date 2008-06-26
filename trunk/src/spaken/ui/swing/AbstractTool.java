@@ -9,6 +9,11 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		MouseMotionListener {
 
 	protected SpaceCanvas canvas;
+	private String name;
+
+	protected AbstractTool(String name) {
+		this.name = name;
+	}
 
 	public void install(SpaceCanvas canvas) {
 		this.canvas = canvas;
@@ -20,6 +25,10 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		this.canvas = null;
 		canvas.removeMouseListener(this);
 		canvas.removeMouseMotionListener(this);
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public void mouseDragged(MouseEvent e) {

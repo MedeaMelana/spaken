@@ -7,6 +7,10 @@ import spaken.model.Pos;
 
 public class PointMoveTool extends AbstractTool {
 
+	protected PointMoveTool() {
+		super("Move Point");
+	}
+
 	private static final double THRESHOLD = 25;
 	private FixedPoint dragging;
 	private Pos mouse;
