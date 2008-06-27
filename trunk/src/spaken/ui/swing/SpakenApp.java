@@ -13,6 +13,7 @@ public class SpakenApp {
 		f.setContentPane(new SpakenPanel());
 		f.setSize(800, 600);
 		f.setVisible(true);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 }

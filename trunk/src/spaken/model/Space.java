@@ -79,7 +79,7 @@ public class Space {
 
 		Circle c1 = new Circle(p3, p1, p2);
 		Circle c2 = new Circle(p2, p1, p3);
-		Point p4 = Intersections.intersect(c1, c2)[1];
+		Point p4 = Intersections.intersect(c1, c2)[0];
 
 		add(p1, p2, p3, p4, c1, c2, new Line(p1, p2), new Line(p3, p4));
 	}
