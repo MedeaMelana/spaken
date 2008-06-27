@@ -13,3 +13,12 @@ Een opname heeft inputelementen en outputelementen. Bijvoorbeeld:
   * Naam: Verdeel lijnstuk in drie gelijke delen.
   * Input: Twee punten (om lijnstuk aan te geven).
   * Output: Twee nieuwe punten (op inputlijnstuk).
+
+Ik stel me de Ondoegeschiedenis voor als zoiets:
+
+  * 1. Maak punt op (_, _)
+  * 2. Maak punt op (_, _)
+  * 3. Maak middelloodlijn
+  * 3.1. Maak cirkel uit 1, 2, 1
+  * 3.2. Maak cirkel uit 2, 1, 2
+  * 3.3. Maak lijn uit snijpunt van 3.1, 3.2 en snijpunt van 3.2, 3.1
