@@ -1,10 +1,11 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -20,6 +21,17 @@ public class SpaceCanvas extends JPanel {
 
 	private Tool currentTool;
 
+	{
+		addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				requestFocus();
+			}
+
+		});
+	}
+
 	public SpaceCanvas() {
 		this(new Space());
 	}
@@ -29,7 +41,7 @@ public class SpaceCanvas extends JPanel {
 
 		setOpaque(true);
 		setBackground(DrawingConstants.BACKGROUND);
-		
+
 		setTool(new PointMoveTool());
 	}
 
@@ -44,7 +56,7 @@ public class SpaceCanvas extends JPanel {
 		for (Rendered r : space.render()) {
 			r.draw(g, 1);
 		}
-		
+
 		if (currentTool != null) {
 			currentTool.drawState(g, 1);
 		}
