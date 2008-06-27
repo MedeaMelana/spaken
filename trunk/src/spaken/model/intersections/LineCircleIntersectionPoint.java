@@ -48,8 +48,11 @@ class LineCircleIntersectionPoint extends DerivedPoint {
 
 		double discR = Math.sqrt(disc);
 
+		double sgn = sgn(d.y);
+		double mul = this.mul * sgn;
+		
 		double a = dm * d.y;
-		double b = sgn(d.y) * d.x * discR;
+		double b = sgn * d.x * discR;
 
 		double x = (a + mul * b) / c;
 

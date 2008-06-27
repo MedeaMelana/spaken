@@ -86,8 +86,9 @@ public class Space {
 
 	public void add(Element... es) {
 		List<Point> intersections = new LinkedList<Point>();
-
+		
 		for (Element e : es) {
+			// Verzamel intersecties met alle andere elementen.
 			for (Element e2 : elements) {
 				if (e != e2) {
 					Point[] is = Intersections.intersections(e, e2);
@@ -100,6 +101,7 @@ public class Space {
 			elements.add(e);
 		}
 
+		// Voeg alle ontstane intersecties toe.
 		elements.addAll(intersections);
 	}
 
