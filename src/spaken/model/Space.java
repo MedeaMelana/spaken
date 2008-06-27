@@ -17,7 +17,6 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
-		demo2();
 	}
 
 	private void demo() {

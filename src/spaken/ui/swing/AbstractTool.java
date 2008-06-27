@@ -1,6 +1,9 @@
 package spaken.ui.swing;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -16,6 +19,17 @@ public abstract class AbstractTool implements Tool, MouseListener,
 
 	private String name;
 
+	private KeyListener escapeListener = new KeyAdapter() {
+
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+				resetState();
+				canvas.refresh();
+			}
+		}
+
+	};
+
 	protected AbstractTool(String name) {
 		this.name = name;
 	}
@@ -24,12 +38,14 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		this.canvas = canvas;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
+		canvas.addKeyListener(escapeListener);
 	}
 
 	public void uninstall(SpaceCanvas canvas) {
 		this.canvas = null;
 		canvas.removeMouseListener(this);
 		canvas.removeMouseMotionListener(this);
+		canvas.removeKeyListener(escapeListener);
 	}
 
 	public String getName() {
@@ -59,7 +75,7 @@ public abstract class AbstractTool implements Tool, MouseListener,
 
 	public void drawState(Graphics2D g, double pixelSize) {
 	}
-	
+
 	public void resetState() {
 	}
 
@@ -68,7 +84,8 @@ public abstract class AbstractTool implements Tool, MouseListener,
 			return;
 		}
 		try {
-			new RenderedPoint(p.getPos(), true, DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
+			new RenderedPoint(p.getPos(), true, DrawingConstants.HIGHLIGHT)
+					.draw(g, pixelSize);
 		} catch (ImaginaryPointException e) {
 			// Blah.
 		}
