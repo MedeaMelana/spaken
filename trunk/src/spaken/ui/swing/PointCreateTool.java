@@ -14,7 +14,8 @@ public class PointCreateTool extends AbstractTool {
 		super("Create Point");
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	@Override
+	public void mouseReleased(MouseEvent e) {
 		FixedPoint pt = new FixedPoint(e.getX(), e.getY());
 		canvas.getSpace().add(pt);
 		canvas.refresh();
@@ -24,6 +25,11 @@ public class PointCreateTool extends AbstractTool {
 	public void mouseMoved(MouseEvent e) {
 		canvas.refresh();
 		mouse = new Pos(e.getX(), e.getY());
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		mouseMoved(e);
 	}
 
 	@Override

@@ -43,14 +43,14 @@ public class SpakenPanel extends JPanel {
 			bg.add(b);
 			bar.add(b);
 		}
-		bg.setSelected(bg.getElements().nextElement().getModel(), true);
+		bg.getElements().nextElement().doClick();
 		return bar;
 	}
 
 	private List<Tool> createTools() {
 		List<Tool> tools = new LinkedList<Tool>();
-		tools.add(new PointMoveTool());
 		tools.add(new PointCreateTool());
+		tools.add(new PointMoveTool());
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
 		return tools;
