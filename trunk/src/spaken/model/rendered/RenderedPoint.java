@@ -24,6 +24,10 @@ public class RenderedPoint implements Rendered {
 	public RenderedPoint(Pos pos, boolean derived) {
 		this(pos, derived, null);
 	}
+	
+	public boolean isDerived() {
+		return derived;
+	}
 
 	private Color getColor() {
 		if (color != null) {

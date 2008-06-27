@@ -23,4 +23,29 @@ public class Intersections {
 		return intersect(l, c);
 	}
 
+	/**
+	 * Determine all intersection points between elements <t>e1</tt> and <tt>e2</tt>.
+	 * 
+	 * @param e1
+	 * @param e2
+	 * @return
+	 */
+	public static Point[] intersections(Element e1, Element e2) {
+		if (e1 instanceof Line) {
+			if (e2 instanceof Line) {
+				return new Point[] { intersect((Line) e1, (Line) e2) };
+			} else if (e2 instanceof Circle) {
+				return intersect((Line) e1, (Circle) e2);
+			}
+		} else if (e1 instanceof Circle) {
+			if (e2 instanceof Circle) {
+				return intersect((Circle) e1, (Circle) e2);
+			} else if (e2 instanceof Line) {
+				return intersect((Circle) e1, (Line) e2);
+			}
+		}
+
+		return new Point[0];
+	}
+
 }
