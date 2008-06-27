@@ -85,6 +85,10 @@ public class Pos {
 	    return new Pos(x / size, y / size);
 	  }
 	}
+	
+	public Pos perpendicular() {
+		return new Pos(y, -x);
+	}
 
 	public String toString() {
 		return "(" + x + "," + y + ")";
