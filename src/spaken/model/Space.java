@@ -9,6 +9,7 @@ import java.util.List;
 import spaken.model.intersections.Intersections;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
+import spaken.ui.swing.DrawingConstants;
 import spaken.util.ClassFilter;
 import spaken.util.FilteredIterable;
 
@@ -18,8 +19,6 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
-
-		demoParallel();
 	}
 
 	private void demo() {
@@ -86,9 +85,22 @@ public class Space {
 	}
 
 	public void add(Element... es) {
+		List<Point> intersections = new LinkedList<Point>();
+
 		for (Element e : es) {
+			for (Element e2 : elements) {
+				if (e != e2) {
+					Point[] is = Intersections.intersections(e, e2);
+					for (Point i : is) {
+						intersections.add(i);
+					}
+				}
+			}
+
 			elements.add(e);
 		}
+
+		elements.addAll(intersections);
 	}
 
 	public Iterable<Element> getElements() {
@@ -115,11 +127,13 @@ public class Space {
 
 	private <P extends Point> P getPointAt(Pos pos, double distance,
 			Iterable<P> points) {
-		double minD = distance * distance;
+		double limit = DrawingConstants.POINT_SELECT_SIZE;
+		limit = limit * limit;
 		P minP = null;
 		for (P p : points) {
 			try {
-				if (p.getPos().distanceSquared(pos) < minD) {
+				Pos pp = p.getPos();
+				if (pp.distanceSquared(pos) < limit) {
 					minP = p;
 				}
 			} catch (ImaginaryPointException e) {
@@ -140,10 +154,18 @@ public class Space {
 		Collections.sort(rs, new Comparator<Rendered>() {
 
 			public int compare(Rendered o1, Rendered o2) {
-				if (o1.getClass() == o2.getClass()) {
-					return 0;
-				} else if (o1 instanceof RenderedPoint) {
-					return 1;
+				if (o1 instanceof RenderedPoint) {
+					if (o2 instanceof RenderedPoint) {
+						RenderedPoint p1 = (RenderedPoint) o1;
+						RenderedPoint p2 = (RenderedPoint) o2;
+						if (p1.isDerived() == p2.isDerived()) {
+							return 0;
+						} else {
+							return p1.isDerived() ? -1 : 1;
+						}
+					} else {
+						return 1;
+					}
 				} else if (o2 instanceof RenderedPoint) {
 					return -1;
 				} else {
