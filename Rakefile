@@ -86,5 +86,9 @@ task :dist_jar => :compile
 
 task :dist_jar do
   rm_f 'dist/spaken.jar'
-  system? "jar cfe dist/spaken.jar #{MAIN_CLASS} -C target spaken"
+  File.open 'dist/MANIFEST.MF', 'w' do |f|
+    f.puts "Main-Class: #{MAIN_CLASS}"
+  end
+  system? "jar cfm dist/spaken.jar dist/MANIFEST.MF -C target spaken"
+  rm 'dist/MANIFEST.MF'
 end
