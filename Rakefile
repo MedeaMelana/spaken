@@ -31,6 +31,9 @@ puts "JAVAC=#{JAVAC}"
 puts
 
 
+MAIN_CLASS = 'spaken.ui.swing.SpakenApp'
+
+
 
 ### Helper stuff
 
@@ -49,6 +52,7 @@ task :default => :compile
 
 task :init do
   mkdir 'target' unless File.exists? 'target'
+  mkdir 'dist'   unless File.exists? 'dist'
 end
 
 
@@ -57,6 +61,7 @@ task :clean
 
 task :clean do
   rm_rf 'target'
+  rm_rf 'dist'
 end
 
 
@@ -64,7 +69,7 @@ desc 'Run SWT frontend'
 task :run => :compile
 
 task :run do
-  system "#{JAVA} spaken.ui.swing.SpakenApp"
+  system "#{JAVA} #{MAIN_CLASS}"
 end
 
 
@@ -72,7 +77,14 @@ desc 'Compile SWT frontend'
 task :compile => :init
 
 task :compile do
-  system? "#{JAVAC} src/spaken/ui/swing/SpakenApp.java"
+  system? "#{JAVAC} src/#{MAIN_CLASS.gsub '.', '/'}.java"
 end
 
 
+desc 'Make distributable jar file'
+task :dist_jar => :compile
+
+task :dist_jar do
+  rm_f 'dist/spaken.jar'
+  system? "jar cfe dist/spaken.jar #{MAIN_CLASS} -C target spaken"
+end
