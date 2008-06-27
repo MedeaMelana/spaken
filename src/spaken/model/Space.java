@@ -17,6 +17,8 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
+
+		demoParallel();
 	}
 
 	private void demo() {
@@ -50,6 +52,38 @@ public class Space {
 		add(is);
 	}
 
+	private void demoMiddenloodlijn() {
+		Point p1 = new FixedPoint(100, 100);
+		Point p2 = new FixedPoint(400, 300);
+
+		Line l1 = new Line(p1, p2);
+
+		Circle c1 = new Circle(p1, p1, p2);
+		Circle c2 = new Circle(p2, p2, p1);
+
+		Point[] is = Intersections.intersect(c1, c2);
+
+		Line mll = new Line(is[0], is[1]);
+
+		add(p1, p2);
+		add(l1);
+		add(c1, c2);
+		add(is);
+		add(mll);
+	}
+
+	private void demoParallel() {
+		Point p1 = new FixedPoint(100, 200);
+		Point p2 = new FixedPoint(400, 300);
+		Point p3 = new FixedPoint(200, 100);
+
+		Circle c1 = new Circle(p3, p1, p2);
+		Circle c2 = new Circle(p2, p1, p3);
+		Point p4 = Intersections.intersect(c1, c2)[1];
+
+		add(p1, p2, p3, p4, c1, c2, new Line(p1, p2), new Line(p3, p4));
+	}
+
 	public void add(Element... es) {
 		for (Element e : es) {
 			elements.add(e);
@@ -61,13 +95,15 @@ public class Space {
 	}
 
 	public Iterable<FixedPoint> getFixedPoints() {
-		return new FilteredIterable<Element,FixedPoint>(getElements(), new ClassFilter<FixedPoint>(FixedPoint.class));
+		return new FilteredIterable<Element, FixedPoint>(getElements(),
+				new ClassFilter<FixedPoint>(FixedPoint.class));
 	}
-	
+
 	public Iterable<Point> getPoints() {
-		return new FilteredIterable<Element,Point>(getElements(), new ClassFilter<Point>(Point.class));
+		return new FilteredIterable<Element, Point>(getElements(),
+				new ClassFilter<Point>(Point.class));
 	}
-	
+
 	public Point getPointAt(Pos pos, double distance) {
 		return getPointAt(pos, distance, getPoints());
 	}
@@ -76,7 +112,8 @@ public class Space {
 		return getPointAt(pos, distance, getFixedPoints());
 	}
 
-	private <P extends Point> P getPointAt(Pos pos, double distance, Iterable<P> points) {
+	private <P extends Point> P getPointAt(Pos pos, double distance,
+			Iterable<P> points) {
 		double minD = distance * distance;
 		P minP = null;
 		for (P p : points) {
@@ -95,7 +132,8 @@ public class Space {
 		for (Element e : elements) {
 			try {
 				rs.add(e.render());
-			} catch (ImaginaryPointException e1) {}
+			} catch (ImaginaryPointException e1) {
+			}
 		}
 
 		Collections.sort(rs, new Comparator<Rendered>() {
