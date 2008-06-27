@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import spaken.model.intersections.Intersections;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.util.ClassFilter;
