@@ -17,7 +17,7 @@ public class CreateLineTool extends AbstractTool {
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {
 		Pos mouse = new Pos(e.getX(), e.getY());
 		Point p = canvas.getSpace().getPointAt(mouse,
 				DrawingConstants.POINT_SELECT_SIZE);
@@ -38,7 +38,12 @@ public class CreateLineTool extends AbstractTool {
 		canvas.refresh();
 		mouse = new Pos(e.getX(), e.getY());
 	}
-
+	
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		mouseMoved(e);
+	}
+	
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		highlightPoint(g, pixelSize, p1);
