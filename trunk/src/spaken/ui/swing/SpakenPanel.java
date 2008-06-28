@@ -53,6 +53,7 @@ public class SpakenPanel extends JPanel {
 		tools.add(new PointMoveTool());
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
+		tools.add(new IntersectionTool());
 		return tools;
 	}
 

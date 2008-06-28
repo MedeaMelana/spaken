@@ -85,24 +85,9 @@ public class Space {
 	}
 
 	public void add(Element... es) {
-		List<Point> intersections = new LinkedList<Point>();
-		
 		for (Element e : es) {
-			// Verzamel intersecties met alle andere elementen.
-			for (Element e2 : elements) {
-				if (e != e2) {
-					Point[] is = Intersections.intersections(e, e2);
-					for (Point i : is) {
-						intersections.add(i);
-					}
-				}
-			}
-
 			elements.add(e);
 		}
-
-		// Voeg alle ontstane intersecties toe.
-		elements.addAll(intersections);
 	}
 
 	public Iterable<Element> getElements() {
@@ -119,16 +104,15 @@ public class Space {
 				new ClassFilter<Point>(Point.class));
 	}
 
-	public Point getPointAt(Pos pos, double distance) {
-		return getPointAt(pos, distance, getPoints());
+	public Point getPointAt(Pos pos) {
+		return getPointAt(pos, getPoints());
 	}
 
-	public FixedPoint getFixedPointAt(Pos pos, double distance) {
-		return getPointAt(pos, distance, getFixedPoints());
+	public FixedPoint getFixedPointAt(Pos pos) {
+		return getPointAt(pos, getFixedPoints());
 	}
 
-	private <P extends Point> P getPointAt(Pos pos, double distance,
-			Iterable<P> points) {
+	public <P extends Point> P getPointAt(Pos pos, Iterable<P> points) {
 		double limit = DrawingConstants.POINT_SELECT_SIZE;
 		limit = limit * limit;
 		P minP = null;
