@@ -6,6 +6,8 @@
   * Verwijderen van gecreëerde elementen.
   * Opneemfunctie om nieuwe constructies te bewaren, te groeperen en herhaaldelijk toe te kunnen passen; zie hieronder.
 
+blah
+
 == Opneemfunctie ==
 
 Een opname heeft inputelementen en outputelementen. Bijvoorbeeld:
@@ -13,6 +15,8 @@ Een opname heeft inputelementen en outputelementen. Bijvoorbeeld:
   * Naam: Verdeel lijnstuk in drie gelijke delen.
   * Input: Twee punten (om lijnstuk aan te geven).
   * Output: Twee nieuwe punten (op inputlijnstuk).
+
+bloeh
 
 Ik stel me de Ondoegeschiedenis voor als zoiets:
 
