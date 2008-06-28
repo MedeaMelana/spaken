@@ -17,8 +17,7 @@ public class PointMoveTool extends AbstractTool {
 
 	public void mousePressed(MouseEvent e) {
 		mouse = new Pos(e.getX(), e.getY());
-		dragging = canvas.getSpace().getFixedPointAt(mouse,
-				DrawingConstants.POINT_SELECT_SIZE);
+		dragging = canvas.getSpace().getFixedPointAt(mouse);
 	}
 
 	@Override
