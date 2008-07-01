@@ -27,8 +27,7 @@ public class IntersectionTool extends AbstractTool {
 		if (pt == null)
 			return;
 
-		canvas.getSpace().add(pt.getDynamicPoint());
-		canvas.refresh();
+		addElement(pt.getDynamicPoint());
 	}
 
 	private CachedPoint closestPoint() {

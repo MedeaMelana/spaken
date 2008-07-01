@@ -8,8 +8,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import spaken.model.Command;
+import spaken.model.Element;
 import spaken.model.ImaginaryPointException;
 import spaken.model.Point;
+import spaken.model.commands.AddElementCommand;
 import spaken.model.rendered.RenderedPoint;
 
 public abstract class AbstractTool implements Tool, MouseListener,
@@ -50,6 +53,14 @@ public abstract class AbstractTool implements Tool, MouseListener,
 
 	public String getName() {
 		return name;
+	}
+
+	protected void execute(Command command) {
+		canvas.getHistory().execute(command);
+	}
+
+	protected void addElement(Element e) {
+		execute(new AddElementCommand(canvas, e));
 	}
 
 	public void mouseDragged(MouseEvent e) {

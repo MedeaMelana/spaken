@@ -3,7 +3,10 @@ package spaken.ui.swing;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
-import spaken.model.*;
+import spaken.model.Circle;
+import spaken.model.ImaginaryPointException;
+import spaken.model.Point;
+import spaken.model.Pos;
 import spaken.model.rendered.RenderedCircle;
 
 public class CreateCircleTool extends AbstractTool {
@@ -28,7 +31,7 @@ public class CreateCircleTool extends AbstractTool {
 		} else if (distTo == null) {
 			distTo = p;
 		} else {
-			canvas.getSpace().add(new Circle(p, distFrom, distTo));
+			addElement(new Circle(p, distFrom, distTo));
 			distFrom = null;
 			distTo = null;
 		}
@@ -40,12 +43,12 @@ public class CreateCircleTool extends AbstractTool {
 		canvas.refresh();
 		mouse = new Pos(e.getX(), e.getY());
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
 	}
-	
+
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		highlightPoint(g, pixelSize, distFrom);

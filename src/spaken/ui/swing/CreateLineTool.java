@@ -26,7 +26,7 @@ public class CreateLineTool extends AbstractTool {
 		if (p1 == null) {
 			p1 = p;
 		} else {
-			canvas.getSpace().add(new Line(p1, p));
+			addElement(new Line(p1, p));
 			p1 = null;
 		}
 		canvas.refresh();
