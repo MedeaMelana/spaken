@@ -90,6 +90,12 @@ public class Space {
 		}
 	}
 
+	public void remove(Element... es) {
+		for (Element e : es) {
+			elements.remove(e);
+		}
+	}
+
 	public Iterable<Element> getElements() {
 		return elements;
 	}

@@ -9,15 +9,14 @@ import java.util.List;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
 import spaken.ui.swing.actions.SetToolAction;
 
-/**
- * @author Martijn van Steenbergen
- */
 public class SpakenPanel extends JPanel {
 
 	private SpaceCanvas canvas;
@@ -27,10 +26,24 @@ public class SpakenPanel extends JPanel {
 	}
 
 	private void createGUI() {
+		// Create canvas.
 		canvas = new SpaceCanvas();
 
+		// Create history list.
+		CommandListModel model = new CommandListModel(canvas.getHistory());
+		canvas.getHistory().addListener(model);
+		JList history = new JList(model);
+
+		// Create splitter with canvas and history list.
+		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+				canvas, history);
+		splitter.setDividerLocation(600);
+		splitter.setOneTouchExpandable(true);
+		splitter.setResizeWeight(1);
+		
+		// Add splitter and tools.
 		setLayout(new BorderLayout());
-		add(canvas, BorderLayout.CENTER);
+		add(splitter, BorderLayout.CENTER);
 		add(createToolbar(), BorderLayout.NORTH);
 	}
 

@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import spaken.model.CommandHistory;
 import spaken.model.Space;
 import spaken.model.rendered.Rendered;
 
@@ -20,6 +21,8 @@ public class SpaceCanvas extends JPanel {
 	private Space space;
 
 	private Tool currentTool;
+
+	private CommandHistory history;
 
 	{
 		addMouseListener(new MouseAdapter() {
@@ -33,11 +36,12 @@ public class SpaceCanvas extends JPanel {
 	}
 
 	public SpaceCanvas() {
-		this(new Space());
+		this(new Space(), new CommandHistory());
 	}
 
-	public SpaceCanvas(Space space) {
+	public SpaceCanvas(Space space, CommandHistory history) {
 		this.space = space;
+		this.history = history;
 
 		setOpaque(true);
 		setBackground(DrawingConstants.BACKGROUND);
@@ -66,6 +70,14 @@ public class SpaceCanvas extends JPanel {
 
 	public void setSpace(Space space) {
 		this.space = space;
+	}
+
+	public CommandHistory getHistory() {
+		return history;
+	}
+
+	public void setHistory(CommandHistory history) {
+		this.history = history;
 	}
 
 	public Tool getTool() {
