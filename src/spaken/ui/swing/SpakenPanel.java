@@ -1,22 +1,13 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.AbstractButton;
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.JList;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
+import javax.swing.*;
 
+import spaken.model.Command;
 import spaken.model.commands.ClearCanvasCommand;
 import spaken.ui.swing.actions.ClearCanvasAction;
 import spaken.ui.swing.actions.ExitAction;
@@ -48,8 +39,10 @@ public class SpakenPanel extends JPanel {
 
 		// Create splitter with canvas and history list.
 		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				canvas, history);
-		splitter.setDividerLocation(600);
+				canvas, new JScrollPane(history,
+						JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+		splitter.setContinuousLayout(true);
 		splitter.setOneTouchExpandable(true);
 		splitter.setResizeWeight(1);
 
