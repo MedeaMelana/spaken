@@ -11,30 +11,36 @@ public class PointMoveTool extends AbstractTool {
 		super("Move Point");
 	}
 
+	private Pos mouseOld;
 	private FixedPoint dragging;
 
-	private Pos mouse;
-
 	public void mousePressed(MouseEvent e) {
-		mouse = new Pos(e.getX(), e.getY());
-		dragging = canvas.getSpace().getFixedPointAt(mouse);
+		super.mousePressed(e);
+		
+		dragging = getSpace().getFixedPointAt(getMouse());
+		mouseOld = getMouse();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		super.mouseDragged(e);
+		
+		Pos mouse = getMouse();
+		
 		if (dragging != null) {
-			Pos mouseNew = new Pos(e.getX(), e.getY());
-			Pos diff = mouseNew.subtract(mouse);
+			Pos diff = mouse.subtract(mouseOld);
 			dragging.setPos(dragging.getPos().add(diff));
-			canvas.refresh();
-			mouse = mouseNew;
+			getCanvas().refresh();
+			mouseOld = mouse;
 		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		super.mouseReleased(e);
+		
+		mouseOld = null;
 		dragging = null;
-		mouse = null;
 	}
 
 }

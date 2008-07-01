@@ -8,42 +8,45 @@ import spaken.model.rendered.RenderedPoint;
 
 public class PointCreateTool extends AbstractTool {
 
-	private Pos mouse;
-
 	protected PointCreateTool() {
 		super("Create Point");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		FixedPoint pt = new FixedPoint(mouse.inverseTransform(canvas
-				.getTransform()));
+		super.mouseReleased(e);
+
+		FixedPoint pt = new FixedPoint(getMouse());
 		addElement(pt);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		canvas.refresh();
-		mouse = new Pos(e.getX(), e.getY());
+		super.mouseMoved(e);
+
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		mouseMoved(e);
+		super.mouseDragged(e);
+
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
+		Pos mouse = getMouse();
+
 		if (mouse != null) {
-			new RenderedPoint(mouse.inverseTransform(canvas.getTransform()),
-					true, DrawingConstants.OUTLINE).draw(g, pixelSize);
+			new RenderedPoint(mouse, true, DrawingConstants.OUTLINE).draw(g,
+					pixelSize);
 		}
 	}
 
 	@Override
 	public void uninstall(SpaceCanvas canvas) {
 		super.uninstall(canvas);
-		mouse = null;
 	}
 
 }
