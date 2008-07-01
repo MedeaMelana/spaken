@@ -13,8 +13,6 @@ public class IntersectionTool extends AbstractTool {
 
 	private List<CachedPoint> intersections;
 
-	private Pos mouse;
-
 	protected IntersectionTool() {
 		super("Mark Intersection");
 		intersections = new LinkedList<CachedPoint>();
@@ -22,7 +20,8 @@ public class IntersectionTool extends AbstractTool {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		mouse = new Pos(e.getX(), e.getY());
+		super.mouseReleased(e);
+
 		CachedPoint pt = closestPoint();
 		if (pt == null)
 			return;
@@ -31,22 +30,27 @@ public class IntersectionTool extends AbstractTool {
 	}
 
 	private CachedPoint closestPoint() {
-		return canvas.getSpace().getPointAt(mouse, intersections);
+		return getSpace().getPointAt(getMouse(), intersections);
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		canvas.refresh();
-		mouse = new Pos(e.getX(), e.getY());
+		super.mouseMoved(e);
+
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		mouseMoved(e);
+		super.mouseDragged(e);
+
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
+		Pos mouse = getMouse();
+
 		if (mouse != null) {
 			Point pt = closestPoint();
 			if (pt == null)
@@ -85,7 +89,6 @@ public class IntersectionTool extends AbstractTool {
 	@Override
 	public void uninstall(SpaceCanvas canvas) {
 		super.uninstall(canvas);
-		mouse = null;
 		intersections.clear();
 	}
 

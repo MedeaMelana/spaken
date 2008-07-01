@@ -13,16 +13,15 @@ public class CreateCircleTool extends AbstractTool {
 
 	private Point distFrom, distTo;
 
-	private Pos mouse;
-
 	protected CreateCircleTool() {
 		super("Create Circle");
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		Pos mouse = new Pos(e.getX(), e.getY());
-		Point p = canvas.getSpace().getPointAt(mouse);
+		super.mouseReleased(e);
+		
+		Point p = getSpace().getPointAt(getMouse());
 		if (p == null) {
 			return;
 		}
@@ -35,24 +34,30 @@ public class CreateCircleTool extends AbstractTool {
 			distFrom = null;
 			distTo = null;
 		}
-		canvas.refresh();
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		canvas.refresh();
-		mouse = new Pos(e.getX(), e.getY());
+		super.mouseMoved(e);
+		
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		mouseMoved(e);
+		super.mouseDragged(e);
+		
+		getCanvas().refresh();
 	}
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		highlightPoint(g, pixelSize, distFrom);
 		highlightPoint(g, pixelSize, distTo);
+		
+		Pos mouse = getMouse();
+		
 		if (mouse == null) {
 			return;
 		}
@@ -72,13 +77,11 @@ public class CreateCircleTool extends AbstractTool {
 	@Override
 	public void uninstall(SpaceCanvas canvas) {
 		super.uninstall(canvas);
-		mouse = null;
 	}
 
 	@Override
 	public void resetState() {
 		super.resetState();
-		mouse = null;
 		distFrom = null;
 		distTo = null;
 	}
