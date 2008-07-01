@@ -32,6 +32,7 @@ public class ClearCanvasCommand implements Command {
 		for (Element e : elements) {
 			canvas.getSpace().add(e);
 		}
+		canvas.repaint();
 	}
 
 	public void redo() {
