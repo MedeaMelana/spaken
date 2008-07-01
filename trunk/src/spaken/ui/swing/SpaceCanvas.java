@@ -4,12 +4,11 @@ package spaken.ui.swing;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.*;
 
 import javax.swing.JPanel;
 
-import spaken.model.CommandHistory;
-import spaken.model.Space;
+import spaken.model.*;
 import spaken.model.rendered.Rendered;
 
 /**
@@ -56,13 +55,21 @@ public class SpaceCanvas extends JPanel {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g.transform(getTransform());
+		AffineTransform trans = getTransform();
+		g.transform(trans);
 		
 		double pixelSize = getPixelSize();
 		g.setStroke(new BasicStroke((float) pixelSize));
 
-		g.drawLine(-5, 0, 10, 0);
-		g.drawLine(0, -5, 0, 10);
+		Pos lb = new Pos(0, 0).inverseTransform(trans);
+		Pos ro = new Pos(getWidth(), getHeight()).inverseTransform(trans);
+		
+		g.setColor(DrawingConstants.AXIS);
+		Line2D line = new Line2D.Double();
+		line.setLine(lb.x, 0, ro.x, 0);
+		g.draw(line);
+		line.setLine(0, lb.y, 0, ro.y);
+		g.draw(line);
 
 		for (Rendered r : space.render()) {
 			r.draw(g, pixelSize);
