@@ -74,6 +74,7 @@ public class SpakenPanel extends JPanel {
 
 	private List<Tool> createTools() {
 		List<Tool> tools = new LinkedList<Tool>();
+		tools.add(new SelectTool());
 		tools.add(new PointCreateTool());
 		tools.add(new PointMoveTool());
 		tools.add(new CreateLineTool());

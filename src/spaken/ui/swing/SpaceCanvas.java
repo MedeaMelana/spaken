@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
@@ -23,6 +24,8 @@ public class SpaceCanvas extends JPanel {
 	private Tool currentTool;
 
 	private CommandHistory history;
+
+	private AffineTransform transform;
 
 	{
 		addMouseListener(new MouseAdapter() {
@@ -55,8 +58,13 @@ public class SpaceCanvas extends JPanel {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
+		g.transform(getTransform());
+
+		g.drawLine(-5, 0, 10, 0);
+		g.drawLine(0, -5, 0, 10);
+
 		for (Rendered r : space.render()) {
-			r.draw(g, 1);
+			r.draw(g, 1 / getTransform().getScaleX());
 		}
 
 		if (currentTool != null) {
@@ -98,6 +106,13 @@ public class SpaceCanvas extends JPanel {
 			currentTool.uninstall(this);
 			currentTool = null;
 		}
+	}
+
+	public AffineTransform getTransform() {
+		if (transform == null) {
+			transform = new AffineTransform();
+		}
+		return transform;
 	}
 
 	public void refresh() {
