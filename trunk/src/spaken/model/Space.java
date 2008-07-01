@@ -110,22 +110,21 @@ public class Space {
 				new ClassFilter<Point>(Point.class));
 	}
 
-	public Point getPointAt(Pos pos) {
-		return getPointAt(pos, getPoints());
+	public Point getPointAt(Pos pos, double distance) {
+		return getPointAt(pos, getPoints(), distance);
 	}
 
-	public FixedPoint getFixedPointAt(Pos pos) {
-		return getPointAt(pos, getFixedPoints());
+	public FixedPoint getFixedPointAt(Pos pos, double distance) {
+		return getPointAt(pos, getFixedPoints(), distance);
 	}
 
-	public <P extends Point> P getPointAt(Pos pos, Iterable<P> points) {
-		double limit = DrawingConstants.POINT_SELECT_SIZE;
-		limit = limit * limit;
+	public <P extends Point> P getPointAt(Pos pos, Iterable<P> points, double distance) {
+		distance = distance * distance;
 		P minP = null;
 		for (P p : points) {
 			try {
 				Pos pp = p.getPos();
-				if (pp.distanceSquared(pos) < limit) {
+				if (pp.distanceSquared(pos) < distance) {
 					minP = p;
 				}
 			} catch (ImaginaryPointException e) {

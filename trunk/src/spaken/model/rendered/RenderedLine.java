@@ -9,7 +9,7 @@ import spaken.ui.swing.DrawingConstants;
 
 public class RenderedLine implements Rendered {
   
-  private static final double VERY_LARGE_NUMBER = Math.pow(10,6);
+  private static final double VERY_LARGE_NUMBER = Math.pow(10,4);
   
 	private Pos p1;
 	private Pos p2;

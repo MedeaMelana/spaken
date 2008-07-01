@@ -30,7 +30,8 @@ public class IntersectionTool extends AbstractTool {
 	}
 
 	private CachedPoint closestPoint() {
-		return getSpace().getPointAt(getMouse(), intersections);
+		return getSpace().getPointAt(getMouse(), intersections,
+				getCanvas().getPointSelectSize());
 	}
 
 	@Override
