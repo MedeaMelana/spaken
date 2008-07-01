@@ -1,7 +1,6 @@
 package spaken.model.rendered;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 import spaken.model.Pos;
@@ -40,7 +39,7 @@ public class RenderedPoint implements Rendered {
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		double s = DrawingConstants.POINT_SIZE / 2;
+		double s = pixelSize * DrawingConstants.POINT_SIZE / 2;
 		Rectangle2D rect = new Rectangle2D.Double(pos.x - s, pos.y - s, 2 * s,
 				2 * s);
 		g.setColor(getColor());

@@ -17,8 +17,9 @@ public class CreateLineTool extends AbstractTool {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased(e);
-		
-		Point p = getSpace().getPointAt(getMouse());
+
+		Point p = getSpace().getPointAt(getMouse(),
+				getCanvas().getPointSelectSize());
 		if (p == null) {
 			return;
 		}
@@ -36,19 +37,19 @@ public class CreateLineTool extends AbstractTool {
 		super.mouseMoved(e);
 		getCanvas().refresh();
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		super.mouseMoved(e);
 		getCanvas().refresh();
 	}
-	
+
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		highlightPoint(g, pixelSize, p1);
-		
+
 		Pos mouse = getMouse();
-		
+
 		if (mouse == null) {
 			return;
 		}
@@ -65,7 +66,7 @@ public class CreateLineTool extends AbstractTool {
 	public void uninstall(SpaceCanvas canvas) {
 		super.uninstall(canvas);
 	}
-	
+
 	@Override
 	public void resetState() {
 		super.resetState();

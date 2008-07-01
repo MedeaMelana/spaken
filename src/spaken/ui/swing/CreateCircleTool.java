@@ -21,7 +21,8 @@ public class CreateCircleTool extends AbstractTool {
 	public void mouseReleased(MouseEvent e) {
 		super.mouseReleased(e);
 		
-		Point p = getSpace().getPointAt(getMouse());
+		Point p = getSpace().getPointAt(getMouse(),
+				getCanvas().getPointSelectSize());
 		if (p == null) {
 			return;
 		}

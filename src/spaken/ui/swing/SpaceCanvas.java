@@ -1,9 +1,7 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -59,16 +57,19 @@ public class SpaceCanvas extends JPanel {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		g.transform(getTransform());
+		
+		double pixelSize = getPixelSize();
+		g.setStroke(new BasicStroke((float) pixelSize));
 
 		g.drawLine(-5, 0, 10, 0);
 		g.drawLine(0, -5, 0, 10);
 
 		for (Rendered r : space.render()) {
-			r.draw(g, 1 / getTransform().getScaleX());
+			r.draw(g, pixelSize);
 		}
 
 		if (currentTool != null) {
-			currentTool.drawState(g, 1);
+			currentTool.drawState(g, pixelSize);
 		}
 	}
 
@@ -122,6 +123,14 @@ public class SpaceCanvas extends JPanel {
 	public void clear() {
 		space.clear();
 		repaint();
+	}
+	
+	public double getPixelSize() {
+		return 1 / getTransform().getScaleX();
+	}
+
+	public double getPointSelectSize() {
+		return DrawingConstants.POINT_SELECT_SIZE / getTransform().getScaleX();
 	}
 
 }
