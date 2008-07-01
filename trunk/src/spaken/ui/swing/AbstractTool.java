@@ -1,12 +1,7 @@
 package spaken.ui.swing;
 
 import java.awt.Graphics2D;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 
 import spaken.model.Command;
 import spaken.model.Element;
@@ -16,7 +11,7 @@ import spaken.model.commands.AddElementCommand;
 import spaken.model.rendered.RenderedPoint;
 
 public abstract class AbstractTool implements Tool, MouseListener,
-		MouseMotionListener {
+		MouseWheelListener, MouseMotionListener {
 
 	protected SpaceCanvas canvas;
 
@@ -41,6 +36,7 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		this.canvas = canvas;
 		canvas.addMouseListener(this);
 		canvas.addMouseMotionListener(this);
+		canvas.addMouseWheelListener(this);
 		canvas.addKeyListener(escapeListener);
 	}
 
@@ -48,6 +44,7 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		this.canvas = null;
 		canvas.removeMouseListener(this);
 		canvas.removeMouseMotionListener(this);
+		canvas.removeMouseWheelListener(this);
 		canvas.removeKeyListener(escapeListener);
 	}
 
@@ -82,6 +79,9 @@ public abstract class AbstractTool implements Tool, MouseListener,
 	}
 
 	public void mouseReleased(MouseEvent e) {
+	}
+
+	public void mouseWheelMoved(MouseWheelEvent e) {
 	}
 
 	public void drawState(Graphics2D g, double pixelSize) {
