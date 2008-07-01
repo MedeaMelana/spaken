@@ -169,4 +169,8 @@ public class Space {
 		return rs;
 	}
 
+	public void clear() {
+		elements.clear();
+	}
+
 }

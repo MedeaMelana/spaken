@@ -17,6 +17,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+import spaken.model.commands.ClearCanvasCommand;
+import spaken.ui.swing.actions.ClearCanvasAction;
 import spaken.ui.swing.actions.ExitAction;
 import spaken.ui.swing.actions.RedoAction;
 import spaken.ui.swing.actions.SetToolAction;
@@ -38,6 +40,11 @@ public class SpakenPanel extends JPanel {
 		CommandListModel model = new CommandListModel(canvas.getHistory());
 		canvas.getHistory().addListener(model);
 		JList history = new JList(model);
+		history.setSelectionModel(new CommandListSelectionModel(canvas
+				.getHistory()));
+
+		// Set initial command.
+		canvas.getHistory().execute(new ClearCanvasCommand(canvas));
 
 		// Create splitter with canvas and history list.
 		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -92,6 +99,8 @@ public class SpakenPanel extends JPanel {
 		JMenu edit = new JMenu("Edit");
 		edit.add(new UndoAction(canvas.getHistory()));
 		edit.add(new RedoAction(canvas.getHistory()));
+		edit.addSeparator();
+		edit.add(new ClearCanvasAction(canvas));
 		return edit;
 	}
 
