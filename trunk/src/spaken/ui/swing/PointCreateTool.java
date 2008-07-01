@@ -16,7 +16,8 @@ public class PointCreateTool extends AbstractTool {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		FixedPoint pt = new FixedPoint(e.getX(), e.getY());
+		FixedPoint pt = new FixedPoint(mouse.inverseTransform(canvas
+				.getTransform()));
 		addElement(pt);
 	}
 
@@ -25,7 +26,7 @@ public class PointCreateTool extends AbstractTool {
 		canvas.refresh();
 		mouse = new Pos(e.getX(), e.getY());
 	}
-	
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		mouseMoved(e);
@@ -34,7 +35,8 @@ public class PointCreateTool extends AbstractTool {
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		if (mouse != null) {
-			new RenderedPoint(mouse, true, DrawingConstants.OUTLINE).draw(g, pixelSize);
+			new RenderedPoint(mouse.inverseTransform(canvas.getTransform()),
+					true, DrawingConstants.OUTLINE).draw(g, pixelSize);
 		}
 	}
 
