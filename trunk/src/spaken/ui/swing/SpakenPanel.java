@@ -10,12 +10,17 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
 import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 
+import spaken.ui.swing.actions.ExitAction;
+import spaken.ui.swing.actions.RedoAction;
 import spaken.ui.swing.actions.SetToolAction;
+import spaken.ui.swing.actions.UndoAction;
 
 public class SpakenPanel extends JPanel {
 
@@ -40,7 +45,7 @@ public class SpakenPanel extends JPanel {
 		splitter.setDividerLocation(600);
 		splitter.setOneTouchExpandable(true);
 		splitter.setResizeWeight(1);
-		
+
 		// Add splitter and tools.
 		setLayout(new BorderLayout());
 		add(splitter, BorderLayout.CENTER);
@@ -68,6 +73,26 @@ public class SpakenPanel extends JPanel {
 		tools.add(new CreateCircleTool());
 		tools.add(new IntersectionTool());
 		return tools;
+	}
+
+	public JMenuBar createMenuBar() {
+		JMenuBar bar = new JMenuBar();
+		bar.add(createFileMenu());
+		bar.add(createEditMenu());
+		return bar;
+	}
+
+	private JMenu createFileMenu() {
+		JMenu file = new JMenu("File");
+		file.add(new ExitAction());
+		return file;
+	}
+
+	private JMenu createEditMenu() {
+		JMenu edit = new JMenu("Edit");
+		edit.add(new UndoAction(canvas.getHistory()));
+		edit.add(new RedoAction(canvas.getHistory()));
+		return edit;
 	}
 
 }

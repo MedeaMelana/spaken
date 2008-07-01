@@ -10,8 +10,10 @@ public class SpakenApp {
 
 	public static void main(String[] args) {
 		JFrame f = new JFrame("Spaken");
-		f.setContentPane(new SpakenPanel());
+		SpakenPanel p = new SpakenPanel();
+		f.setContentPane(p);
 		f.setSize(800, 600);
+		f.setJMenuBar(p.createMenuBar());
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
