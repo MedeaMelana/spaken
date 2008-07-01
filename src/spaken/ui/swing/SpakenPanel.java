@@ -19,6 +19,8 @@ public class SpakenPanel extends JPanel {
 
 	private SpaceCanvas canvas;
 
+	private JSplitPane splitter;
+
 	public SpakenPanel() {
 		createGUI();
 	}
@@ -38,10 +40,10 @@ public class SpakenPanel extends JPanel {
 		canvas.getHistory().execute(new ClearCanvasCommand(canvas));
 
 		// Create splitter with canvas and history list.
-		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				canvas, new JScrollPane(history,
+		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, canvas,
+				new JScrollPane(history,
 						JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-						JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+						JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 		splitter.setContinuousLayout(true);
 		splitter.setOneTouchExpandable(true);
 		splitter.setResizeWeight(1);
@@ -50,6 +52,15 @@ public class SpakenPanel extends JPanel {
 		setLayout(new BorderLayout());
 		add(splitter, BorderLayout.CENTER);
 		add(createToolbar(), BorderLayout.NORTH);
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		if (splitter != null) {
+			splitter.setDividerLocation(getWidth() - 200);
+			splitter = null;
+		}
+		super.paintComponent(g);
 	}
 
 	private Component createToolbar() {
