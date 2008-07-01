@@ -104,4 +104,9 @@ public class SpaceCanvas extends JPanel {
 		repaint();
 	}
 
+	public void clear() {
+		space.clear();
+		repaint();
+	}
+
 }

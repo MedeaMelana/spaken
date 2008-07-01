@@ -41,7 +41,7 @@ public class UndoAction extends AbstractAction implements CommandListener {
 	}
 
 	private void update() {
-		setEnabled(history.canUndo());
+		setEnabled(history.getUndoes().size() > 1);
 	}
 
 }
