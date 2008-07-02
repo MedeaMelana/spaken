@@ -18,6 +18,7 @@ public class ClearCanvasCommand implements Command {
 	}
 
 	public void execute() {
+		elements.clear();
 		for (Element e : canvas.getSpace().getElements()) {
 			elements.add(e);
 		}
