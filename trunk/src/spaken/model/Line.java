@@ -10,6 +10,9 @@ public class Line implements Element {
 	private Point p2;
 
 	public Line(Point p1, Point p2) {
+		if (p1 == p2) {
+			throw new IllegalArgumentException("Don't create line from two equal points.");
+		}
 		this.p1 = p1;
 		this.p2 = p2;
 	}

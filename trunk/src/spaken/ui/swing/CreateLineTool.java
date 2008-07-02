@@ -1,75 +1,66 @@
 package spaken.ui.swing;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 
-import spaken.model.*;
-import spaken.model.rendered.*;
+import spaken.model.ImaginaryPointException;
+import spaken.model.Line;
+import spaken.model.Point;
+import spaken.model.Pos;
+import spaken.model.rendered.RenderedLine;
 
 public class CreateLineTool extends AbstractTool {
 
-	private Point p1;
+	Point p1;
 
 	protected CreateLineTool() {
 		super("Create Line");
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-
-		Point p = getSpace().getPointAt(getMouse(),
-				getCanvas().getPointSelectSize());
-		if (p == null) {
-			return;
-		}
+	protected void strokeStarted(Pos origin) {
 		if (p1 == null) {
-			p1 = p;
-		} else {
-			addElement(new Line(p1, p));
-			p1 = null;
+			p1 = getCanvas().getPointAt(origin);
 		}
+	}
+
+	@Override
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
 		getCanvas().refresh();
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-		getCanvas().refresh();
+	protected void strokeFinished(Pos origin, Pos end) {
+		if (p1 != null) {
+			Point p2 = getCanvas().getPointAt(end);
+			if (p2 != null && p2 != p1) {
+				addElement(new Line(p1, p2));
+				p1 = null;
+			}
+		} else {
+			p1 = getCanvas().getPointAt(end);
+		}
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseMoved(e);
+	protected void mouseMoved(Pos current, Pos delta) {
 		getCanvas().refresh();
 	}
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
-		highlightPoint(g, pixelSize, p1);
-
 		Pos mouse = getMouse();
-
-		if (mouse == null) {
-			return;
-		}
-		try {
-			if (p1 != null) {
+		if (p1 != null && mouse != null) {
+			highlightPoint(g, pixelSize, p1);
+			try {
 				new RenderedLine(p1.getPos(), mouse, DrawingConstants.OUTLINE)
 						.draw(g, pixelSize);
+			} catch (ImaginaryPointException e) {
 			}
-		} catch (ImaginaryPointException e) {
 		}
-	}
-
-	@Override
-	public void uninstall(SpaceCanvas canvas) {
-		super.uninstall(canvas);
 	}
 
 	@Override
 	public void resetState() {
-		super.resetState();
 		p1 = null;
 	}
 

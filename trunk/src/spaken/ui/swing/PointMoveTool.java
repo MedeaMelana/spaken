@@ -1,7 +1,5 @@
 package spaken.ui.swing;
 
-import java.awt.event.MouseEvent;
-
 import spaken.model.FixedPoint;
 import spaken.model.Pos;
 
@@ -11,37 +9,23 @@ public class PointMoveTool extends AbstractTool {
 		super("Move Point");
 	}
 
-	private Pos mouseOld;
-
 	private FixedPoint dragging;
 
-	public void mousePressed(MouseEvent e) {
-		super.mousePressed(e);
-
-		dragging = getSpace().getFixedPointAt(getMouse(),
-				getCanvas().getPointSelectSize());
-		mouseOld = getMouse();
+	@Override
+	protected void strokeStarted(Pos origin) {
+		dragging = getCanvas().getFixedPointAt(origin);
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-
-		Pos mouse = getMouse();
-
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
 		if (dragging != null) {
-			Pos diff = mouse.subtract(mouseOld);
-			dragging.setPos(dragging.getPos().add(diff));
+			dragging.setPos(dragging.getPos().add(delta));
 			getCanvas().refresh();
-			mouseOld = mouse;
 		}
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-
-		mouseOld = null;
+	protected void strokeFinished(Pos origin, Pos end) {
 		dragging = null;
 	}
 

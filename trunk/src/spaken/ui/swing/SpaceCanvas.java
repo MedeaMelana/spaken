@@ -1,19 +1,26 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
-import spaken.model.*;
+import spaken.model.CommandHistory;
+import spaken.model.FixedPoint;
+import spaken.model.Point;
+import spaken.model.Pos;
+import spaken.model.Space;
 import spaken.model.rendered.Rendered;
 
-/**
- * @author Martijn van Steenbergen
- */
 public class SpaceCanvas extends JPanel {
 
 	private Space space;
@@ -32,6 +39,14 @@ public class SpaceCanvas extends JPanel {
 				requestFocus();
 			}
 
+		});
+
+		addMouseWheelListener(new MouseWheelListener() {
+
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				int rot = e.getWheelRotation();
+				scale(-0.5 * rot, mouse2space(new Pos(e.getPoint())));
+			}
 		});
 	}
 
@@ -57,13 +72,13 @@ public class SpaceCanvas extends JPanel {
 
 		AffineTransform trans = getTransform();
 		g.transform(trans);
-		
+
 		double pixelSize = getPixelSize();
 		g.setStroke(new BasicStroke((float) pixelSize));
 
 		Pos lb = new Pos(0, 0).inverseTransform(trans);
 		Pos ro = new Pos(getWidth(), getHeight()).inverseTransform(trans);
-		
+
 		g.setColor(DrawingConstants.AXIS);
 		Line2D line = new Line2D.Double();
 		line.setLine(lb.x, 0, ro.x, 0);
@@ -123,6 +138,14 @@ public class SpaceCanvas extends JPanel {
 		return transform;
 	}
 
+	public Pos space2mouse(Pos pos) {
+		return pos.transform(getTransform());
+	}
+
+	public Pos mouse2space(Pos pos) {
+		return pos.inverseTransform(getTransform());
+	}
+
 	public void refresh() {
 		repaint();
 	}
@@ -131,13 +154,32 @@ public class SpaceCanvas extends JPanel {
 		space.clear();
 		repaint();
 	}
-	
+
 	public double getPixelSize() {
 		return 1 / getTransform().getScaleX();
 	}
 
 	public double getPointSelectSize() {
 		return DrawingConstants.POINT_SELECT_SIZE / getTransform().getScaleX();
+	}
+
+	public Point getPointAt(Pos pos) {
+		return space.getPointAt(pos, getPointSelectSize());
+	}
+
+	public FixedPoint getFixedPointAt(Pos pos) {
+		return space.getFixedPointAt(pos, getPointSelectSize());
+	}
+
+	private void scale(double zoom, Pos pos) {
+		double scale = Math.pow(2, zoom);
+
+		AffineTransform transform = getTransform();
+		transform.translate(pos.x, pos.y);
+		transform.scale(scale, scale);
+		transform.translate(-pos.x, -pos.y);
+
+		refresh();
 	}
 
 }
