@@ -1,83 +1,67 @@
 package spaken.ui.swing;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.AffineTransform;
-
-import spaken.model.Pos;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 public class SelectTool extends AbstractTool {
-	
-	private Pos mouseOld;
-	
+
 	protected SelectTool() {
 		super("Select");
 	}
 
+	private TranslateListener translateListener = new TranslateListener();
+
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-		
-		SpaceCanvas canvas = getCanvas();
-		
-		Pos mouse = getMouse();
-		if (mouseOld == null) {
-			mouseOld = mouse;
-			return;
+	public void install(SpaceCanvas canvas) {
+		super.install(canvas);
+		canvas.addMouseListener(translateListener);
+		canvas.addMouseMotionListener(translateListener);
+	}
+
+	@Override
+	public void uninstall(SpaceCanvas canvas) {
+		super.uninstall(canvas);
+		canvas.removeMouseListener(translateListener);
+		canvas.removeMouseMotionListener(translateListener);
+	}
+
+	private class TranslateListener implements MouseListener,
+			MouseMotionListener {
+
+		Point mouse;
+
+		public void mousePressed(MouseEvent e) {
+			mouse = e.getPoint();
 		}
-		
-		double dx = mouse.x - mouseOld.x;
-		double dy = mouse.y - mouseOld.y;
-		
-		canvas.getTransform().translate(dx, dy);
-		canvas.refresh();
-	}
-	
-	@Override
-	public void mousePressed(MouseEvent e) {
-		super.mousePressed(e);
-		
-		mouseOld = getMouse();
-	}
-	
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-		
-		mouseOld = null;
-	}
 
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		super.mouseWheelMoved(e);
-		
-		int rot = e.getWheelRotation();
-		scale(-0.5 * rot);
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		super.mouseClicked(e);
-		
-		if (e.getClickCount() > 1) {
-			if (e.getButton() == MouseEvent.BUTTON3) {
-				scale(-1);
-			} else {
-				scale(1);
+		public void mouseDragged(MouseEvent e) {
+			Point newMouse = e.getPoint();
+			if (mouse != null) {
+				int dx = newMouse.x - mouse.x;
+				int dy = newMouse.y - mouse.y;
+				getCanvas().getTransform().translate(dx, dy);
+				getCanvas().refresh();
 			}
+			mouse = newMouse;
 		}
+
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		public void mouseExited(MouseEvent e) {
+		}
+
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		public void mouseMoved(MouseEvent e) {
+		}
+
 	}
 
-	private void scale(double zoom) {
-		double scale = Math.pow(2, zoom);
-		
-		Pos mouse = getMouse();
-		
-		AffineTransform transform = getCanvas().getTransform();
-		transform.translate(mouse.x, mouse.y);
-		transform.scale(scale, scale);
-		transform.translate(-mouse.x, -mouse.y);
-		
-		getCanvas().refresh();
-	}
 }

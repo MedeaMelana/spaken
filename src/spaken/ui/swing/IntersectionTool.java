@@ -18,34 +18,29 @@ public class IntersectionTool extends AbstractTool {
 		intersections = new LinkedList<CachedPoint>();
 	}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-
-		CachedPoint pt = closestPoint();
-		if (pt == null)
-			return;
-
-		addElement(pt.getDynamicPoint());
-	}
-
 	private CachedPoint closestPoint() {
 		return getSpace().getPointAt(getMouse(), intersections,
 				getCanvas().getPointSelectSize());
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-
+	protected void mouseMoved(Pos current, Pos delta) {
 		getCanvas().refresh();
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
+	protected void strokeFinished(Pos origin, Pos end) {
+		CachedPoint pt = closestPoint();
+		if (pt == null) {
+			return;
+		}
 
-		getCanvas().refresh();
+		addElement(pt.getDynamicPoint());
+	}
+
+	@Override
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
+		getCanvas().repaint();
 	}
 
 	@Override

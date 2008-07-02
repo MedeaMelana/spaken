@@ -7,14 +7,13 @@ import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
 import spaken.model.rendered.RenderedPoint;
 
-public abstract class AbstractTool implements Tool, MouseListener,
-		MouseWheelListener, MouseMotionListener {
+public abstract class AbstractTool implements Tool {
 
 	private SpaceCanvas canvas;
 
-	private Pos mouse;
-
 	private String name;
+
+	private StrokeListener strokeListener = new StrokeListener();
 
 	private KeyListener escapeListener = new KeyAdapter() {
 
@@ -33,19 +32,17 @@ public abstract class AbstractTool implements Tool, MouseListener,
 
 	public void install(SpaceCanvas canvas) {
 		this.canvas = canvas;
-		canvas.addMouseListener(this);
-		canvas.addMouseMotionListener(this);
-		canvas.addMouseWheelListener(this);
 		canvas.addKeyListener(escapeListener);
+		canvas.addMouseListener(strokeListener);
+		canvas.addMouseMotionListener(strokeListener);
 	}
 
 	public void uninstall(SpaceCanvas canvas) {
 		this.canvas = null;
-		this.mouse = null;
-		canvas.removeMouseListener(this);
-		canvas.removeMouseMotionListener(this);
-		canvas.removeMouseWheelListener(this);
 		canvas.removeKeyListener(escapeListener);
+		canvas.removeMouseListener(strokeListener);
+		canvas.removeMouseMotionListener(strokeListener);
+		strokeListener.reset();
 	}
 
 	/**
@@ -80,58 +77,20 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		execute(new AddElementCommand(canvas, e));
 	}
 
-	private void trackMouse(MouseEvent e) {
-		mouse = new Pos(e.getX(), e.getY()).inverseTransform(canvas
-				.getTransform());
-	}
-
 	/**
-	 * @return The current location of the mouse, in drawing coordinated (i.e.
+	 * @return The current location of the mouse, in drawing coordinates (i.e.
 	 *         inverse transformed with the <tt>AffineTransform</tt> on the
 	 *         canvas), or <tt>null</tt> if the mouse is not inside the
 	 *         canvas.
 	 */
 	protected Pos getMouse() {
-		return mouse;
-	}
-
-	public void mouseDragged(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseExited(MouseEvent e) {
-		mouse = null;
-	}
-
-	public void mousePressed(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		trackMouse(e);
-	}
-
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		trackMouse(e);
+		return strokeListener.getCurrent();
 	}
 
 	public void drawState(Graphics2D g, double pixelSize) {
 	}
 
 	public void resetState() {
-		mouse = null;
 	}
 
 	protected void highlightPoint(Graphics2D g, double pixelSize, Point p) {
@@ -144,6 +103,77 @@ public abstract class AbstractTool implements Tool, MouseListener,
 		} catch (ImaginaryPointException e) {
 			// Blah.
 		}
+	}
+
+	protected void mouseMoved(Pos current, Pos delta) {
+	}
+
+	protected void strokeStarted(Pos origin) {
+	}
+
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
+	}
+
+	protected void strokeFinished(Pos origin, Pos end) {
+	}
+
+	private class StrokeListener implements MouseListener, MouseMotionListener {
+
+		private Pos origin;
+
+		private Pos current;
+
+		private Pos setAndDelta(Pos newCurrent) {
+			Pos delta = current != null ? newCurrent.subtract(current) : null;
+			current = newCurrent;
+			return delta;
+		}
+
+		public void reset() {
+			origin = null;
+			current = null;
+		}
+
+		public void mouseMoved(MouseEvent e) {
+			Pos delta = setAndDelta(canvas.mouse2space(new Pos(e.getPoint())));
+			AbstractTool.this.mouseMoved(current, delta);
+		}
+
+		public void mousePressed(MouseEvent e) {
+			origin = canvas.mouse2space(new Pos(e.getPoint()));
+			current = origin;
+			strokeStarted(origin);
+		}
+
+		public void mouseReleased(MouseEvent e) {
+			strokeFinished(origin, current);
+			origin = null;
+		}
+
+		public void mouseDragged(MouseEvent e) {
+			Pos delta = setAndDelta(canvas.mouse2space(new Pos(e.getPoint())));
+			strokeInProgress(origin, current, delta);
+		}
+
+		/** During a stroke, returns the position where the mouse was pressed. */
+		public Pos getOrigin() {
+			return origin;
+		}
+
+		/** Returns the mouse's current position. */
+		public Pos getCurrent() {
+			return current;
+		}
+
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		public void mouseExited(MouseEvent e) {
+		}
+
 	}
 
 }

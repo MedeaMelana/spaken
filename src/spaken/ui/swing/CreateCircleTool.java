@@ -1,7 +1,6 @@
 package spaken.ui.swing;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 
 import spaken.model.Circle;
 import spaken.model.ImaginaryPointException;
@@ -9,6 +8,9 @@ import spaken.model.Point;
 import spaken.model.Pos;
 import spaken.model.rendered.RenderedCircle;
 
+// Idea:
+// One stroke creates a circle from two points.
+// Three stokes create a circle from three points.
 public class CreateCircleTool extends AbstractTool {
 
 	private Point distFrom, distTo;
@@ -18,37 +20,36 @@ public class CreateCircleTool extends AbstractTool {
 	}
 
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		super.mouseReleased(e);
-		
-		Point p = getSpace().getPointAt(getMouse(),
-				getCanvas().getPointSelectSize());
+	protected void mouseMoved(Pos current, Pos delta) {
+		getCanvas().refresh();
+	}
+
+	@Override
+	protected void strokeStarted(Pos origin) {
+		if (distFrom == null) {
+			distFrom = getCanvas().getPointAt(origin);
+		}
+	}
+
+	@Override
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
+		getCanvas().refresh();
+	}
+
+	@Override
+	protected void strokeFinished(Pos origin, Pos end) {
+		Point p = getCanvas().getPointAt(end);
+
 		if (p == null) {
 			return;
-		}
-		if (distFrom == null) {
-			distFrom = p;
-		} else if (distTo == null) {
-			distTo = p;
-		} else {
+		} else if (distTo != null) {
 			addElement(new Circle(p, distFrom, distTo));
-			distFrom = null;
-			distTo = null;
+			resetState();
+		} else if (distFrom != null && distFrom != p) {
+			distTo = p;
+		} else if (distFrom == null) {
+			distFrom = p;
 		}
-		getCanvas().refresh();
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		super.mouseMoved(e);
-		
-		getCanvas().refresh();
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		super.mouseDragged(e);
-		
 		getCanvas().refresh();
 	}
 
@@ -56,12 +57,13 @@ public class CreateCircleTool extends AbstractTool {
 	public void drawState(Graphics2D g, double pixelSize) {
 		highlightPoint(g, pixelSize, distFrom);
 		highlightPoint(g, pixelSize, distTo);
-		
+
 		Pos mouse = getMouse();
-		
+
 		if (mouse == null) {
 			return;
 		}
+
 		try {
 			if (distTo != null) {
 				new RenderedCircle(mouse, distTo.getPos().distance(
@@ -73,11 +75,6 @@ public class CreateCircleTool extends AbstractTool {
 			}
 		} catch (ImaginaryPointException e) {
 		}
-	}
-
-	@Override
-	public void uninstall(SpaceCanvas canvas) {
-		super.uninstall(canvas);
 	}
 
 	@Override
