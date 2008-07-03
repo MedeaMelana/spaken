@@ -6,13 +6,18 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 
+import spaken.model.FixedPoint;
+import spaken.model.Pos;
+
 public class SelectTool extends AbstractTool {
 
-	protected SelectTool() {
+	private TranslateListener translateListener = new TranslateListener();
+
+	private FixedPoint dragging;
+
+	public SelectTool() {
 		super("Select");
 	}
-
-	private TranslateListener translateListener = new TranslateListener();
 
 	@Override
 	public void install(SpaceCanvas canvas) {
@@ -28,6 +33,24 @@ public class SelectTool extends AbstractTool {
 		canvas.removeMouseMotionListener(translateListener);
 	}
 
+	@Override
+	protected void strokeStarted(Pos origin) {
+		dragging = getCanvas().getFixedPointAt(origin);
+	}
+
+	@Override
+	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
+		if (dragging != null) {
+			dragging.setPos(dragging.getPos().add(delta));
+			getCanvas().refresh();
+		}
+	}
+
+	@Override
+	protected void strokeFinished(Pos origin, Pos end) {
+		dragging = null;
+	}
+
 	private class TranslateListener implements MouseListener,
 			MouseMotionListener {
 
@@ -38,6 +61,10 @@ public class SelectTool extends AbstractTool {
 		}
 
 		public void mouseDragged(MouseEvent e) {
+			if (dragging != null) {
+				return;
+			}
+
 			Point newMouse = e.getPoint();
 			if (mouse != null) {
 				AffineTransform xf = getCanvas().getTransform();
