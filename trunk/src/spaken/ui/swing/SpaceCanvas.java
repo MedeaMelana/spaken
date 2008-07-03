@@ -184,8 +184,6 @@ public class SpaceCanvas extends JPanel {
 		xf.scale(scale, scale);
 		xf.translate(-pos.x, -pos.y);
 
-		System.out.println("New zoom = " + xf.getScaleX());
-
 		refresh();
 	}
 
