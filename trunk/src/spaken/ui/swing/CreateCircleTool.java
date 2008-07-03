@@ -58,22 +58,21 @@ public class CreateCircleTool extends AbstractTool {
 		highlightPoint(g, pixelSize, distFrom);
 		highlightPoint(g, pixelSize, distTo);
 
-		Pos mouse = getMouse();
+		if (isMouseInside()) {
+			try {
+				Pos mouse = getMouse();
 
-		if (mouse == null) {
-			return;
-		}
-
-		try {
-			if (distTo != null) {
-				new RenderedCircle(mouse, distTo.getPos().distance(
-						distFrom.getPos()), DrawingConstants.OUTLINE).draw(g,
-						pixelSize);
-			} else if (distFrom != null) {
-				new RenderedCircle(mouse, distFrom.getPos().distance(mouse),
-						DrawingConstants.OUTLINE).draw(g, pixelSize);
+				if (distTo != null) {
+					new RenderedCircle(mouse, distTo.getPos().distance(
+							distFrom.getPos()), DrawingConstants.OUTLINE).draw(
+							g, pixelSize);
+				} else if (distFrom != null) {
+					new RenderedCircle(mouse,
+							distFrom.getPos().distance(mouse),
+							DrawingConstants.OUTLINE).draw(g, pixelSize);
+				}
+			} catch (ImaginaryPointException e) {
 			}
-		} catch (ImaginaryPointException e) {
 		}
 	}
 

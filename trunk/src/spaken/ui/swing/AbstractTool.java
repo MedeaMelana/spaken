@@ -87,6 +87,10 @@ public abstract class AbstractTool implements Tool {
 		return strokeListener.getCurrent();
 	}
 
+	protected boolean isMouseInside() {
+		return strokeListener.isMouseInside();
+	}
+
 	public void drawState(Graphics2D g, double pixelSize) {
 	}
 
@@ -176,10 +180,12 @@ public abstract class AbstractTool implements Tool {
 
 		public void mouseEntered(MouseEvent e) {
 			mouseInside = true;
+			getCanvas().refresh();
 		}
 
 		public void mouseExited(MouseEvent e) {
 			mouseInside = false;
+			getCanvas().refresh();
 		}
 
 	}
