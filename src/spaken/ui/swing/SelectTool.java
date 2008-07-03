@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
 
 public class SelectTool extends AbstractTool {
 
@@ -39,9 +40,12 @@ public class SelectTool extends AbstractTool {
 		public void mouseDragged(MouseEvent e) {
 			Point newMouse = e.getPoint();
 			if (mouse != null) {
+				AffineTransform xf = getCanvas().getTransform();
 				int dx = newMouse.x - mouse.x;
 				int dy = newMouse.y - mouse.y;
-				getCanvas().getTransform().translate(dx, dy);
+				double sx = xf.getScaleX();
+				double sy = xf.getScaleY();
+				getCanvas().getTransform().translate(dx / sx, dy / sy);
 				getCanvas().refresh();
 			}
 			mouse = newMouse;
