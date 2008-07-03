@@ -48,13 +48,16 @@ public class CreateLineTool extends AbstractTool {
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
-		Pos mouse = getMouse();
-		if (p1 != null && mouse != null) {
+		if (p1 != null) {
 			highlightPoint(g, pixelSize, p1);
-			try {
-				new RenderedLine(p1.getPos(), mouse, DrawingConstants.OUTLINE)
-						.draw(g, pixelSize);
-			} catch (ImaginaryPointException e) {
+
+			if (isMouseInside()) {
+				Pos mouse = getMouse();
+				try {
+					new RenderedLine(p1.getPos(), mouse,
+							DrawingConstants.OUTLINE).draw(g, pixelSize);
+				} catch (ImaginaryPointException e) {
+				}
 			}
 		}
 	}
