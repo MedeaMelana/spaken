@@ -134,6 +134,8 @@ public class SpaceCanvas extends JPanel {
 	public AffineTransform getTransform() {
 		if (transform == null) {
 			transform = new AffineTransform();
+			transform.scale(DrawingConstants.ZOOM_INITIAL,
+					DrawingConstants.ZOOM_INITIAL);
 		}
 		return transform;
 	}
@@ -172,12 +174,17 @@ public class SpaceCanvas extends JPanel {
 	}
 
 	private void scale(double zoom, Pos pos) {
-		double scale = Math.pow(2, zoom);
+		AffineTransform xf = getTransform();
 
-		AffineTransform transform = getTransform();
-		transform.translate(pos.x, pos.y);
-		transform.scale(scale, scale);
-		transform.translate(-pos.x, -pos.y);
+		double scale = Math.pow(2, zoom);
+		scale = Math.max(scale, DrawingConstants.ZOOM_MIN / xf.getScaleX());
+		scale = Math.min(scale, DrawingConstants.ZOOM_MAX / xf.getScaleX());
+
+		xf.translate(pos.x, pos.y);
+		xf.scale(scale, scale);
+		xf.translate(-pos.x, -pos.y);
+
+		System.out.println("New zoom = " + xf.getScaleX());
 
 		refresh();
 	}

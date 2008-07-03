@@ -123,6 +123,8 @@ public abstract class AbstractTool implements Tool {
 
 		private Pos current;
 
+		private boolean mouseInside;
+
 		private Pos setAndDelta(Pos newCurrent) {
 			Pos delta = current != null ? newCurrent.subtract(current) : null;
 			current = newCurrent;
@@ -165,13 +167,19 @@ public abstract class AbstractTool implements Tool {
 			return current;
 		}
 
+		public boolean isMouseInside() {
+			return mouseInside;
+		}
+
 		public void mouseClicked(MouseEvent e) {
 		}
 
 		public void mouseEntered(MouseEvent e) {
+			mouseInside = true;
 		}
 
 		public void mouseExited(MouseEvent e) {
+			mouseInside = false;
 		}
 
 	}
