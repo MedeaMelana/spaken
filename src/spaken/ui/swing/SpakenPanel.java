@@ -80,7 +80,6 @@ public class SpakenPanel extends JPanel {
 		List<Tool> tools = new LinkedList<Tool>();
 		tools.add(new SelectTool());
 		tools.add(new PointCreateTool());
-		tools.add(new PointMoveTool());
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
 		tools.add(new IntersectionTool());
