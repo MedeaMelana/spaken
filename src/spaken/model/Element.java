@@ -6,5 +6,7 @@ import spaken.model.rendered.Rendered;
 public interface Element {
 
 	public Rendered render() throws ImaginaryPointException;
+	
+	public Element[] getDependencies();
 
 }

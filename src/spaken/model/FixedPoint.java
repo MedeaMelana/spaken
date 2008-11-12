@@ -41,7 +41,11 @@ public class FixedPoint implements Point {
 	}
 
 	public Rendered render() throws ImaginaryPointException {
-		return new RenderedPoint(getPos(), false);
+		return new RenderedPoint(getPos(), RenderedPoint.Type.FIXED);
+	}
+	
+	public Point[] getDependencies() {
+		return new Point[] {};
 	}
 
 }

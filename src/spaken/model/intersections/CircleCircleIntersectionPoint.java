@@ -46,4 +46,8 @@ public class CircleCircleIntersectionPoint extends DerivedPoint {
 			throw new ImaginaryPointException();
 		}
 	}
+	
+	public Element[] getDependencies() {
+		return new Element[] {c1, c2};
+	}
 }
