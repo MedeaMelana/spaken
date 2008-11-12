@@ -74,4 +74,8 @@ class LineCircleIntersectionPoint extends DerivedPoint {
 			return 1;
 		}
 	}
+	
+	public Element[] getDependencies() {
+		return new Element[] {l, c};
+	}
 }

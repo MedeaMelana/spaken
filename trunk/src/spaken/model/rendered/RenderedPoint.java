@@ -9,29 +9,39 @@ import spaken.ui.swing.DrawingConstants;
 public class RenderedPoint implements Rendered {
 
 	private Pos pos;
-
-	private boolean derived;
+	
+	public enum Type {
+		FIXED(false), DERIVED(true), PLUGGABLE(true);
+		
+		private boolean derived; 
+		
+		Type(boolean derived) {
+			this.derived = derived;
+		}
+	}
+	
+	private Type type;
 
 	private Color color;
 
-	public RenderedPoint(Pos pos, boolean derived, Color color) {
+	public RenderedPoint(Pos pos, Type type, Color color) {
 		this.pos = pos;
-		this.derived = derived;
+		this.type = type;
 		this.color = color;
 	}
 
-	public RenderedPoint(Pos pos, boolean derived) {
-		this(pos, derived, null);
+	public RenderedPoint(Pos pos, Type type) {
+		this(pos, type, null);
 	}
 	
 	public boolean isDerived() {
-		return derived;
+		return type.derived;
 	}
 
 	private Color getColor() {
 		if (color != null) {
 			return color;
-		} else if (derived) {
+		} else if (isDerived()) {
 			return DrawingConstants.BACKGROUND;
 		} else {
 			return DrawingConstants.CONTROLLABLE;

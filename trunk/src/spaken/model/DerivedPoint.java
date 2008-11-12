@@ -6,7 +6,7 @@ import spaken.model.rendered.RenderedPoint;
 public abstract class DerivedPoint implements Point {
 
 	public Rendered render() throws ImaginaryPointException {
-		return new RenderedPoint(getPos(), true);
+		return new RenderedPoint(getPos(), RenderedPoint.Type.DERIVED);
 	}
 
 }

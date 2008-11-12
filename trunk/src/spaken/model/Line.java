@@ -28,5 +28,9 @@ public class Line implements Element {
 	public Rendered render() throws ImaginaryPointException {
 		return new RenderedLine(p1.getPos(), p2.getPos());
 	}
+	
+	public Point[] getDependencies() {
+		return new Point[] {p1, p2};
+	}
 
 }

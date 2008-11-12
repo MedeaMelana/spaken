@@ -37,5 +37,8 @@ public class LineLineIntersectionPoint extends DerivedPoint {
 
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
 	}
-
+	
+	public Element[] getDependencies() {
+		return new Element[] {l1, l2};
+	}
 }

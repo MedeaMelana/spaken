@@ -53,8 +53,8 @@ public class IntersectionTool extends AbstractTool {
 				return;
 
 			try {
-				new RenderedPoint(pt.getPos(), true, DrawingConstants.OUTLINE)
-						.draw(g, pixelSize);
+				new RenderedPoint(pt.getPos(), RenderedPoint.Type.DERIVED,
+						DrawingConstants.OUTLINE).draw(g, pixelSize);
 			} catch (ImaginaryPointException e) {
 			}
 		}
@@ -107,6 +107,11 @@ public class IntersectionTool extends AbstractTool {
 
 		public Point getDynamicPoint() {
 			return point;
+		}
+		
+		public Element[] getDependencies() {
+			// TODO ook cachen? wordt het wel gebruikt?
+			return point.getDependencies();
 		}
 
 	}

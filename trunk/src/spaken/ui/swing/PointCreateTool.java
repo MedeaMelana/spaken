@@ -15,8 +15,8 @@ public class PointCreateTool extends AbstractTool {
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		if (isMouseInside()) {
-			new RenderedPoint(getMouse(), true, DrawingConstants.OUTLINE).draw(
-					g, pixelSize);
+			new RenderedPoint(getMouse(), RenderedPoint.Type.DERIVED,
+					DrawingConstants.OUTLINE).draw(g, pixelSize);
 		}
 	}
 

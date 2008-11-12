@@ -32,5 +32,9 @@ public class Circle implements Element {
 		return new RenderedCircle(center.getPos(), distTo.getPos().distance(
 				distFrom.getPos()));
 	}
+	
+	public Point[] getDependencies() {
+		return new Point[] {center, distFrom, distTo};
+	}
 
 }

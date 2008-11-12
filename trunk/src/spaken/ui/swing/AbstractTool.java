@@ -102,8 +102,8 @@ public abstract class AbstractTool implements Tool {
 			return;
 		}
 		try {
-			new RenderedPoint(p.getPos(), true, DrawingConstants.HIGHLIGHT)
-					.draw(g, pixelSize);
+			new RenderedPoint(p.getPos(), RenderedPoint.Type.DERIVED,
+					DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
 		} catch (ImaginaryPointException e) {
 			// Blah.
 		}
