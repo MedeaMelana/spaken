@@ -1,8 +1,9 @@
-package spaken.model.intersections;
+package spaken.model.elements.intersections;
 
 import java.util.List;
 
 import spaken.model.*;
+import spaken.model.elements.*;
 
 class LineCircleIntersectionPoint extends AbstractPoint {
 	private final Line l;

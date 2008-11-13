@@ -1,8 +1,9 @@
 /* Created on Jun 20, 2008. */
-package spaken.model;
+package spaken.model.elements;
 
 import java.util.List;
 
+import spaken.model.*;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedLine;
 

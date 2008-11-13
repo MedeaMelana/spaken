@@ -1,5 +1,6 @@
-package spaken.model;
+package spaken.model.elements;
 
+import spaken.model.ImaginaryPointException;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 

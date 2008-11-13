@@ -1,5 +1,7 @@
 package spaken.model;
 
+import spaken.model.elements.Point;
+
 public class ImaginaryPointException extends Exception {
   private static final String MESSAGE = "Attempt to use imaginary Point";
   private final Point point;

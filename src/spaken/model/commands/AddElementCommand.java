@@ -5,6 +5,11 @@ import spaken.model.Element;
 import spaken.ui.swing.SpaceCanvas;
 
 public class AddElementCommand implements Command {
+	/*
+	 * TODO Move this out of the spaken.model package, or eliminate the
+	 * SpaceCanvas in favour of a Space (and do the repainting through listeners
+	 * on Space). I prefer the latter.
+	 */
 
 	private SpaceCanvas canvas;
 

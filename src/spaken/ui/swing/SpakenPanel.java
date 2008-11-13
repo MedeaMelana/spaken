@@ -14,6 +14,7 @@ import spaken.ui.swing.actions.ExitAction;
 import spaken.ui.swing.actions.RedoAction;
 import spaken.ui.swing.actions.SetToolAction;
 import spaken.ui.swing.actions.UndoAction;
+import spaken.ui.swing.tools.*;
 
 public class SpakenPanel extends JPanel {
 

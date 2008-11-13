@@ -1,19 +1,22 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.*;
 
 import spaken.model.*;
-import spaken.model.intersections.Intersections;
+import spaken.model.elements.*;
+import spaken.model.elements.intersections.Intersections;
 import spaken.model.rendered.RenderedPoint;
+import spaken.ui.swing.DrawingConstants;
+import spaken.ui.swing.SpaceCanvas;
 import spaken.util.Iterables;
 
 public class IntersectionTool extends AbstractTool {
 
 	private List<CachedPoint> intersections;
 
-	protected IntersectionTool() {
+	public IntersectionTool() {
 		super("Mark Intersection");
 		intersections = new LinkedList<CachedPoint>();
 	}

@@ -3,6 +3,7 @@ package spaken.model;
 
 import java.util.List;
 
+import spaken.model.elements.PluggablePoint;
 import spaken.model.rendered.Rendered;
 
 public interface Element<T extends Element> {

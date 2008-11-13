@@ -1,18 +1,19 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
 import spaken.model.ImaginaryPointException;
-import spaken.model.Line;
-import spaken.model.Point;
 import spaken.model.Pos;
+import spaken.model.elements.Line;
+import spaken.model.elements.Point;
 import spaken.model.rendered.RenderedLine;
+import spaken.ui.swing.DrawingConstants;
 
 public class CreateLineTool extends AbstractTool {
 
 	Point p1;
 
-	protected CreateLineTool() {
+	public CreateLineTool() {
 		super("Create Line");
 	}
 

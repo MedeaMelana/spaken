@@ -1,4 +1,4 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -6,8 +6,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 
-import spaken.model.FixedPoint;
 import spaken.model.Pos;
+import spaken.model.elements.FixedPoint;
+import spaken.ui.swing.SpaceCanvas;
 
 public class SelectTool extends AbstractTool {
 

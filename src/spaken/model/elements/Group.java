@@ -1,9 +1,10 @@
-package spaken.model;
+package spaken.model.elements;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import spaken.model.*;
 import spaken.model.rendered.Rendered;
 
 public class Group implements Element<Group> {

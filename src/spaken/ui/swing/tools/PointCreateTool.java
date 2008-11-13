@@ -1,14 +1,15 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.FixedPoint;
 import spaken.model.Pos;
+import spaken.model.elements.FixedPoint;
 import spaken.model.rendered.RenderedPoint;
+import spaken.ui.swing.DrawingConstants;
 
 public class PointCreateTool extends AbstractTool {
 
-	protected PointCreateTool() {
+	public PointCreateTool() {
 		super("Create Point");
 	}
 
