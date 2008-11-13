@@ -1,11 +1,14 @@
 package spaken.model.elements;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class Group implements Element<Group> {
 	private List<PluggablePoint> inputPoints;
@@ -44,5 +47,16 @@ public class Group implements Element<Group> {
 		//outputElement.makePluggableCopy(collect);
 		
 		return new Group(outputElement);
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRefs(inputPoints);
+		out.writeRef(outputElement);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		for (Element e : in.readRefs()) {
+			inputPoints.add((PluggablePoint) e);
+		}
 	}
 }
