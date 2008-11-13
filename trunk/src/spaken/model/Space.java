@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import spaken.model.intersections.Intersections;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.util.ClassFilter;
@@ -18,70 +17,6 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
-		demo();
-	}
-
-	private void demo() {
-		FixedPoint p1 = new FixedPoint(100, 100);
-		FixedPoint p2 = new FixedPoint(200, 150);
-		Line l = new Line(p1, p2);
-
-		add(p1);
-		add(p2);
-		add(l);
-	}
-
-	private void demo2() {
-		Point p1 = new FixedPoint(100, 100);
-		Point p2 = new FixedPoint(400, 400);
-		Point p3 = new FixedPoint(0, 300);
-		Point p4 = new FixedPoint(400, 100);
-
-		Line l1 = new Line(p1, p2);
-		Line l2 = new Line(p3, p4);
-
-		Point i = Intersections.intersect(l1, l2);
-
-		Circle c = new Circle(i, i, p3);
-		Point[] is = Intersections.intersect(c, l1);
-
-		add(p1, p2, p3, p4);
-		add(l1, l2);
-		add(i);
-		add(c);
-		add(is);
-	}
-
-	private void demoMiddenloodlijn() {
-		Point p1 = new FixedPoint(100, 100);
-		Point p2 = new FixedPoint(400, 300);
-
-		Line l1 = new Line(p1, p2);
-
-		Circle c1 = new Circle(p1, p1, p2);
-		Circle c2 = new Circle(p2, p2, p1);
-
-		Point[] is = Intersections.intersect(c1, c2);
-
-		Line mll = new Line(is[0], is[1]);
-
-		add(p1, p2);
-		add(l1);
-		add(c1, c2);
-		add(is);
-		add(mll);
-	}
-
-	private void demoParallel() {
-		Point p1 = new FixedPoint(100, 200);
-		Point p2 = new FixedPoint(400, 300);
-		Point p3 = new FixedPoint(200, 100);
-
-		Circle c1 = new Circle(p3, p1, p2);
-		Circle c2 = new Circle(p2, p1, p3);
-		Point p4 = Intersections.intersect(c1, c2)[0];
-
-		add(p1, p2, p3, p4, c1, c2, new Line(p1, p2), new Line(p3, p4));
 	}
 
 	public void add(Element... es) {
