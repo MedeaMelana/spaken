@@ -1,11 +1,13 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.*;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
+import spaken.model.elements.Point;
 import spaken.model.rendered.RenderedPoint;
+import spaken.ui.swing.*;
 
 public abstract class AbstractTool implements Tool {
 

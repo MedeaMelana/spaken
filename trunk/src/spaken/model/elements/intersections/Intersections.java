@@ -1,6 +1,7 @@
-package spaken.model.intersections;
+package spaken.model.elements.intersections;
 
 import spaken.model.*;
+import spaken.model.elements.*;
 
 public class Intersections {
 

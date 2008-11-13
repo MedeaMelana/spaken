@@ -1,5 +1,7 @@
 /* Created on Jun 20, 2008. */
-package spaken.model;
+package spaken.model.elements;
+
+import spaken.model.*;
 
 public interface Point extends Element<Point> {
 

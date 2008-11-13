@@ -15,10 +15,10 @@ import java.awt.geom.Line2D;
 import javax.swing.JPanel;
 
 import spaken.model.CommandHistory;
-import spaken.model.FixedPoint;
-import spaken.model.Point;
 import spaken.model.Pos;
 import spaken.model.Space;
+import spaken.model.elements.FixedPoint;
+import spaken.model.elements.Point;
 import spaken.model.rendered.Rendered;
 
 public class SpaceCanvas extends JPanel {

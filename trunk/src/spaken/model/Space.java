@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import spaken.model.elements.FixedPoint;
+import spaken.model.elements.Point;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.util.ClassFilter;

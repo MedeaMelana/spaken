@@ -1,12 +1,13 @@
-package spaken.ui.swing;
+package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.Circle;
 import spaken.model.ImaginaryPointException;
-import spaken.model.Point;
 import spaken.model.Pos;
+import spaken.model.elements.Circle;
+import spaken.model.elements.Point;
 import spaken.model.rendered.RenderedCircle;
+import spaken.ui.swing.DrawingConstants;
 
 // Idea:
 // One stroke creates a circle from two points.
@@ -15,7 +16,7 @@ public class CreateCircleTool extends AbstractTool {
 
 	private Point distFrom, distTo;
 
-	protected CreateCircleTool() {
+	public CreateCircleTool() {
 		super("Create Circle");
 	}
 
