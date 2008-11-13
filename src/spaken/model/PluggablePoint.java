@@ -34,7 +34,13 @@ public class PluggablePoint implements Point {
 		return plugged.getDependencies();
 	}
 
-	public void makePluggable(List<PluggablePoint> collect) {
-		collect.add(this);
+	public Point makePluggableCopy(List<PluggablePoint> collect) {
+		// This is never a newly generated PluggablePoint, so we should not
+		// collect it.
+		// TODO: possibly concatenate chains of nested PluggablePoints
+		// (optimisation)
+		Point cPlugged = plugged.makePluggableCopy(collect);
+		PluggablePoint p = new PluggablePoint(cPlugged);
+		return p;
 	}
 }

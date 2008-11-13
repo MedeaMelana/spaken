@@ -9,7 +9,6 @@ import java.util.List;
 import spaken.model.intersections.Intersections;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
-import spaken.ui.swing.DrawingConstants;
 import spaken.util.ClassFilter;
 import spaken.util.FilteredIterable;
 
@@ -19,6 +18,7 @@ public class Space {
 
 	public Space() {
 		elements = new LinkedList<Element>();
+		demo();
 	}
 
 	private void demo() {

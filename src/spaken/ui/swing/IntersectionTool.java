@@ -108,12 +108,16 @@ public class IntersectionTool extends AbstractTool {
 		public Point getDynamicPoint() {
 			return point;
 		}
-		
+
 		public Element[] getDependencies() {
 			// TODO ook cachen? wordt het wel gebruikt?
 			return point.getDependencies();
 		}
 
+		public Point makePluggableCopy(List<PluggablePoint> collect) {
+			throw new UnsupportedOperationException(
+					"This internal CachedPoint has escaped and is now being copied!");
+		}
 	}
 
 }

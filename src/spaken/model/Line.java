@@ -6,7 +6,7 @@ import java.util.List;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedLine;
 
-public class Line implements Element {
+public class Line implements Element<Line> {
 
 	private Point p1;
 	private Point p2;
@@ -35,8 +35,10 @@ public class Line implements Element {
 		return new Point[] {p1, p2};
 	}
 	
-	public void makePluggable(List<PluggablePoint> collect) {
-		p1.makePluggable(collect);
-		p2.makePluggable(collect);
+	public Line makePluggableCopy(List<PluggablePoint> collect) {
+		Point cp1 = p1.makePluggableCopy(collect);
+		Point cp2 = p2.makePluggableCopy(collect);
+		
+		return new Line(cp1, cp2);
 	}
 }
