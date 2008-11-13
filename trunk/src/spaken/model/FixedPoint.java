@@ -3,7 +3,6 @@ package spaken.model;
 
 import java.util.List;
 
-import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.model.rendered.RenderedPoint.Type;
 
@@ -50,5 +49,11 @@ public class FixedPoint extends AbstractPoint {
 	
 	public Point[] getDependencies() {
 		return new Point[] {};
+	}
+	
+	public Point makePluggableCopy(List<PluggablePoint> collect) {
+		PluggablePoint p = new PluggablePoint(this);
+		collect.add(p);
+		return p;
 	}
 }

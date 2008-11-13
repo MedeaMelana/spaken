@@ -6,7 +6,7 @@ import java.util.List;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedCircle;
 
-public class Circle implements Element {
+public class Circle implements Element<Circle> {
 
 	private Point center;
 	private Point distFrom;
@@ -39,9 +39,11 @@ public class Circle implements Element {
 		return new Point[] {center, distFrom, distTo};
 	}
 
-	public void makePluggable(List<PluggablePoint> collect) {
-		center.makePluggable(collect);
-		distFrom.makePluggable(collect);
-		distTo.makePluggable(collect);
+	public Circle makePluggableCopy(List<PluggablePoint> collect) {
+		Point cc = center.makePluggableCopy(collect);
+		Point dfc = distFrom.makePluggableCopy(collect);
+		Point dtc = distTo.makePluggableCopy(collect);
+		
+		return new Circle(cc, dfc, dtc);
 	}
 }

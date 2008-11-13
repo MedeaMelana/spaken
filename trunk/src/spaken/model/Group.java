@@ -6,17 +6,15 @@ import java.util.List;
 
 import spaken.model.rendered.Rendered;
 
-public class Group implements Element {
+public class Group implements Element<Group> {
 	private List<PluggablePoint> inputPoints;
 
-	private Element outputElement;
+	private Element<?> outputElement;
 	
-	public Group(Element outputElement) {
+	public Group(Element<?> outputElement) {
 		//TODO see if this has to become non-destructive
 		List<PluggablePoint> points = new LinkedList<PluggablePoint>();
-		outputElement.makePluggable(points);
-		
-		this.outputElement = outputElement;
+		this.outputElement = outputElement.makePluggableCopy(points);
 		
 		// make a copy (in a more efficient form)
 		this.inputPoints = new ArrayList<PluggablePoint>(points);
@@ -40,8 +38,10 @@ public class Group implements Element {
 		return outputElement.render();
 	}
 
-	public void makePluggable(List<PluggablePoint> collect) {
+	public Group makePluggableCopy(List<PluggablePoint> collect) {
 		// TODO Think about this. This is just a guess.
-		collect.addAll(inputPoints);
+		//outputElement.makePluggableCopy(collect);
+		
+		return new Group(outputElement);
 	}
 }

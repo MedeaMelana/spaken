@@ -1,5 +1,7 @@
 package spaken.model.intersections;
 
+import java.util.List;
+
 import spaken.model.*;
 
 public class CircleCircleIntersectionPoint extends AbstractPoint {
@@ -49,5 +51,12 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 	
 	public Element[] getDependencies() {
 		return new Element[] {c1, c2};
+	}
+	
+	public Point makePluggableCopy(List<PluggablePoint> collect) {
+		Circle c1c = c1.makePluggableCopy(collect);
+		Circle c2c = c2.makePluggableCopy(collect);
+		
+		return new CircleCircleIntersectionPoint(c1c, c2c, mul);
 	}
 }
