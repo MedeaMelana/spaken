@@ -7,13 +7,8 @@ import java.util.List;
 
 import javax.swing.*;
 
-import spaken.model.Command;
 import spaken.model.commands.ClearCanvasCommand;
-import spaken.ui.swing.actions.ClearCanvasAction;
-import spaken.ui.swing.actions.ExitAction;
-import spaken.ui.swing.actions.RedoAction;
-import spaken.ui.swing.actions.SetToolAction;
-import spaken.ui.swing.actions.UndoAction;
+import spaken.ui.swing.actions.*;
 import spaken.ui.swing.tools.*;
 
 public class SpakenPanel extends JPanel {
@@ -67,14 +62,24 @@ public class SpakenPanel extends JPanel {
 	private Component createToolbar() {
 		JToolBar bar = new JToolBar();
 		ButtonGroup bg = new ButtonGroup();
-		for (Tool tool : createTools()) {
-			Action a = new SetToolAction(canvas, tool);
+		for (Action a : createToolbarActions()) {
 			AbstractButton b = new JToggleButton(a);
 			bg.add(b);
 			bar.add(b);
 		}
 		bg.getElements().nextElement().doClick();
 		return bar;
+	}
+	
+	private List<Action> createToolbarActions() {
+		List<Action> actions = new LinkedList<Action>();
+		
+		for (Tool tool : createTools()) {
+			Action a = new SetToolAction(canvas, tool);
+			actions.add(a);
+		}
+		
+		return actions;
 	}
 
 	private List<Tool> createTools() {
@@ -96,6 +101,7 @@ public class SpakenPanel extends JPanel {
 
 	private JMenu createFileMenu() {
 		JMenu file = new JMenu("File");
+		file.add(new HackySaveAction(canvas));
 		file.add(new ExitAction());
 		return file;
 	}

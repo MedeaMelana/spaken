@@ -1,10 +1,13 @@
 package spaken.model.elements;
 
+import java.io.IOException;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class PluggablePoint implements Point {
 	private Point plugged;
@@ -43,5 +46,13 @@ public class PluggablePoint implements Point {
 		Point cPlugged = plugged.makePluggableCopy(collect);
 		PluggablePoint p = new PluggablePoint(cPlugged);
 		return p;
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRef(plugged);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		plugged = (Point) in.readRef();
 	}
 }

@@ -1,11 +1,14 @@
 /* Created on Jun 20, 2008. */
 package spaken.model.elements;
 
+import java.io.IOException;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.RenderedPoint;
 import spaken.model.rendered.RenderedPoint.Type;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class FixedPoint extends AbstractPoint {
 
@@ -56,5 +59,13 @@ public class FixedPoint extends AbstractPoint {
 		PluggablePoint p = new PluggablePoint(this);
 		collect.add(p);
 		return p;
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writePos(pos);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		pos = in.readPos();
 	}
 }

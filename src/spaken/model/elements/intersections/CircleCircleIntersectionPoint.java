@@ -1,14 +1,19 @@
 package spaken.model.elements.intersections;
 
+import java.io.IOException;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.elements.*;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class CircleCircleIntersectionPoint extends AbstractPoint {
-	private final Circle c1, c2;
+	// :( had to remove final from the fields, because of readElement
 
-	private final double mul;
+	private Circle c1, c2;
+
+	private double mul;
 
 	CircleCircleIntersectionPoint(Circle c1, Circle c2, double mul) {
 		assert mul == -1 || mul == 1;
@@ -59,5 +64,17 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 		Circle c2c = c2.makePluggableCopy(collect);
 		
 		return new CircleCircleIntersectionPoint(c1c, c2c, mul);
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRef(c1);
+		out.writeRef(c2);
+		out.writeDouble(mul);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		c1 = (Circle) in.readRef();
+		c2 = (Circle) in.readRef();
+		mul = in.readDouble();
 	}
 }

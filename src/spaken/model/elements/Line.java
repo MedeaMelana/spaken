@@ -1,11 +1,14 @@
 /* Created on Jun 20, 2008. */
 package spaken.model.elements;
 
+import java.io.IOException;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedLine;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class Line implements Element<Line> {
 
@@ -41,5 +44,15 @@ public class Line implements Element<Line> {
 		Point cp2 = p2.makePluggableCopy(collect);
 		
 		return new Line(cp1, cp2);
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRef(p1);
+		out.writeRef(p2);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		p1 = (Point) in.readRef();
+		p2 = (Point) in.readRef();
 	}
 }

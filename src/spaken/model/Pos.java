@@ -122,4 +122,13 @@ public class Pos {
 		return "(" + x + "," + y + ")";
 	}
 
+	public static Pos parsePos(String str) throws NumberFormatException {
+		str = str.replaceAll("\\s*(\\(|\\))\\s*", "");
+		String[] strs = str.split("\\s*,\\s*");
+		if (strs.length != 2)
+			throw new NumberFormatException("For input string: \"" + str + "\"");
+
+		return new Pos(Double.parseDouble(strs[0]), Double.parseDouble(strs[1]));
+	}
+
 }

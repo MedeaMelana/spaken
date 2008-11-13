@@ -1,9 +1,12 @@
 package spaken.model.elements.intersections;
 
+import java.io.IOException;
 import java.util.List;
 
 import spaken.model.*;
 import spaken.model.elements.*;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 
 public class LineLineIntersectionPoint extends AbstractPoint {
 	
@@ -50,5 +53,15 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 		Line l2c = l2.makePluggableCopy(collect);
 		
 		return new LineLineIntersectionPoint(l1c, l2c);
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRef(l1);
+		out.writeRef(l2);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		l1 = (Line) in.readRef();
+		l2 = (Line) in.readRef();
 	}
 }

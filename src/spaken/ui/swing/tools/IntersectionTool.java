@@ -2,12 +2,15 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 import java.util.*;
 
 import spaken.model.*;
 import spaken.model.elements.*;
 import spaken.model.elements.intersections.Intersections;
 import spaken.model.rendered.RenderedPoint;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 import spaken.ui.swing.DrawingConstants;
 import spaken.ui.swing.SpaceCanvas;
 import spaken.util.Iterables;
@@ -116,10 +119,23 @@ public class IntersectionTool extends AbstractTool {
 			// TODO ook cachen? wordt het wel gebruikt?
 			return point.getDependencies();
 		}
+		
+		private void impossible(String verb) {
+			throw new UnsupportedOperationException(
+					"This internal CachedPoint has escaped and is now being " + verb + "!");
+		}
 
 		public Point makePluggableCopy(List<PluggablePoint> collect) {
-			throw new UnsupportedOperationException(
-					"This internal CachedPoint has escaped and is now being copied!");
+			impossible("copied");
+			return null;
+		}
+
+		public void readElement(ElementReader in) throws IOException {
+			impossible("read");
+		}
+
+		public void writeElement(ElementWriter out) throws IOException {
+			impossible("written");
 		}
 	}
 
