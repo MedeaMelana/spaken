@@ -1,10 +1,13 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import java.util.List;
+
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
+import spaken.model.rendered.RenderedPoint.Type;
 
-public class FixedPoint implements Point {
+public class FixedPoint extends AbstractPoint {
 
 	private Pos pos;
 
@@ -39,13 +42,13 @@ public class FixedPoint implements Point {
 	public void setY(double y) {
 		pos = pos.setY(y);
 	}
-
-	public Rendered render() throws ImaginaryPointException {
-		return new RenderedPoint(getPos(), RenderedPoint.Type.FIXED);
+	
+	@Override
+	protected Type getRenderedPointType() {
+		return RenderedPoint.Type.FIXED;
 	}
 	
 	public Point[] getDependencies() {
 		return new Point[] {};
 	}
-
 }

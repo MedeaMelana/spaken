@@ -88,7 +88,7 @@ public class IntersectionTool extends AbstractTool {
 		intersections.clear();
 	}
 
-	private static class CachedPoint extends DerivedPoint {
+	private static class CachedPoint extends AbstractPoint {
 
 		private Point point;
 
