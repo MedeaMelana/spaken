@@ -2,7 +2,7 @@ package spaken.model.intersections;
 
 import spaken.model.*;
 
-public class CircleCircleIntersectionPoint extends DerivedPoint {
+public class CircleCircleIntersectionPoint extends AbstractPoint {
 	private final Circle c1, c2;
 
 	private final double mul;

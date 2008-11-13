@@ -1,5 +1,7 @@
 package spaken.model;
 
+import java.util.List;
+
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 
@@ -32,4 +34,7 @@ public class PluggablePoint implements Point {
 		return plugged.getDependencies();
 	}
 
+	public void makePluggable(List<PluggablePoint> collect) {
+		collect.add(this);
+	}
 }

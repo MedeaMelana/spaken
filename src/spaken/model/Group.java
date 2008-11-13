@@ -1,24 +1,33 @@
 package spaken.model;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import spaken.model.rendered.Rendered;
 
 public class Group implements Element {
-	private PluggablePoint[] inputPoints;
+	private List<PluggablePoint> inputPoints;
 
 	private Element outputElement;
 	
-	private Group(Element outputElement) {
-		//TODO rebuild element with PluggablePoints as the bottom dependencies
+	public Group(Element outputElement) {
+		//TODO see if this has to become non-destructive
+		List<PluggablePoint> points = new LinkedList<PluggablePoint>();
+		outputElement.makePluggable(points);
+		
+		this.outputElement = outputElement;
+		
+		// make a copy (in a more efficient form)
+		this.inputPoints = new ArrayList<PluggablePoint>(points);
 	}
 
 	public Element[] getDependencies() {
-		// TODO kopie maken
-		return inputPoints;
+		return getInputPoints();
 	}
 
 	public PluggablePoint[] getInputPoints() {
-		// TODO kopie maken
-		return inputPoints;
+		return inputPoints.toArray(new PluggablePoint[inputPoints.size()]);
 	}
 
 	public Element getOutputElement() {
@@ -29,5 +38,10 @@ public class Group implements Element {
 
 	public Rendered render() throws ImaginaryPointException {
 		return outputElement.render();
+	}
+
+	public void makePluggable(List<PluggablePoint> collect) {
+		// TODO Think about this. This is just a guess.
+		collect.addAll(inputPoints);
 	}
 }

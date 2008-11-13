@@ -1,6 +1,8 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import java.util.List;
+
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedLine;
 
@@ -32,5 +34,9 @@ public class Line implements Element {
 	public Point[] getDependencies() {
 		return new Point[] {p1, p2};
 	}
-
+	
+	public void makePluggable(List<PluggablePoint> collect) {
+		p1.makePluggable(collect);
+		p2.makePluggable(collect);
+	}
 }

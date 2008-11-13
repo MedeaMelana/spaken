@@ -1,6 +1,8 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import java.util.List;
+
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedCircle;
 
@@ -37,4 +39,9 @@ public class Circle implements Element {
 		return new Point[] {center, distFrom, distTo};
 	}
 
+	public void makePluggable(List<PluggablePoint> collect) {
+		center.makePluggable(collect);
+		distFrom.makePluggable(collect);
+		distTo.makePluggable(collect);
+	}
 }
