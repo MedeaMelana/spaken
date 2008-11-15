@@ -89,6 +89,10 @@ public class FlatFileStorage implements StorageEngine {
 		public void writeDouble(double d) throws IOException {
 			data.add("d" + d);
 		}
+		
+		public void writeBoolean(boolean b) throws IOException {
+			data.add("b" + b);
+		}
 
 		public void writeRefs(Iterable<? extends Element> refs) throws IOException {
 			data.add("[");

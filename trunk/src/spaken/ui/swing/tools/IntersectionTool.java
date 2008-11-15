@@ -1,7 +1,6 @@
 package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.*;
 
@@ -115,19 +114,9 @@ public class IntersectionTool extends AbstractTool {
 			return point;
 		}
 
-		public Element[] getDependencies() {
-			// TODO ook cachen? wordt het wel gebruikt?
-			return point.getDependencies();
-		}
-		
 		private void impossible(String verb) {
 			throw new UnsupportedOperationException(
 					"This internal CachedPoint has escaped and is now being " + verb + "!");
-		}
-
-		public Point makePluggableCopy(List<PluggablePoint> collect) {
-			impossible("copied");
-			return null;
 		}
 
 		public void readElement(ElementReader in) throws IOException {

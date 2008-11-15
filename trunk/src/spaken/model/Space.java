@@ -6,12 +6,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import spaken.model.elements.FixedPoint;
+import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
-import spaken.util.ClassFilter;
-import spaken.util.FilteredIterable;
+import spaken.util.*;
 
 public class Space {
 
@@ -37,9 +36,23 @@ public class Space {
 		return elements;
 	}
 
-	public Iterable<FixedPoint> getFixedPoints() {
-		return new FilteredIterable<Element, FixedPoint>(getElements(),
-				new ClassFilter<FixedPoint>(FixedPoint.class));
+	public Iterable<AssumedPoint> getFixedPoints() {
+		// only fixed AssumedPoints (i.e. for which isActual returns false)
+		return new FilteredIterable<Element, AssumedPoint>(getElements(),
+				new Filter<Element, AssumedPoint>() {
+
+					public boolean accepts(Element a) {
+						if (a instanceof AssumedPoint) {
+							return !((AssumedPoint) a).isActual();
+						}
+						return false;
+					}
+
+					public AssumedPoint map(Element a) {
+						return (AssumedPoint) a;
+					}
+
+				});
 	}
 
 	public Iterable<Point> getPoints() {
@@ -51,11 +64,12 @@ public class Space {
 		return getPointAt(pos, getPoints(), distance);
 	}
 
-	public FixedPoint getFixedPointAt(Pos pos, double distance) {
+	public AssumedPoint getFixedPointAt(Pos pos, double distance) {
 		return getPointAt(pos, getFixedPoints(), distance);
 	}
 
-	public <P extends Point> P getPointAt(Pos pos, Iterable<P> points, double distance) {
+	public <P extends Point> P getPointAt(Pos pos, Iterable<P> points,
+			double distance) {
 		distance = distance * distance;
 		P minP = null;
 		for (P p : points) {

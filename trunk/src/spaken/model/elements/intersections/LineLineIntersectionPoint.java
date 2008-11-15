@@ -1,7 +1,6 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
-import java.util.List;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -42,17 +41,6 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 		double by = p1.y - p2.y;
 
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
-	}
-	
-	public Element[] getDependencies() {
-		return new Element[] {l1, l2};
-	}
-	
-	public Point makePluggableCopy(List<PluggablePoint> collect) {
-		Line l1c = l1.makePluggableCopy(collect);
-		Line l2c = l2.makePluggableCopy(collect);
-		
-		return new LineLineIntersectionPoint(l1c, l2c);
 	}
 	
 	public void writeElement(ElementWriter out) throws IOException {

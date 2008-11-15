@@ -2,7 +2,6 @@
 package spaken.model.elements;
 
 import java.io.IOException;
-import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
@@ -37,18 +36,6 @@ public class Circle implements Element<Circle> {
 	public Rendered render() throws ImaginaryPointException {
 		return new RenderedCircle(center.getPos(), distTo.getPos().distance(
 				distFrom.getPos()));
-	}
-	
-	public Point[] getDependencies() {
-		return new Point[] {center, distFrom, distTo};
-	}
-
-	public Circle makePluggableCopy(List<PluggablePoint> collect) {
-		Point cc = center.makePluggableCopy(collect);
-		Point dfc = distFrom.makePluggableCopy(collect);
-		Point dtc = distTo.makePluggableCopy(collect);
-		
-		return new Circle(cc, dfc, dtc);
 	}
 	
 	public void writeElement(ElementWriter out) throws IOException {
