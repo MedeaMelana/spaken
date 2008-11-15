@@ -3,7 +3,7 @@ package spaken.ui.swing.tools;
 import java.awt.Graphics2D;
 
 import spaken.model.Pos;
-import spaken.model.elements.FixedPoint;
+import spaken.model.elements.AssumedPoint;
 import spaken.model.rendered.RenderedPoint;
 import spaken.ui.swing.DrawingConstants;
 
@@ -23,7 +23,7 @@ public class PointCreateTool extends AbstractTool {
 
 	@Override
 	protected void strokeFinished(Pos origin, Pos end) {
-		addElement(new FixedPoint(end));
+		addElement(new AssumedPoint(end));
 	}
 
 	@Override

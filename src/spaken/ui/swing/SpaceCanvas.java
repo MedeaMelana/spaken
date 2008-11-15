@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import spaken.model.CommandHistory;
 import spaken.model.Pos;
 import spaken.model.Space;
-import spaken.model.elements.FixedPoint;
+import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
 import spaken.model.rendered.Rendered;
 
@@ -169,7 +169,7 @@ public class SpaceCanvas extends JPanel {
 		return space.getPointAt(pos, getPointSelectSize());
 	}
 
-	public FixedPoint getFixedPointAt(Pos pos) {
+	public AssumedPoint getFixedPointAt(Pos pos) {
 		return space.getFixedPointAt(pos, getPointSelectSize());
 	}
 

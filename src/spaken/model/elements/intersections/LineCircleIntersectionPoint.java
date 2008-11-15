@@ -1,7 +1,6 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
-import java.util.List;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -81,17 +80,6 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 		} else {
 			return 1;
 		}
-	}
-	
-	public Element[] getDependencies() {
-		return new Element[] {l, c};
-	}
-	
-	public Point makePluggableCopy(List<PluggablePoint> collect) {
-		Line lc   = l.makePluggableCopy(collect);
-		Circle cc = c.makePluggableCopy(collect);
-		
-		return new LineCircleIntersectionPoint(lc, cc, mul);
 	}
 	
 	public void writeElement(ElementWriter out) throws IOException {

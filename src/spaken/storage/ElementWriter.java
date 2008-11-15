@@ -12,4 +12,5 @@ public interface ElementWriter {
 	public void writePos(Pos pos) throws IOException;
 	
 	public void writeDouble(double d) throws IOException;
+	public void writeBoolean(boolean isActual) throws IOException;
 }

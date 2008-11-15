@@ -2,7 +2,6 @@
 package spaken.model.elements;
 
 import java.io.IOException;
-import java.util.List;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
@@ -33,17 +32,6 @@ public class Line implements Element<Line> {
 
 	public Rendered render() throws ImaginaryPointException {
 		return new RenderedLine(p1.getPos(), p2.getPos());
-	}
-	
-	public Point[] getDependencies() {
-		return new Point[] {p1, p2};
-	}
-	
-	public Line makePluggableCopy(List<PluggablePoint> collect) {
-		Point cp1 = p1.makePluggableCopy(collect);
-		Point cp2 = p2.makePluggableCopy(collect);
-		
-		return new Line(cp1, cp2);
 	}
 	
 	public void writeElement(ElementWriter out) throws IOException {
