@@ -16,6 +16,11 @@ public class Circle implements Element<Circle> {
 	private Point distFrom;
 	private Point distTo;
 
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public Circle() {}
+	
 	public Circle(Point center, Point distFrom, Point distTo) {
 		this.center = center;
 		this.distFrom = distFrom;

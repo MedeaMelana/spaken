@@ -17,6 +17,11 @@ public class AssumedPoint extends AbstractPoint {
 	private Point actual;
 	private Pos example;
 
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public AssumedPoint() {}
+	
 	public AssumedPoint(Point actual) {
 		setActual(actual);
 	}

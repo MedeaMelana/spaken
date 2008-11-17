@@ -7,6 +7,8 @@ import spaken.model.Element;
 import spaken.model.Pos;
 
 public interface ElementReader {
+	// TODO some kind of ParseError instead of IOException
+	
 	public Element readRef() throws IOException;
 	public List<Element<?>> readRefs() throws IOException;
 
