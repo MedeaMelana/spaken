@@ -8,7 +8,7 @@ import spaken.model.Pos;
 
 public interface ElementReader {
 	public Element readRef() throws IOException;
-	public List<Element> readRefs() throws IOException;
+	public List<Element<?>> readRefs() throws IOException;
 
 	public Pos readPos() throws IOException;
 	

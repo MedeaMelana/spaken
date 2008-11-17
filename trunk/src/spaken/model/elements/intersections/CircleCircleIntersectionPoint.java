@@ -1,6 +1,7 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -65,4 +66,14 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 		c2 = (Circle) in.readRef();
 		mul = in.readDouble();
 	}
+	
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		c1.collectAssumptions(list);
+		c2.collectAssumptions(list);
+	}
+	
+	public Point copyElement() {
+		return new CircleCircleIntersectionPoint(c1.copyElement(), c2.copyElement(), mul);
+	}
+	
 }

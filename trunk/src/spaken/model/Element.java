@@ -2,7 +2,9 @@
 package spaken.model;
 
 import java.io.IOException;
+import java.util.Collection;
 
+import spaken.model.elements.AssumedPoint;
 import spaken.model.rendered.Rendered;
 import spaken.storage.*;
 
@@ -41,5 +43,9 @@ public interface Element<T extends Element> {
 	 * @throws IOException
 	 */
 	public void readElement(ElementReader in) throws IOException;
+	
+	public void collectAssumptions(Collection<AssumedPoint> list);
+	
+	public T copyElement();
 
 }

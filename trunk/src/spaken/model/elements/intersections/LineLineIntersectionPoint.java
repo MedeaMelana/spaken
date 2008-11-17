@@ -1,6 +1,7 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -52,4 +53,14 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 		l1 = (Line) in.readRef();
 		l2 = (Line) in.readRef();
 	}
+	
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		l1.collectAssumptions(list);
+		l2.collectAssumptions(list);
+	}
+	
+	public Point copyElement() {
+		return new LineLineIntersectionPoint(l1.copyElement(), l2.copyElement());
+	}
+	
 }

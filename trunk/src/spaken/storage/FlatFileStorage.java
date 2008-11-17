@@ -6,7 +6,8 @@ import java.util.*;
 import spaken.model.*;
 
 public class FlatFileStorage implements StorageEngine {
-
+	// TODO write out references that are not explicitely 'writeElement'ed
+	
 	File file;
 
 	public FlatFileStorage(File file) {
@@ -94,7 +95,7 @@ public class FlatFileStorage implements StorageEngine {
 			data.add("b" + b);
 		}
 
-		public void writeRefs(Iterable<? extends Element> refs) throws IOException {
+		public void writeRefs(Iterable<? extends Element<?>> refs) throws IOException {
 			data.add("[");
 			for (Element ref : refs) {
 				writeRef(ref);

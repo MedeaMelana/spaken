@@ -114,7 +114,7 @@ public class IntersectionTool extends AbstractTool {
 			return point;
 		}
 
-		private void impossible(String verb) {
+		private <A> A impossible(String verb) {
 			throw new UnsupportedOperationException(
 					"This internal CachedPoint has escaped and is now being " + verb + "!");
 		}
@@ -126,6 +126,15 @@ public class IntersectionTool extends AbstractTool {
 		public void writeElement(ElementWriter out) throws IOException {
 			impossible("written");
 		}
+		
+		public void collectAssumptions(Collection<AssumedPoint> list) {
+			impossible("collected");
+		}
+		
+		public Point copyElement() {
+			return impossible("copied");
+		}
+		
 	}
 
 }

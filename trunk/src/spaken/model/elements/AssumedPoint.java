@@ -1,6 +1,7 @@
 package spaken.model.elements;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.rendered.RenderedPoint;
@@ -86,7 +87,7 @@ public class AssumedPoint extends AbstractPoint {
 			out.writePos(example);
 		}
 	}
-
+	
 	public void readElement(ElementReader in) throws IOException {
 		// TODO needs more thought
 		
@@ -97,4 +98,21 @@ public class AssumedPoint extends AbstractPoint {
 			example = in.readPos();
 		}
 	}
+
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		if (isActual) {
+			actual.collectAssumptions(list);
+		} else {
+			list.add(this);
+		}
+	}
+	
+	public AssumedPoint copyElement() {
+		if (isActual) {
+			return new AssumedPoint(actual.copyElement());
+		} else {
+			return new AssumedPoint(example);
+		}
+	}
+	
 }
