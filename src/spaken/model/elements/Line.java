@@ -15,6 +15,11 @@ public class Line implements Element<Line> {
 	private Point p1;
 	private Point p2;
 
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public Line() {}
+	
 	public Line(Point p1, Point p2) {
 		if (p1 == p2) {
 			throw new IllegalArgumentException("Don't create line from two equal points.");

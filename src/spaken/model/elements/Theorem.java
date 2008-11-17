@@ -20,6 +20,11 @@ public class Theorem implements Element<Theorem> {
 	private List<AssumedPoint> assumptions;
 	private List<Element<?>> targetElements;
 	
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public Theorem() {}
+	
 	public Theorem(Element<?> target) {
 		List<Element<?>> targets = new LinkedList<Element<?>>();
 		targets.add(target);
@@ -55,7 +60,7 @@ public class Theorem implements Element<Theorem> {
 	}
 
 	public void readElement(ElementReader in) throws IOException {
-		targetElements = (List<Element<?>>) in.readRefs();
+		init(in.readRefs());
 	}
 
 	public void writeElement(ElementWriter out) throws IOException {

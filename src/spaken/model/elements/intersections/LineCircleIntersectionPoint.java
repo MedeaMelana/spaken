@@ -17,6 +17,11 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 
 	private double mul;
 
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public LineCircleIntersectionPoint() {}
+	
 	LineCircleIntersectionPoint(Line l, Circle c, double mul) {
 		assert mul == -1 || mul == 1;
 

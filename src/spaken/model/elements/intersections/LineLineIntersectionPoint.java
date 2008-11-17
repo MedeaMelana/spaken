@@ -12,6 +12,11 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 	
 	private Line l1, l2;
 	
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public LineLineIntersectionPoint() {}
+	
 	LineLineIntersectionPoint(Line l1, Line l2) {
 		this.l1 = l1;
 		this.l2 = l2;

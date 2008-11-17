@@ -15,6 +15,11 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 
 	private double mul;
 
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public CircleCircleIntersectionPoint() {}
+	
 	CircleCircleIntersectionPoint(Circle c1, Circle c2, double mul) {
 		assert mul == -1 || mul == 1;
 
