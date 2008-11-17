@@ -1,0 +1,62 @@
+/* Created on Jun 20, 2008. */
+package spaken.model.elements;
+
+import java.io.IOException;
+import java.util.Collection;
+
+import spaken.model.*;
+import spaken.model.rendered.Rendered;
+import spaken.model.rendered.RenderedLine;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
+
+public class Line implements Element<Line> {
+
+	private Point p1;
+	private Point p2;
+
+	/**
+	 * Only used internally for reading and writing!
+	 */
+	public Line() {}
+	
+	public Line(Point p1, Point p2) {
+		if (p1 == p2) {
+			throw new IllegalArgumentException("Don't create line from two equal points.");
+		}
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+
+	public Point getP1() {
+		return p1;
+	}
+
+	public Point getP2() {
+		return p2;
+	}
+
+	public Rendered render() throws ImaginaryPointException {
+		return new RenderedLine(p1.getPos(), p2.getPos());
+	}
+	
+	public void writeElement(ElementWriter out) throws IOException {
+		out.writeRef(p1);
+		out.writeRef(p2);
+	}
+	
+	public void readElement(ElementReader in) throws IOException {
+		p1 = (Point) in.readRef();
+		p2 = (Point) in.readRef();
+	}
+	
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		p1.collectAssumptions(list);
+		p2.collectAssumptions(list);
+	}
+	
+	public Line copyElement() {
+		return new Line(p1.copyElement(), p2.copyElement());
+	}
+	
+}

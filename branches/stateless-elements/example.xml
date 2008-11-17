@@ -1,0 +1,36 @@
+<spaken>
+	<!-- id-based -->
+	<!-- disadvantage: needs potentially arbitrary generation of ids -->
+	<construction name="Middelloodlijn">
+		<point id="0"/>
+		<point id="1"/>
+		<circle id="2" c="0" d1="0" d2="1"/>
+		<circle id="3" c="1" d1="1" d2="0"/>
+		<ccintersection id="4" c1="2" c2="3">
+			<!-- sorth sorts horizontally: first by x, then by y if x1 == x2 -->
+			<sorth rank="0"/>
+		</ccintersection>
+		<ccintersection id="5" c1="2" c2="3">
+			<sorth rank="1"/>
+		</ccintersection>
+		<line id="6" p1="4" p2="5" output="true"/>
+	</construction>
+	
+	<!-- stack-based, 0-relative -->
+	<construction name="Middelloodlijn">
+		<point/>
+		<point/>
+		<circle c="0" d1="0" d2="1"/>
+		<circle c="1" d1="1" d2="0"/>
+		<ccintersection c1="2" c2="3">
+			<sorth rank="0"/>
+		</ccintersection>
+		<ccintersection c1="2" c2="3">
+			<sorth rank="1"/>
+		</ccintersection>
+		<line p1="4" p2="5" output="true"/>
+	</construction>
+	
+	<construction name="Parallel">
+	</construction>
+</spaken>
