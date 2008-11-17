@@ -6,8 +6,6 @@ import java.util.*;
 import spaken.model.*;
 
 public class FlatFileStorage implements StorageEngine {
-	// TODO write out references that are not explicitely 'writeElement'ed
-	
 	File file;
 
 	public FlatFileStorage(File file) {
@@ -23,10 +21,16 @@ public class FlatFileStorage implements StorageEngine {
 		FlatElementWriter write = new FlatElementWriter();
 		PrintWriter out = new PrintWriter(new FileWriter(file));
 
-		for (Element e : space.getElements()) {
-			write.writeElement(out, e);
+		Set<Element> unsaved = new HashSet<Element>(space.getElements());
+		
+		while (! unsaved.isEmpty()) {
+			for (Element e : unsaved) {
+				write.writeElement(out, e);
+			}
+			unsaved.clear();
+			unsaved.addAll(write.unsavedRefs);
 		}
-
+		
 		out.close();
 	}
 
@@ -39,10 +43,12 @@ public class FlatFileStorage implements StorageEngine {
 		private String type;
 
 		private List<String> data;
+		private Set<Element> unsavedRefs;
 
 		private FlatElementWriter() {
 			ids = new HashMap<Element, Integer>();
 			data = new ArrayList<String>(5); // 5 is probably always enough
+			unsavedRefs = new HashSet<Element>();
 			nextID = 0;
 		}
 
@@ -77,6 +83,8 @@ public class FlatFileStorage implements StorageEngine {
 				out.print(d);
 			}
 			out.println();
+			
+			unsavedRefs.remove(elem);
 		}
 
 		public void writePos(Pos pos) {
@@ -84,6 +92,9 @@ public class FlatFileStorage implements StorageEngine {
 		}
 
 		public void writeRef(Element ref) {
+			if (! ids.containsKey(ref)) {
+				unsavedRefs.add(ref);
+			}
 			data.add("<" + getID(ref) + ">");
 		}
 
