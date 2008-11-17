@@ -1,10 +1,7 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
@@ -32,8 +29,8 @@ public class Space {
 		}
 	}
 
-	public Iterable<Element> getElements() {
-		return elements;
+	public Collection<Element> getElements() {
+		return Collections.unmodifiableList(elements);
 	}
 
 	public Iterable<AssumedPoint> getFixedPoints() {
