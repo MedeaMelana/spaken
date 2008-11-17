@@ -51,7 +51,7 @@ public class Line implements Element<Line> {
 	}
 	
 	public Line copyElement() {
-		return new Line(p1, p2);
+		return new Line(p1.copyElement(), p2.copyElement());
 	}
 	
 }

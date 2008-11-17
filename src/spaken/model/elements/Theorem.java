@@ -15,9 +15,8 @@ import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
 import spaken.util.ListWithoutDuplicates;
 
+// TODO differentiate between a Theorem and an applied Theorem
 public class Theorem implements Element<Theorem> {
-	// TODO SHARING BUGS!
-
 	private List<AssumedPoint> assumptions;
 	private List<Element<?>> targetElements;
 	
