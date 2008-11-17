@@ -52,13 +52,16 @@ public class Circle implements Element<Circle> {
 	}
 	
 	public void collectAssumptions(Collection<AssumedPoint> list) {
-		center.collectAssumptions(list);
+		// Reordered these for more useful dragging in UI. This should actually
+		// be done in a theorem file, but that concept doesn't exists yet :)
 		distFrom.collectAssumptions(list);
 		distTo.collectAssumptions(list);
+		center.collectAssumptions(list);
 	}
 	
 	public Circle copyElement() {
-		return new Circle(center, distFrom, distTo);
+		return new Circle(center.copyElement(), distFrom.copyElement(), distTo
+				.copyElement());
 	}
 	
 }

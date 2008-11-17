@@ -94,10 +94,10 @@ public class SpakenPanel extends JPanel {
 		tools.add(new CreateCircleTool());
 		tools.add(new IntersectionTool());
 		
-//		AssumedPoint p1 = new AssumedPoint(new Pos(0,0));
-//		AssumedPoint p2 = new AssumedPoint(new Pos(1,0.5));
-//		Circle c = new Circle(p1, p1, p2);
-//		tools.add(new ApplyTheoremTool("circle", new Theorem(c)));
+		AssumedPoint p1 = new AssumedPoint(new Pos(0,0));
+		AssumedPoint p2 = new AssumedPoint(new Pos(1,0.5));
+		Circle c = new Circle(p1, p1, p2);
+		tools.add(new ApplyTheoremTool("circle", new Theorem(c)));
 		
 		return tools;
 	}

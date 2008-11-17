@@ -73,7 +73,8 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 	}
 	
 	public Point copyElement() {
-		return new CircleCircleIntersectionPoint(c1.copyElement(), c2.copyElement(), mul);
+		return new CircleCircleIntersectionPoint(c1.copyElement(), c2
+				.copyElement(), mul);
 	}
 	
 }

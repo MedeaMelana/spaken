@@ -117,6 +117,19 @@ public class Pos {
 			throw new IllegalStateException(e);
 		}
 	}
+	
+	public boolean equals(Object that) {
+		if (that == null) return false;
+		if (this == that) return true;
+		if (! (that instanceof Pos)) return false;
+		
+		Pos p = (Pos) that;
+		return x == p.x && y == p.y;
+	}
+	
+	public int hashCode() {
+		return Double.valueOf(x).hashCode() + Double.valueOf(y).hashCode();
+	}
 
 	public String toString() {
 		return "(" + x + "," + y + ")";

@@ -10,8 +10,6 @@ import spaken.model.elements.Point;
 import spaken.model.elements.Theorem;
 
 public class ApplyTheoremTool extends AbstractTool {
-	// TODO SHARING BUGS!
-	
 	private Theorem originalTheorem;
 	
 	private Theorem currentTheorem;
@@ -30,33 +28,32 @@ public class ApplyTheoremTool extends AbstractTool {
 
 	@Override
 	protected void strokeStarted(Pos origin) {
-		System.out.println(originalTheorem.getAssumptions());
 		if (currentTheorem == null) {
 			currentTheorem = originalTheorem.copyElement();
 			assumptions = currentTheorem.getAssumptions();
 			if (assumptions.isEmpty()) {
-				System.out.println("empty");
+				System.err.println("empty");
 				// TODO maybe apply theorem as is?
 				resetState();
+				return;
 			} else {
 				for (AssumedPoint p : assumptions) {
 					p.setActual(getMousePoint());
 				}
 				
 				nextAssumption = 0;
-				feedPoint(getCanvas().getPointAt(origin));
 			}
 		}
+		
+		feedPoint(getCanvas().getPointAt(origin));
 	}
 	
 	protected void feedPoint(Point p) {
 		assumptions.get(nextAssumption).setActual(p);
-		System.out.println("adding " + p);
 		
 		nextAssumption++;
 		
 		if (nextAssumption >= assumptions.size()) {
-			System.out.println("done!");
 			addElement(currentTheorem);
 			resetState();
 		}
@@ -69,12 +66,13 @@ public class ApplyTheoremTool extends AbstractTool {
 
 	@Override
 	protected void strokeFinished(Pos origin, Pos end) {
-		if (currentTheorem == null) {
-			return;
+		if (currentTheorem == null) return;
+		
+		if (! origin.equals(end)) {
+			Point p = getCanvas().getPointAt(end);
+			feedPoint(p);
 		}
-				
-		Point p = getCanvas().getPointAt(end);
-		feedPoint(p);
+		
 		getCanvas().refresh();
 	}
 

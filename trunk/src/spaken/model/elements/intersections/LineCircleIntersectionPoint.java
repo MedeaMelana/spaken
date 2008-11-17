@@ -101,7 +101,8 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 	}
 	
 	public Point copyElement() {
-		return new LineCircleIntersectionPoint(l.copyElement(), c.copyElement(), mul);
+		return new LineCircleIntersectionPoint(l.copyElement(),
+				c.copyElement(), mul);
 	}
 	
 }
