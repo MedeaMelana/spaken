@@ -2,6 +2,7 @@
 package spaken.model.elements;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
@@ -49,4 +50,15 @@ public class Circle implements Element<Circle> {
 		distFrom = (Point) in.readRef();
 		distTo = (Point) in.readRef();
 	}
+	
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		center.collectAssumptions(list);
+		distFrom.collectAssumptions(list);
+		distTo.collectAssumptions(list);
+	}
+	
+	public Circle copyElement() {
+		return new Circle(center, distFrom, distTo);
+	}
+	
 }

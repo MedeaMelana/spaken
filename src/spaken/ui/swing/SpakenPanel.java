@@ -7,7 +7,11 @@ import java.util.List;
 
 import javax.swing.*;
 
+import spaken.model.Pos;
 import spaken.model.commands.ClearCanvasCommand;
+import spaken.model.elements.AssumedPoint;
+import spaken.model.elements.Circle;
+import spaken.model.elements.Theorem;
 import spaken.ui.swing.actions.*;
 import spaken.ui.swing.tools.*;
 
@@ -89,6 +93,12 @@ public class SpakenPanel extends JPanel {
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
 		tools.add(new IntersectionTool());
+		
+//		AssumedPoint p1 = new AssumedPoint(new Pos(0,0));
+//		AssumedPoint p2 = new AssumedPoint(new Pos(1,0.5));
+//		Circle c = new Circle(p1, p1, p2);
+//		tools.add(new ApplyTheoremTool("circle", new Theorem(c)));
+		
 		return tools;
 	}
 

@@ -2,11 +2,17 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
+import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
+import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
+import spaken.storage.ElementReader;
+import spaken.storage.ElementWriter;
 import spaken.ui.swing.*;
 
 public abstract class AbstractTool implements Tool {
@@ -16,6 +22,8 @@ public abstract class AbstractTool implements Tool {
 	private String name;
 
 	private StrokeListener strokeListener = new StrokeListener();
+
+	private Point mousePoint = new MousePoint();
 
 	private KeyListener escapeListener = new KeyAdapter() {
 
@@ -87,6 +95,14 @@ public abstract class AbstractTool implements Tool {
 	 */
 	protected Pos getMouse() {
 		return strokeListener.getCurrent();
+	}
+
+	/**
+	 * @return A <tt>Point</tt> always reflecting the current position of the
+	 *         mouse.
+	 */
+	protected Point getMousePoint() {
+		return mousePoint;
 	}
 
 	protected boolean isMouseInside() {
@@ -188,6 +204,38 @@ public abstract class AbstractTool implements Tool {
 		public void mouseExited(MouseEvent e) {
 			mouseInside = false;
 			getCanvas().refresh();
+		}
+
+	}
+
+	private class MousePoint implements Point {
+
+		public Pos getPos() throws ImaginaryPointException {
+			if (isMouseInside()) {
+				return getMouse();
+			} else {
+				throw new ImaginaryPointException(this);
+			}
+		}
+
+		public void collectAssumptions(Collection<AssumedPoint> list) {
+			throw new UnsupportedOperationException();
+		}
+
+		public Point copyElement() {
+			throw new UnsupportedOperationException();
+		}
+
+		public void readElement(ElementReader in) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public Rendered render() throws ImaginaryPointException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void writeElement(ElementWriter out) throws IOException {
+			throw new UnsupportedOperationException();
 		}
 
 	}

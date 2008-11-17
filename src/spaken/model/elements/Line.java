@@ -2,6 +2,7 @@
 package spaken.model.elements;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
@@ -43,4 +44,14 @@ public class Line implements Element<Line> {
 		p1 = (Point) in.readRef();
 		p2 = (Point) in.readRef();
 	}
+	
+	public void collectAssumptions(Collection<AssumedPoint> list) {
+		p1.collectAssumptions(list);
+		p2.collectAssumptions(list);
+	}
+	
+	public Line copyElement() {
+		return new Line(p1, p2);
+	}
+	
 }
