@@ -1,123 +1,72 @@
 package spaken.model.elements;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.rendered.RenderedPoint;
 import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
 
-public class AssumedPoint extends AbstractPoint {
-	/*
-	 * An AssumedPoint is either assumed from thin air (with an example Pos) or
-	 * filled in with an actual Point.
-	 */
-	private boolean isActual;
-	private Point actual;
-	private Pos example;
+public class AssumedPoint extends AbstractPoint implements
+		Comparable<AssumedPoint> {
+	int index;
 
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public AssumedPoint() {}
-	
-	public AssumedPoint(Point actual) {
-		setActual(actual);
-	}
-	
-	public AssumedPoint(Pos example) {
-		setExample(example);
+	public AssumedPoint() {
 	}
 
-	public boolean isActual() {
-		return isActual;
+	public AssumedPoint(int i) {
+		this.index = i;
 	}
 
-	public void setExample(Pos example) {
-		isActual = false;
-		this.example = example;
+	public int getIndex() {
+		return index;
 	}
 
-	public void setActual(Point actual) {
-		isActual = true;
-		this.actual = actual;
-	}
-	
-	public Pos getExample() {
-		if (isActual) {
-			throw new IllegalStateException("This AssumedPoint does not have an example");
-		} else {
-			return example;
-		}
+	public void collectAssumptions(Set<AssumedPoint> collect) {
+		collect.add(this);
 	}
 
-	public Point getActual() {
-		if (isActual) {
-			return actual;
-		} else {
-			throw new IllegalStateException("This AssumedPoint does not have an actual point");
-		}
+	public Point instantiate(PointBinding binding) throws UnboundPointException {
+		return binding.getPoint(index);
 	}
 
-	public Pos getPos() throws ImaginaryPointException {
-		if (isActual) {
-			return actual.getPos();
-		} else {
-			return example;
-		}
-	}
-	
-	// compatibility with FixedPoint
-	public void setPos(Pos pos) {
-		//TODO OF! proberen de positie van actual te veranderen als isActual
-		setExample(pos);
+	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
+			UnboundPointException {
+		return binding.getPoint(index).getPos(binding);
 	}
 
 	public RenderedPoint.Type getRenderedPointType() {
-		if (isActual) {
-			return RenderedPoint.Type.PLUGGABLE;
-		} else {
-			return RenderedPoint.Type.FIXED;
-		}
+		return RenderedPoint.Type.PLUGGABLE;
 	}
 
 	public void writeElement(ElementWriter out) throws IOException {
-		// TODO needs more thought
-		
-		out.writeBoolean(isActual);
-		if (isActual) {
-			out.writeRef(actual);
-		} else {
-			out.writePos(example);
-		}
-	}
-	
-	public void readElement(ElementReader in) throws IOException {
-		// TODO needs more thought
-		
-		isActual = in.readBoolean();
-		if (isActual) {
-			actual = (Point) in.readRef();
-		} else {
-			example = in.readPos();
-		}
+		out.writeInt(index);
 	}
 
-	public void collectAssumptions(Collection<AssumedPoint> list) {
-		if (isActual) {
-			actual.collectAssumptions(list);
-		} else {
-			list.add(this);
-		}
+	public void readElement(ElementReader in) throws IOException {
+		index = in.readInt();
 	}
 	
-	public AssumedPoint copyElement() {
-		if (isActual) {
-			return new AssumedPoint(actual.copyElement());
-		} else {
-			return new AssumedPoint(example);
-		}
+	public boolean equals(Object that) {
+		if (that == null) return false;
+		if (that == this) return true;
+		
+		if (! (that instanceof AssumedPoint)) return false;
+		
+		return ((AssumedPoint) that).index == this.index;
 	}
 	
+	public int hashCode() {
+		return index;
+	}
+
+	public int compareTo(AssumedPoint that) {
+		return Integer.valueOf(this.index).compareTo(
+				Integer.valueOf(that.index));
+	}
+
 }

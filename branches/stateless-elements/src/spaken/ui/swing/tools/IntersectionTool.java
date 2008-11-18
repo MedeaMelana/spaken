@@ -127,14 +127,6 @@ public class IntersectionTool extends AbstractTool {
 			impossible("written");
 		}
 		
-		public void collectAssumptions(Collection<AssumedPoint> list) {
-			impossible("collected");
-		}
-		
-		public Point copyElement() {
-			return impossible("copied");
-		}
-		
 	}
 
 }

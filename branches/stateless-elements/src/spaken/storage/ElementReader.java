@@ -16,4 +16,5 @@ public interface ElementReader {
 	
 	public double readDouble() throws IOException;
 	public boolean readBoolean() throws IOException;
+	public int readInt() throws IOException;
 }

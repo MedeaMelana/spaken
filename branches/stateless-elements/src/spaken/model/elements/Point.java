@@ -7,7 +7,9 @@ public interface Point extends Element<Point> {
 
 	/**
 	 * @return The position of this <tt>Point</tt>.
+	 * @throws UnboundPointException
 	 */
-	public Pos getPos() throws ImaginaryPointException;
+	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
+			UnboundPointException;
 
 }
