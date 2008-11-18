@@ -218,14 +218,6 @@ public abstract class AbstractTool implements Tool {
 			}
 		}
 
-		public void collectAssumptions(Collection<AssumedPoint> list) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Point copyElement() {
-			throw new UnsupportedOperationException();
-		}
-
 		public void readElement(ElementReader in) throws IOException {
 			throw new UnsupportedOperationException();
 		}
