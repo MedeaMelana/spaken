@@ -7,8 +7,8 @@ import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
-import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
+import spaken.model.commands.AddGroupCommand;
+import spaken.model.elements.*;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.storage.ElementReader;
@@ -85,6 +85,10 @@ public abstract class AbstractTool implements Tool {
 
 	protected void addElement(Element e) {
 		execute(new AddElementCommand(canvas, e));
+	}
+	
+	protected void addGroup(Group g) {
+		execute(new AddGroupCommand(canvas, g));
 	}
 
 	protected void addPoint(Pos pos) {

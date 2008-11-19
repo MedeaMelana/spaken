@@ -63,7 +63,7 @@ public class ApplyTheoremTool extends AbstractTool {
 		if (assumptions.size() >= theorem.getAssumptionCount()) {
 			try {
 				Group complete = theorem.applyTheorem(assumptions);
-				addElement(complete);
+				addGroup(complete);
 			} catch (UnboundPointException e) {
 				System.err.println("ApplyTheoremTool.feedPoint() screwed up.");
 			}
@@ -83,7 +83,7 @@ public class ApplyTheoremTool extends AbstractTool {
 		if (assumptions == null)
 			return;
 
-		boolean dragged = ! origin.equals(end);
+		boolean dragged = !origin.equals(end);
 
 		Point p = getCanvas().getPointAt(end);
 		if (p != null) {
@@ -93,7 +93,7 @@ public class ApplyTheoremTool extends AbstractTool {
 		}
 
 		firstClick = true;
-		
+
 		getCanvas().refresh();
 	}
 
