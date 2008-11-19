@@ -13,6 +13,8 @@ public class ApplyTheoremTool extends AbstractTool {
 
 	private List<Point> assumptions;
 
+	private boolean firstClick;
+
 	public ApplyTheoremTool(String name, Theorem theorem) {
 		super("Apply Theorem '" + name + "'");
 		this.theorem = theorem;
@@ -26,9 +28,13 @@ public class ApplyTheoremTool extends AbstractTool {
 	@Override
 	protected void strokeStarted(Pos origin) {
 		if (assumptions == null) {
-			int n = theorem.getAssumptionCount();
-			assumptions = new ArrayList<Point>(n);
-			feedPoint(getCanvas().getPointAt(origin));
+			Point p = getCanvas().getPointAt(origin);
+			if (p != null) {
+				int n = theorem.getAssumptionCount();
+				assumptions = new ArrayList<Point>(n);
+				feedPoint(getCanvas().getPointAt(origin));
+			}
+			firstClick = false;
 		}
 	}
 
@@ -77,11 +83,17 @@ public class ApplyTheoremTool extends AbstractTool {
 		if (assumptions == null)
 			return;
 
-		if (!origin.equals(end)) {
-			Point p = getCanvas().getPointAt(end);
-			feedPoint(p);
+		boolean dragged = ! origin.equals(end);
+
+		Point p = getCanvas().getPointAt(end);
+		if (p != null) {
+			if (firstClick || dragged) {
+				feedPoint(p);
+			}
 		}
 
+		firstClick = true;
+		
 		getCanvas().refresh();
 	}
 
