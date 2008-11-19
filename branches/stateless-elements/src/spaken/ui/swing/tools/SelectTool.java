@@ -6,8 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 
-import spaken.model.ImaginaryPointException;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.model.elements.AssumedPoint;
 import spaken.ui.swing.SpaceCanvas;
 
@@ -43,12 +42,17 @@ public class SelectTool extends AbstractTool {
 	@Override
 	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
 		if (dragging != null) {
+			PointBinding<Pos> binding = getSpace().getPointBinding();
 			try {
-				dragging.setPos(dragging.getPos().add(delta));
+				dragging.setPos(binding, dragging.getPos(binding).add(delta));
 			} catch (ImaginaryPointException e) {
 				// TODO kan dit echt niet?
 				throw new RuntimeException(
 						"A imaginary Point is being dragged. Mind boggling.");
+			} catch (UnboundPointException e) {
+				// TODO kan dit echt niet?
+				throw new RuntimeException(
+						"An unbound Point is being dragged. Mind boggling.");
 			}
 			getCanvas().refresh();
 		}

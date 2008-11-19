@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import spaken.model.elements.AssumedPoint;
+import spaken.model.elements.Point;
 import spaken.model.rendered.Rendered;
 import spaken.storage.*;
 
@@ -15,13 +16,14 @@ public interface Element<T extends Element> {
 	 * ==. Fix this first if you want equals.
 	 */
 
-	public Rendered render(PointBinding binding)
+	public Rendered render(PointBinding<Pos> binding)
 			throws ImaginaryPointException, UnboundPointException;
 
 	public void collectAssumptions(Set<AssumedPoint> collect);
-	
-	public T instantiate(PointBinding binding) throws UnboundPointException;
-	
+
+	public T instantiate(PointBinding<Point> binding)
+			throws UnboundPointException;
+
 	/**
 	 * Write this <tt>Element</tt> using the specified <tt>ElementWriter</tt>.
 	 * Call this method whenever you like.

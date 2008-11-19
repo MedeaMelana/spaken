@@ -15,11 +15,11 @@ public class RenderedGroup implements Rendered {
 	}
 
 	public static RenderedGroup renderAll(Collection<Element<?>> elements,
-			PointBinding binding) throws ImaginaryPointException,
+			PointBinding<Pos> binding) throws ImaginaryPointException,
 			UnboundPointException {
 		LinkedList<Rendered> rendered = new LinkedList<Rendered>();
 
-		for (Element e : elements) {
+		for (Element<?> e : elements) {
 			rendered.add(e.render(binding));
 		}
 

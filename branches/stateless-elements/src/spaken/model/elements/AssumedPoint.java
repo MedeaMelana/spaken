@@ -17,9 +17,13 @@ public class AssumedPoint extends AbstractPoint implements
 	 */
 	public AssumedPoint() {
 	}
+	
+	public AssumedPoint(int index) {
+		this.index = index;
+	}
 
-	public AssumedPoint(int i) {
-		this.index = i;
+	public AssumedPoint(PointBinding<Pos> binding, Pos pos) {
+		this.index = binding.createBinding(pos);
 	}
 
 	public int getIndex() {
@@ -30,17 +34,22 @@ public class AssumedPoint extends AbstractPoint implements
 		collect.add(this);
 	}
 
-	public Point instantiate(PointBinding binding) throws UnboundPointException {
-		return binding.getPoint(index);
+	public Point instantiate(PointBinding<Point> binding)
+			throws UnboundPointException {
+		return binding.getBindingFor(index);
 	}
 
-	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
-			UnboundPointException {
-		return binding.getPoint(index).getPos(binding);
+	public Pos getPos(PointBinding<Pos> binding)
+			throws ImaginaryPointException, UnboundPointException {
+		return binding.getBindingFor(index);
+	}
+	
+	public void setPos(PointBinding<Pos> binding, Pos pos) throws UnboundPointException {
+		binding.setBindingFor(index, pos);
 	}
 
 	public RenderedPoint.Type getRenderedPointType() {
-		return RenderedPoint.Type.PLUGGABLE;
+		return RenderedPoint.Type.FIXED;
 	}
 
 	public void writeElement(ElementWriter out) throws IOException {
@@ -50,16 +59,19 @@ public class AssumedPoint extends AbstractPoint implements
 	public void readElement(ElementReader in) throws IOException {
 		index = in.readInt();
 	}
-	
+
 	public boolean equals(Object that) {
-		if (that == null) return false;
-		if (that == this) return true;
-		
-		if (! (that instanceof AssumedPoint)) return false;
-		
+		if (that == null)
+			return false;
+		if (that == this)
+			return true;
+
+		if (!(that instanceof AssumedPoint))
+			return false;
+
 		return ((AssumedPoint) that).index == this.index;
 	}
-	
+
 	public int hashCode() {
 		return index;
 	}

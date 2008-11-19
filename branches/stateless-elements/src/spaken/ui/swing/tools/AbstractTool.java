@@ -3,7 +3,7 @@ package spaken.ui.swing.tools;
 import java.awt.Graphics2D;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
@@ -87,6 +87,16 @@ public abstract class AbstractTool implements Tool {
 		execute(new AddElementCommand(canvas, e));
 	}
 
+	protected void addPoint(Pos pos) {
+		Point p = new AssumedPoint(getSpace().getPointBinding(), pos);
+		addElement(p);
+	}
+
+	protected Pos getPos(Point p) throws ImaginaryPointException,
+			UnboundPointException {
+		return p.getPos(getSpace().getPointBinding());
+	}
+
 	/**
 	 * @return The current location of the mouse, in drawing coordinates (i.e.
 	 *         inverse transformed with the <tt>AffineTransform</tt> on the
@@ -120,9 +130,11 @@ public abstract class AbstractTool implements Tool {
 			return;
 		}
 		try {
-			new RenderedPoint(p.getPos(), RenderedPoint.Type.DERIVED,
+			new RenderedPoint(getPos(p), RenderedPoint.Type.DERIVED,
 					DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
 		} catch (ImaginaryPointException e) {
+			// Blah.
+		} catch (UnboundPointException e) {
 			// Blah.
 		}
 	}
@@ -210,7 +222,8 @@ public abstract class AbstractTool implements Tool {
 
 	private class MousePoint implements Point {
 
-		public Pos getPos() throws ImaginaryPointException {
+		public Pos getPos(PointBinding<Pos> binding)
+				throws ImaginaryPointException {
 			if (isMouseInside()) {
 				return getMouse();
 			} else {
@@ -227,6 +240,20 @@ public abstract class AbstractTool implements Tool {
 		}
 
 		public void writeElement(ElementWriter out) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void collectAssumptions(Set<AssumedPoint> collect) {
+			throw new UnsupportedOperationException();
+		}
+
+		public Point instantiate(PointBinding<Point> binding)
+				throws UnboundPointException {
+			throw new UnsupportedOperationException();
+		}
+
+		public Rendered render(PointBinding<Pos> binding)
+				throws ImaginaryPointException, UnboundPointException {
 			throw new UnsupportedOperationException();
 		}
 

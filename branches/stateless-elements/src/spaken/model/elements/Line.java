@@ -39,7 +39,7 @@ public class Line implements Element<Line> {
 		return p2;
 	}
 
-	public Rendered render(PointBinding binding)
+	public Rendered render(PointBinding<Pos> binding)
 			throws ImaginaryPointException, UnboundPointException {
 		return new RenderedLine(p1.getPos(binding), p2.getPos(binding));
 	}
@@ -49,7 +49,8 @@ public class Line implements Element<Line> {
 		p2.collectAssumptions(collect);
 	}
 
-	public Line instantiate(PointBinding binding) throws UnboundPointException {
+	public Line instantiate(PointBinding<Point> binding)
+			throws UnboundPointException {
 		return new Line(p1.instantiate(binding), p2.instantiate(binding));
 	}
 
