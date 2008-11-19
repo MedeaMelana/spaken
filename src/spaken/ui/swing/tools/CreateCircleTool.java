@@ -2,8 +2,7 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.ImaginaryPointException;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.model.elements.Circle;
 import spaken.model.elements.Point;
 import spaken.model.rendered.RenderedCircle;
@@ -64,15 +63,16 @@ public class CreateCircleTool extends AbstractTool {
 				Pos mouse = getMouse();
 
 				if (distTo != null) {
-					new RenderedCircle(mouse, distTo.getPos().distance(
-							distFrom.getPos()), DrawingConstants.OUTLINE).draw(
+					new RenderedCircle(mouse, getPos(distTo).distance(
+							getPos(distFrom)), DrawingConstants.OUTLINE).draw(
 							g, pixelSize);
 				} else if (distFrom != null) {
 					new RenderedCircle(mouse,
-							distFrom.getPos().distance(mouse),
+							getPos(distFrom).distance(mouse),
 							DrawingConstants.OUTLINE).draw(g, pixelSize);
 				}
 			} catch (ImaginaryPointException e) {
+			} catch (UnboundPointException e) {
 			}
 		}
 	}

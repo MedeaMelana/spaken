@@ -1,7 +1,9 @@
 package spaken.model;
 
-import spaken.model.elements.Point;
+public interface PointBinding<P> {
+	public P getBindingFor(int i) throws UnboundPointException;
 
-public interface PointBinding {
-	public Point getPoint(int i) throws UnboundPointException;
+	public int createBinding(P p);
+
+	public void setBindingFor(int index, P pos) throws UnboundPointException;
 }

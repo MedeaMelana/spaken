@@ -13,8 +13,14 @@ public class Space {
 
 	private List<Element> elements;
 
+	private PointBinding<Pos> pointBinding;
+
+	private List<Pos> pointPositions;
+
 	public Space() {
 		elements = new LinkedList<Element>();
+		pointPositions = new ArrayList<Pos>();
+		pointBinding = new ListPointBinding<Pos>(pointPositions);
 	}
 
 	public void add(Element... es) {
@@ -36,20 +42,7 @@ public class Space {
 	public Iterable<AssumedPoint> getFixedPoints() {
 		// only fixed AssumedPoints (i.e. for which isActual returns false)
 		return new FilteredIterable<Element, AssumedPoint>(getElements(),
-				new Filter<Element, AssumedPoint>() {
-
-					public boolean accepts(Element a) {
-						if (a instanceof AssumedPoint) {
-							return !((AssumedPoint) a).isActual();
-						}
-						return false;
-					}
-
-					public AssumedPoint map(Element a) {
-						return (AssumedPoint) a;
-					}
-
-				});
+				new ClassFilter<AssumedPoint>(AssumedPoint.class));
 	}
 
 	public Iterable<Point> getPoints() {
@@ -71,11 +64,12 @@ public class Space {
 		P minP = null;
 		for (P p : points) {
 			try {
-				Pos pp = p.getPos();
+				Pos pp = p.getPos(pointBinding);
 				if (pp.distanceSquared(pos) < distance) {
 					minP = p;
 				}
 			} catch (ImaginaryPointException e) {
+			} catch (UnboundPointException e) {
 			}
 		}
 		return minP;
@@ -83,10 +77,11 @@ public class Space {
 
 	public Iterable<Rendered> render() {
 		List<Rendered> rs = new LinkedList<Rendered>();
-		for (Element e : elements) {
+		for (Element<?> e : elements) {
 			try {
-				rs.add(e.render());
+				rs.add(e.render(pointBinding));
 			} catch (ImaginaryPointException e1) {
+			} catch (UnboundPointException e1) {
 			}
 		}
 
@@ -119,5 +114,13 @@ public class Space {
 	public void clear() {
 		elements.clear();
 	}
+
+	public PointBinding<Pos> getPointBinding() {
+		return pointBinding;
+	}
+
+	/* public Pos getPos(Point p) throws ImaginaryPointException, UnboundPointException {
+		return p.getPos(pointBinding);
+	} */
 
 }

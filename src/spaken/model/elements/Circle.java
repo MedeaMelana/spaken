@@ -42,7 +42,7 @@ public class Circle implements Element<Circle> {
 		return distTo;
 	}
 
-	public Rendered render(PointBinding binding)
+	public Rendered render(PointBinding<Pos> binding)
 			throws ImaginaryPointException, UnboundPointException {
 		return new RenderedCircle(center.getPos(binding), distTo
 				.getPos(binding).distance(distFrom.getPos(binding)));
@@ -54,7 +54,7 @@ public class Circle implements Element<Circle> {
 		distTo.collectAssumptions(collect);
 	}
 
-	public Circle instantiate(PointBinding binding)
+	public Circle instantiate(PointBinding<Point> binding)
 			throws UnboundPointException {
 		return new Circle(center.instantiate(binding), distFrom
 				.instantiate(binding), distTo.instantiate(binding));

@@ -6,7 +6,7 @@ import spaken.model.rendered.RenderedPoint;
 
 public abstract class AbstractPoint implements Point {
 
-	public Rendered render(PointBinding binding)
+	public Rendered render(PointBinding<Pos> binding)
 			throws ImaginaryPointException, UnboundPointException {
 		return new RenderedPoint(getPos(binding), getRenderedPointType());
 	}

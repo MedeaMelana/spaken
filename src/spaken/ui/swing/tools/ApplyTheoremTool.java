@@ -1,24 +1,21 @@
 package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
-import java.util.List;
+import java.util.*;
 
-import spaken.model.ImaginaryPointException;
-import spaken.model.Pos;
-import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
-import spaken.model.elements.Theorem;
+import spaken.model.*;
+import spaken.model.elements.*;
 
 public class ApplyTheoremTool extends AbstractTool {
-	private Theorem originalTheorem;
-	
-	private Theorem currentTheorem;
-	private List<AssumedPoint> assumptions;
-	private int nextAssumption;
-	
+	private Theorem theorem;
+
+	private Group partial;
+
+	private List<Point> assumptions;
+
 	public ApplyTheoremTool(String name, Theorem theorem) {
 		super("Apply Theorem '" + name + "'");
-		this.originalTheorem = theorem;
+		this.theorem = theorem;
 	}
 
 	@Override
@@ -28,34 +25,45 @@ public class ApplyTheoremTool extends AbstractTool {
 
 	@Override
 	protected void strokeStarted(Pos origin) {
-		if (currentTheorem == null) {
-			currentTheorem = originalTheorem.copyElement();
-			assumptions = currentTheorem.getAssumptions();
-			if (assumptions.isEmpty()) {
-				System.err.println("empty");
-				// TODO maybe apply theorem as is?
-				resetState();
-				return;
-			} else {
-				for (AssumedPoint p : assumptions) {
-					p.setActual(getMousePoint());
-				}
-				
-				nextAssumption = 0;
-			}
+		if (assumptions == null) {
+			int n = theorem.getAssumptionCount();
+			assumptions = new ArrayList<Point>(n);
+			feedPoint(getCanvas().getPointAt(origin));
 		}
-		
-		feedPoint(getCanvas().getPointAt(origin));
 	}
-	
-	protected void feedPoint(Point p) {
-		assumptions.get(nextAssumption).setActual(p);
-		
-		nextAssumption++;
-		
-		if (nextAssumption >= assumptions.size()) {
-			addElement(currentTheorem);
+
+	private void buildPartial() {
+		int num = theorem.getAssumptionCount();
+		List<Point> points = new ArrayList<Point>(num);
+		points.addAll(assumptions);
+
+		Point mouse = getMousePoint();
+
+		for (int n = points.size(); n < num; n++) {
+			points.add(mouse);
+		}
+
+		try {
+			partial = theorem.applyTheorem(points);
+		} catch (UnboundPointException e) {
+			System.err.println("ApplyTheoremTool.buildPartial() screwed up.");
 			resetState();
+		}
+	}
+
+	protected void feedPoint(Point p) {
+		assumptions.add(p);
+
+		if (assumptions.size() >= theorem.getAssumptionCount()) {
+			try {
+				Group complete = theorem.applyTheorem(assumptions);
+				addElement(complete);
+			} catch (UnboundPointException e) {
+				System.err.println("ApplyTheoremTool.feedPoint() screwed up.");
+			}
+			resetState();
+		} else {
+			buildPartial();
 		}
 	}
 
@@ -66,31 +74,32 @@ public class ApplyTheoremTool extends AbstractTool {
 
 	@Override
 	protected void strokeFinished(Pos origin, Pos end) {
-		if (currentTheorem == null) return;
-		
-		if (! origin.equals(end)) {
+		if (assumptions == null)
+			return;
+
+		if (!origin.equals(end)) {
 			Point p = getCanvas().getPointAt(end);
 			feedPoint(p);
 		}
-		
+
 		getCanvas().refresh();
 	}
 
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
-		if (currentTheorem == null) {
+		if (assumptions == null)
 			return;
-		}
 
-		for (int i = 0; i < nextAssumption; i++) {
-			highlightPoint(g, pixelSize, assumptions.get(i));
+		for (Point p : assumptions) {
+			highlightPoint(g, pixelSize, p);
 		}
 
 		if (isMouseInside()) {
 			try {
 				// TODO outline
-				currentTheorem.render().draw(g, pixelSize);
+				partial.render(getSpace().getPointBinding()).draw(g, pixelSize);
 			} catch (ImaginaryPointException e) {
+			} catch (UnboundPointException e) {
 			}
 		}
 	}
@@ -98,9 +107,8 @@ public class ApplyTheoremTool extends AbstractTool {
 	@Override
 	public void resetState() {
 		super.resetState();
-		currentTheorem = null;
-		// not really necessary, but saves space
 		assumptions = null;
+		partial = null;
 	}
 
 }

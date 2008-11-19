@@ -1,15 +1,10 @@
-package spaken.model.elements;
+package spaken.model;
 
-import java.io.IOException;
 import java.util.*;
 
-import spaken.model.*;
-import spaken.model.rendered.Rendered;
-import spaken.model.rendered.RenderedGroup;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
+import spaken.model.elements.*;
 
-public class Theorem implements Element<AppliedTheorem> {
+public class Theorem {
 	private List<Element<?>> targetElements;
 
 	private List<AssumedPoint> assumptions;
@@ -44,18 +39,34 @@ public class Theorem implements Element<AppliedTheorem> {
 		return assumptions.size();
 	}
 
-	public AppliedTheorem instantiate(final PointBinding binding)
+	public Group applyTheorem(final List<Point> points)
 			throws UnboundPointException {
-		PointBinding newBinding = new PointBinding() {
+		return applyTheorem(new ListPointBinding<Point>(points));
+	}
 
-			public Point getPoint(int index) throws UnboundPointException {
+	public Group applyTheorem(final PointBinding<Point> binding)
+			throws UnboundPointException {
+		PointBinding<Point> newBinding = new PointBinding<Point>() {
+
+			public Point getBindingFor(int index) throws UnboundPointException {
 				for (int i = 0; i < assumptions.size(); i++) {
 					if (assumptions.get(i).getIndex() == index) {
-						return binding.getPoint(i);
+						return binding.getBindingFor(i);
 					}
 				}
 
 				throw new UnboundPointException(index);
+			}
+
+			public void setBindingFor(int index, Point pos)
+					throws UnboundPointException {
+				// TODO
+				throw new UnsupportedOperationException();
+			}
+
+			public int createBinding(Point p) {
+				// TODO
+				throw new UnsupportedOperationException();
 			}
 
 		};
@@ -66,27 +77,11 @@ public class Theorem implements Element<AppliedTheorem> {
 		 */
 		List<Element<?>> newTargets = new ArrayList<Element<?>>(targetElements
 				.size());
-		for (Element e : targetElements) {
+		for (Element<?> e : targetElements) {
 			newTargets.add(e.instantiate(newBinding));
 		}
 
-		return new AppliedTheorem(this, newTargets);
+		return new Group(newTargets);
 	}
 
-	public void readElement(ElementReader in) throws IOException {
-		init(new ArrayList<Element<?>>(in.readRefs()));
-	}
-
-	public void writeElement(ElementWriter out) throws IOException {
-		out.writeRefs(targetElements);
-	}
-
-	public Rendered render(PointBinding binding)
-			throws ImaginaryPointException, UnboundPointException {
-		return RenderedGroup.renderAll(targetElements, binding);
-	}
-
-	public void collectAssumptions(Set<AssumedPoint> collect) {
-		collect.addAll(assumptions);
-	}
 }
