@@ -54,4 +54,8 @@ public class Group implements Element<Group> {
 		out.writeRefs(elements);
 	}
 
+	public List<Element<?>> getElements() {
+		return Collections.unmodifiableList(elements);
+	}
+
 }
