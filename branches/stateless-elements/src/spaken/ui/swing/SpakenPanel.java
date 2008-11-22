@@ -118,8 +118,8 @@ public class SpakenPanel extends JPanel {
 
 	private JMenu createFileMenu() {
 		JMenu file = new JMenu("File");
-		//file.add(new HackyLoadAction(canvas));
-		//file.add(new HackySaveAction(canvas));
+		file.add(new HackyLoadAction(canvas));
+		file.add(new HackySaveAction(canvas));
 		file.add(new ExitAction());
 		return file;
 	}
