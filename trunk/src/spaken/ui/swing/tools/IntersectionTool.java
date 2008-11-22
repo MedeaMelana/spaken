@@ -58,9 +58,10 @@ public class IntersectionTool extends AbstractTool {
 				return;
 
 			try {
-				new RenderedPoint(pt.getPos(), RenderedPoint.Type.DERIVED,
+				new RenderedPoint(getPos(pt), RenderedPoint.Type.DERIVED,
 						DrawingConstants.OUTLINE).draw(g, pixelSize);
 			} catch (ImaginaryPointException e) {
+			} catch (UnboundPointException e) {
 			}
 		}
 	}
@@ -103,9 +104,9 @@ public class IntersectionTool extends AbstractTool {
 			this.point = point;
 		}
 
-		public Pos getPos() throws ImaginaryPointException {
+		public Pos getPos(PointBinding<Pos> binding) throws ImaginaryPointException, UnboundPointException {
 			if (pos == null) {
-				pos = point.getPos();
+				pos = point.getPos(binding);
 			}
 			return pos;
 		}
@@ -116,7 +117,8 @@ public class IntersectionTool extends AbstractTool {
 
 		private <A> A impossible(String verb) {
 			throw new UnsupportedOperationException(
-					"This internal CachedPoint has escaped and is now being " + verb + "!");
+					"This internal CachedPoint has escaped and is now being "
+							+ verb + "!");
 		}
 
 		public void readElement(ElementReader in) throws IOException {
@@ -126,15 +128,15 @@ public class IntersectionTool extends AbstractTool {
 		public void writeElement(ElementWriter out) throws IOException {
 			impossible("written");
 		}
-		
-		public void collectAssumptions(Collection<AssumedPoint> list) {
+
+		public void collectAssumptions(Set<AssumedPoint> collect) {
 			impossible("collected");
 		}
-		
-		public Point copyElement() {
-			return impossible("copied");
+
+		public Point instantiate(PointBinding<Point> binding) throws UnboundPointException {
+			return impossible("instantiated");
 		}
-		
+
 	}
 
 }
