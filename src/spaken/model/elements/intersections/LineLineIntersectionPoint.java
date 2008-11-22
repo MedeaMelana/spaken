@@ -1,7 +1,7 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -9,24 +9,26 @@ import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
 
 public class LineLineIntersectionPoint extends AbstractPoint {
-	
+
 	private Line l1, l2;
-	
+
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public LineLineIntersectionPoint() {}
-	
+	public LineLineIntersectionPoint() {
+	}
+
 	LineLineIntersectionPoint(Line l1, Line l2) {
 		this.l1 = l1;
 		this.l2 = l2;
 	}
 
-	public Pos getPos() throws ImaginaryPointException {
-		Pos p1 = l1.getP1().getPos();
-		Pos p2 = l1.getP2().getPos();
-		Pos p3 = l2.getP1().getPos();
-		Pos p4 = l2.getP2().getPos();
+	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
+			UnboundPointException {
+		Pos p1 = l1.getP1().getPos(binding);
+		Pos p2 = l1.getP2().getPos(binding);
+		Pos p3 = l2.getP1().getPos(binding);
+		Pos p4 = l2.getP2().getPos(binding);
 
 		// formule van
 		// http://en.wikipedia.org/w/index.php?title=Line-line_intersection&oldid=210305729
@@ -48,24 +50,25 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
 	}
-	
+
+	public void collectAssumptions(Set<AssumedPoint> collect) {
+		l1.collectAssumptions(collect);
+		l2.collectAssumptions(collect);
+	}
+
+	public Point instantiate(PointBinding binding) throws UnboundPointException {
+		return new LineLineIntersectionPoint(l1.instantiate(binding), l2
+				.instantiate(binding));
+	}
+
 	public void writeElement(ElementWriter out) throws IOException {
 		out.writeRef(l1);
 		out.writeRef(l2);
 	}
-	
+
 	public void readElement(ElementReader in) throws IOException {
 		l1 = (Line) in.readRef();
 		l2 = (Line) in.readRef();
 	}
-	
-	public void collectAssumptions(Collection<AssumedPoint> list) {
-		l1.collectAssumptions(list);
-		l2.collectAssumptions(list);
-	}
-	
-	public Point copyElement() {
-		return new LineLineIntersectionPoint(l1.copyElement(), l2.copyElement());
-	}
-	
+
 }

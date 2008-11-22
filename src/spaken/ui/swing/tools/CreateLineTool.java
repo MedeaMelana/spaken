@@ -2,8 +2,7 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.ImaginaryPointException;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.model.elements.Line;
 import spaken.model.elements.Point;
 import spaken.model.rendered.RenderedLine;
@@ -55,9 +54,10 @@ public class CreateLineTool extends AbstractTool {
 			if (isMouseInside()) {
 				Pos mouse = getMouse();
 				try {
-					new RenderedLine(p1.getPos(), mouse,
+					new RenderedLine(getPos(p1), mouse,
 							DrawingConstants.OUTLINE).draw(g, pixelSize);
 				} catch (ImaginaryPointException e) {
+				} catch (UnboundPointException e) {
 				}
 			}
 		}

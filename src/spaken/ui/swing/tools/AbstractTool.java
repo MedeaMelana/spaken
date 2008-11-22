@@ -3,12 +3,12 @@ package spaken.ui.swing.tools;
 import java.awt.Graphics2D;
 import java.awt.event.*;
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
-import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
+import spaken.model.commands.AddGroupCommand;
+import spaken.model.elements.*;
 import spaken.model.rendered.Rendered;
 import spaken.model.rendered.RenderedPoint;
 import spaken.storage.ElementReader;
@@ -86,6 +86,20 @@ public abstract class AbstractTool implements Tool {
 	protected void addElement(Element e) {
 		execute(new AddElementCommand(canvas, e));
 	}
+	
+	protected void addGroup(Group g) {
+		execute(new AddGroupCommand(canvas, g));
+	}
+
+	protected void addPoint(Pos pos) {
+		Point p = new AssumedPoint(getSpace().getPointBinding(), pos);
+		addElement(p);
+	}
+
+	protected Pos getPos(Point p) throws ImaginaryPointException,
+			UnboundPointException {
+		return p.getPos(getSpace().getPointBinding());
+	}
 
 	/**
 	 * @return The current location of the mouse, in drawing coordinates (i.e.
@@ -120,9 +134,11 @@ public abstract class AbstractTool implements Tool {
 			return;
 		}
 		try {
-			new RenderedPoint(p.getPos(), RenderedPoint.Type.DERIVED,
+			new RenderedPoint(getPos(p), RenderedPoint.Type.DERIVED,
 					DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
 		} catch (ImaginaryPointException e) {
+			// Blah.
+		} catch (UnboundPointException e) {
 			// Blah.
 		}
 	}
@@ -210,20 +226,13 @@ public abstract class AbstractTool implements Tool {
 
 	private class MousePoint implements Point {
 
-		public Pos getPos() throws ImaginaryPointException {
+		public Pos getPos(PointBinding<Pos> binding)
+				throws ImaginaryPointException {
 			if (isMouseInside()) {
 				return getMouse();
 			} else {
 				throw new ImaginaryPointException(this);
 			}
-		}
-
-		public void collectAssumptions(Collection<AssumedPoint> list) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Point copyElement() {
-			throw new UnsupportedOperationException();
 		}
 
 		public void readElement(ElementReader in) throws IOException {
@@ -235,6 +244,20 @@ public abstract class AbstractTool implements Tool {
 		}
 
 		public void writeElement(ElementWriter out) throws IOException {
+			throw new UnsupportedOperationException();
+		}
+
+		public void collectAssumptions(Set<AssumedPoint> collect) {
+			throw new UnsupportedOperationException();
+		}
+
+		public Point instantiate(PointBinding<Point> binding)
+				throws UnboundPointException {
+			throw new UnsupportedOperationException();
+		}
+
+		public Rendered render(PointBinding<Pos> binding)
+				throws ImaginaryPointException, UnboundPointException {
 			throw new UnsupportedOperationException();
 		}
 

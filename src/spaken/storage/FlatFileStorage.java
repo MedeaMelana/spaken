@@ -105,6 +105,10 @@ public class FlatFileStorage implements StorageEngine {
 				return Boolean.parseBoolean(nextWord());
 			}
 			
+			public int readInt() throws IOException {
+				return Integer.parseInt(nextWord());
+			}
+			
 			public double readDouble() throws IOException {
 				return Double.parseDouble(nextWord());
 			}
@@ -236,6 +240,11 @@ public class FlatFileStorage implements StorageEngine {
 		public void writeBoolean(boolean b) throws IOException {
 			out.print(" ");
 			out.print(b);
+		}
+		
+		public void writeInt(int i) throws IOException {
+			out.print(" ");
+			out.print(i);
 		}
 
 		public void writeRefs(Iterable<? extends Element<?>> refs) throws IOException {

@@ -15,4 +15,5 @@ public interface ElementWriter {
 	
 	public void writeDouble(double d) throws IOException;
 	public void writeBoolean(boolean isActual) throws IOException;
+	public void writeInt(int i) throws IOException;
 }

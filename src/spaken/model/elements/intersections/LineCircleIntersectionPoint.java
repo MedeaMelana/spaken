@@ -1,7 +1,7 @@
 package spaken.model.elements.intersections;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.elements.*;
@@ -10,7 +10,7 @@ import spaken.storage.ElementWriter;
 
 class LineCircleIntersectionPoint extends AbstractPoint {
 	// :( had to remove final from the fields, because of readElement
-	
+
 	private Line l;
 
 	private Circle c;
@@ -20,8 +20,9 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public LineCircleIntersectionPoint() {}
-	
+	public LineCircleIntersectionPoint() {
+	}
+
 	LineCircleIntersectionPoint(Line l, Circle c, double mul) {
 		assert mul == -1 || mul == 1;
 
@@ -30,12 +31,13 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 		this.mul = mul;
 	}
 
-	public Pos getPos() throws ImaginaryPointException {
-		Pos p1 = l.getP1().getPos();
-		Pos p2 = l.getP2().getPos();
-		Pos cc = c.getCenter().getPos();
-		Pos cf = c.getDistFrom().getPos();
-		Pos ct = c.getDistTo().getPos();
+	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
+			UnboundPointException {
+		Pos p1 = l.getP1().getPos(binding);
+		Pos p2 = l.getP2().getPos(binding);
+		Pos cc = c.getCenter().getPos(binding);
+		Pos cf = c.getDistFrom().getPos(binding);
+		Pos ct = c.getDistTo().getPos(binding);
 
 		// transform line relative to center of circle
 		p1 = p1.subtract(cc);
@@ -63,7 +65,7 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 
 		double sgn = sgn(d.y);
 		double mul = this.mul * sgn;
-		
+
 		double a = dm * d.y;
 		double b = sgn * d.x * discR;
 
@@ -77,6 +79,16 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 		return new Pos(x, y).add(cc);
 	}
 
+	public void collectAssumptions(Set<AssumedPoint> collect) {
+		l.collectAssumptions(collect);
+		c.collectAssumptions(collect);
+	}
+
+	public Point instantiate(PointBinding binding) throws UnboundPointException {
+		return new LineCircleIntersectionPoint(l.instantiate(binding), c
+				.instantiate(binding), mul);
+	}
+
 	private static double sgn(double v) {
 		// Math.signum, met één uitzondering:
 		// signum(0) == 0
@@ -87,27 +99,17 @@ class LineCircleIntersectionPoint extends AbstractPoint {
 			return 1;
 		}
 	}
-	
+
 	public void writeElement(ElementWriter out) throws IOException {
 		out.writeRef(l);
 		out.writeRef(c);
 		out.writeDouble(mul);
 	}
-	
+
 	public void readElement(ElementReader in) throws IOException {
 		l = (Line) in.readRef();
 		c = (Circle) in.readRef();
 		mul = in.readDouble();
 	}
-	
-	public void collectAssumptions(Collection<AssumedPoint> list) {
-		l.collectAssumptions(list);
-		c.collectAssumptions(list);
-	}
-	
-	public Point copyElement() {
-		return new LineCircleIntersectionPoint(l.copyElement(),
-				c.copyElement(), mul);
-	}
-	
+
 }

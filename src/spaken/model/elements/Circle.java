@@ -2,7 +2,7 @@
 package spaken.model.elements;
 
 import java.io.IOException;
-import java.util.Collection;
+import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.rendered.Rendered;
@@ -13,14 +13,17 @@ import spaken.storage.ElementWriter;
 public class Circle implements Element<Circle> {
 
 	private Point center;
+
 	private Point distFrom;
+
 	private Point distTo;
 
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public Circle() {}
-	
+	public Circle() {
+	}
+
 	public Circle(Point center, Point distFrom, Point distTo) {
 		this.center = center;
 		this.distFrom = distFrom;
@@ -39,34 +42,34 @@ public class Circle implements Element<Circle> {
 		return distTo;
 	}
 
-	public Rendered render() throws ImaginaryPointException {
-		return new RenderedCircle(center.getPos(), distTo.getPos().distance(
-				distFrom.getPos()));
+	public Rendered render(PointBinding<Pos> binding)
+			throws ImaginaryPointException, UnboundPointException {
+		return new RenderedCircle(center.getPos(binding), distTo
+				.getPos(binding).distance(distFrom.getPos(binding)));
 	}
-	
+
+	public void collectAssumptions(Set<AssumedPoint> collect) {
+		center.collectAssumptions(collect);
+		distFrom.collectAssumptions(collect);
+		distTo.collectAssumptions(collect);
+	}
+
+	public Circle instantiate(PointBinding<Point> binding)
+			throws UnboundPointException {
+		return new Circle(center.instantiate(binding), distFrom
+				.instantiate(binding), distTo.instantiate(binding));
+	}
+
 	public void writeElement(ElementWriter out) throws IOException {
 		out.writeRef(center);
 		out.writeRef(distFrom);
 		out.writeRef(distTo);
 	}
-	
+
 	public void readElement(ElementReader in) throws IOException {
 		center = (Point) in.readRef();
 		distFrom = (Point) in.readRef();
 		distTo = (Point) in.readRef();
 	}
-	
-	public void collectAssumptions(Collection<AssumedPoint> list) {
-		// Reordered these for more useful dragging in UI. This should actually
-		// be done in a theorem file, but that concept doesn't exists yet :)
-		distFrom.collectAssumptions(list);
-		distTo.collectAssumptions(list);
-		center.collectAssumptions(list);
-	}
-	
-	public Circle copyElement() {
-		return new Circle(center.copyElement(), distFrom.copyElement(), distTo
-				.copyElement());
-	}
-	
+
 }
