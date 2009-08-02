@@ -92,3 +92,12 @@ task :dist_jar do
   system? "jar cfm dist/spaken.jar dist/MANIFEST.MF -C target spaken"
   rm 'dist/MANIFEST.MF'
 end
+
+desc 'Render logo'
+task :logo => 'logo.png'
+
+file 'logo.png' => 'logo.svg'
+file 'logo.png' do
+  system? "inkscape --export-png=logo.png --export-height=55 --export-background='#ffffffff' logo.svg"
+end
+
