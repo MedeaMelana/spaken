@@ -1,25 +1,16 @@
 /* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
-import spaken.model.CommandHistory;
-import spaken.model.Pos;
-import spaken.model.Space;
+import spaken.model.*;
 import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
-import spaken.model.rendered.Rendered;
 
 public class SpaceCanvas extends JPanel {
 
@@ -86,9 +77,7 @@ public class SpaceCanvas extends JPanel {
 		line.setLine(0, lb.y, 0, ro.y);
 		g.draw(line);
 
-		for (Rendered r : space.render()) {
-			r.draw(g, pixelSize);
-		}
+		space.draw(g, pixelSize);
 
 		if (currentTool != null) {
 			currentTool.drawState(g, pixelSize);

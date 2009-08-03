@@ -1,0 +1,11 @@
+Globale TODO's, die niet echt in codecommentaar op één plek passen.
+
+- Doe het idee van een null opleverende getPos() in de ban.
+  NullPointerExceptions gegarandeerd! Zorg dat getPos() een Exception oplevert
+  die afgevangen *moet* worden (bijvoorbeeld weer ImaginaryPointException).
+- Iets verzinnen om GUI-gerelateerde elementen te tekenen (een gehighlight punt
+  bijvoorbeeld). Wat opties:
+  - On-the-fly een elementje maken en tekenen.
+  - Een slimme Graphics2D-achtige klasse maken die allerlei handige dingen kan
+    tekenen.
+
