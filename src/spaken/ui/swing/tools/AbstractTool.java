@@ -7,10 +7,8 @@ import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
-import spaken.model.commands.AddGroupCommand;
-import spaken.model.elements.*;
-import spaken.model.rendered.Rendered;
-import spaken.model.rendered.RenderedPoint;
+import spaken.model.elements.AssumedPoint;
+import spaken.model.elements.Point;
 import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
 import spaken.ui.swing.*;
@@ -86,19 +84,15 @@ public abstract class AbstractTool implements Tool {
 	protected void addElement(Element e) {
 		execute(new AddElementCommand(canvas, e));
 	}
-	
-	protected void addGroup(Group g) {
-		execute(new AddGroupCommand(canvas, g));
-	}
 
 	protected void addPoint(Pos pos) {
-		Point p = new AssumedPoint(getSpace().getPointBinding(), pos);
+		Point p = new AssumedPoint(pos);
 		addElement(p);
 	}
 
-	protected Pos getPos(Point p) throws ImaginaryPointException,
-			UnboundPointException {
-		return p.getPos(getSpace().getPointBinding());
+	protected Pos getPos(Point p) {
+		// FIXME hoe nutteloos
+		return p.getPos();
 	}
 
 	/**
@@ -133,14 +127,12 @@ public abstract class AbstractTool implements Tool {
 		if (p == null) {
 			return;
 		}
-		try {
-			new RenderedPoint(getPos(p), RenderedPoint.Type.DERIVED,
-					DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
-		} catch (ImaginaryPointException e) {
-			// Blah.
-		} catch (UnboundPointException e) {
-			// Blah.
-		}
+		Pos pos = p.getPos();
+		if (pos == null) return;
+		
+		// TODO iets 
+		g.setColor(DrawingConstants.HIGHLIGHT);
+		g.drawOval((int) (pos.x - pixelSize * 5), (int) (pos.y - pixelSize * 5), (int) (pos.x + pixelSize * 10), (int) (pos.y + pixelSize * 10));
 	}
 
 	protected void mouseMoved(Pos current, Pos delta) {
@@ -226,24 +218,15 @@ public abstract class AbstractTool implements Tool {
 
 	private class MousePoint implements Point {
 
-		public Pos getPos(PointBinding<Pos> binding)
-				throws ImaginaryPointException {
+		public Pos getPos() {
 			if (isMouseInside()) {
 				return getMouse();
 			} else {
-				throw new ImaginaryPointException(this);
+				return null;
 			}
 		}
 
-		public void readElement(ElementReader in) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-
-		public Rendered render() throws ImaginaryPointException {
-			throw new UnsupportedOperationException();
-		}
-
-		public void writeElement(ElementWriter out) throws IOException {
+		public void draw(Graphics2D g, double pixelSize) {
 			throw new UnsupportedOperationException();
 		}
 
@@ -251,13 +234,15 @@ public abstract class AbstractTool implements Tool {
 			throw new UnsupportedOperationException();
 		}
 
-		public Point instantiate(PointBinding<Point> binding)
-				throws UnboundPointException {
+		public Type getType() {
 			throw new UnsupportedOperationException();
 		}
 
-		public Rendered render(PointBinding<Pos> binding)
-				throws ImaginaryPointException, UnboundPointException {
+		public void addDependency(Dependency<? super Point> d) {
+			throw new UnsupportedOperationException();
+		}
+
+		public void removeDependency(Dependency<? super Point> d) {
 			throw new UnsupportedOperationException();
 		}
 

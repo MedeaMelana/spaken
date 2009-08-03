@@ -1,26 +1,21 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
+import java.awt.Graphics2D;
 import java.util.*;
 
 import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
-import spaken.model.rendered.Rendered;
-import spaken.model.rendered.RenderedPoint;
-import spaken.util.*;
+import spaken.model.elements.Point.Type;
+import spaken.util.ClassFilter;
+import spaken.util.FilteredIterable;
 
 public class Space {
 
 	private List<Element> elements;
 
-	private PointBinding<Pos> pointBinding;
-
-	private List<Pos> pointPositions;
-
 	public Space() {
 		elements = new LinkedList<Element>();
-		pointPositions = new ArrayList<Pos>();
-		pointBinding = new ListPointBinding<Pos>(pointPositions);
 	}
 
 	public void add(Element... es) {
@@ -63,64 +58,48 @@ public class Space {
 		distance = distance * distance;
 		P minP = null;
 		for (P p : points) {
-			try {
-				Pos pp = p.getPos(pointBinding);
-				if (pp.distanceSquared(pos) < distance) {
-					minP = p;
-				}
-			} catch (ImaginaryPointException e) {
-			} catch (UnboundPointException e) {
+			Pos pp = p.getPos();
+			if (pp != null && pp.distanceSquared(pos) < distance) {
+				minP = p;
 			}
 		}
 		return minP;
 	}
 
-	public Iterable<Rendered> render() {
-		List<Rendered> rs = new LinkedList<Rendered>();
-		for (Element<?> e : elements) {
-			try {
-				rs.add(e.render(pointBinding));
-			} catch (ImaginaryPointException e1) {
-			} catch (UnboundPointException e1) {
-			}
-		}
+	public void draw(Graphics2D g, double pixelSize) {
+		List<Element> rs = new LinkedList<Element>(elements);
+		
+		// TODO gesorteerde datastructuur ipv steeds sorteren.
+		Collections.sort(rs, new Comparator<Element>() {
 
-		Collections.sort(rs, new Comparator<Rendered>() {
-
-			public int compare(Rendered o1, Rendered o2) {
-				if (o1 instanceof RenderedPoint) {
-					if (o2 instanceof RenderedPoint) {
-						RenderedPoint p1 = (RenderedPoint) o1;
-						RenderedPoint p2 = (RenderedPoint) o2;
-						if (p1.isDerived() == p2.isDerived()) {
+			public int compare(Element o1, Element o2) {
+				if (o1 instanceof Point) {
+					if (o2 instanceof Point) {
+						Point p1 = (Point) o1;
+						Point p2 = (Point) o2;
+						if (p1.getType() == Type.DERIVED && p2.getType() == Type.DERIVED) {
 							return 0;
 						} else {
-							return p1.isDerived() ? -1 : 1;
+							return (p1.getType() == Type.DERIVED) ? -1 : 1;
 						}
 					} else {
 						return 1;
 					}
-				} else if (o2 instanceof RenderedPoint) {
+				} else if (o2 instanceof Point) {
 					return -1;
 				} else {
 					return 0;
 				}
 			}
 		});
-
-		return rs;
+		
+		for (Element element : rs) {
+			element.draw(g, pixelSize);
+		}
 	}
 
 	public void clear() {
 		elements.clear();
 	}
-
-	public PointBinding<Pos> getPointBinding() {
-		return pointBinding;
-	}
-
-	/* public Pos getPos(Point p) throws ImaginaryPointException, UnboundPointException {
-		return p.getPos(pointBinding);
-	} */
 
 }
