@@ -1,15 +1,19 @@
-/* Created on Jun 20, 2008. */
 package spaken.model.elements;
 
 import spaken.model.*;
 
 public interface Point extends Element<Point> {
 
+	public enum Type {
+		FIXED, DERIVED;
+	}
+	
 	/**
-	 * @return The position of this <tt>Point</tt>.
-	 * @throws UnboundPointException
+	 * @return The position of this <tt>Point</tt>, or <tt>null</tt> if the
+	 *         position is not defined.
 	 */
-	public Pos getPos(PointBinding<Pos> binding)
-			throws ImaginaryPointException, UnboundPointException;
+	public Pos getPos();
+	
+	public Type getType();
 
 }

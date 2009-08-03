@@ -1,14 +1,11 @@
 package spaken.model.elements.intersections;
 
-import java.io.IOException;
 import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.elements.*;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
 
-public class CircleCircleIntersectionPoint extends AbstractPoint {
+public class CircleCircleIntersectionPoint extends AbstractPoint implements Dependency<Circle> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Circle c1, c2;
@@ -27,19 +24,23 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 		this.c1 = c1;
 		this.c2 = c2;
 		this.mul = mul;
+		
+		c1.addDependency(this);
+		c2.addDependency(this);
 	}
 
-	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
-			UnboundPointException {
+	public Pos getPos() {
+		// TODO uitrekenen van uitkomst in elementChanged doen.
+
 		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
 
-		Pos p1 = c1.getCenter().getPos(binding);
-		Pos p2 = c2.getCenter().getPos(binding);
+		Pos p1 = c1.getCenter().getPos();
+		Pos p2 = c2.getCenter().getPos();
 
-		double r1s = c1.getDistFrom().getPos(binding).distanceSquared(
-				c1.getDistTo().getPos(binding));
-		double r2s = c2.getDistFrom().getPos(binding).distanceSquared(
-				c2.getDistTo().getPos(binding));
+		double r1s = c1.getDistFrom().getPos().distanceSquared(
+				c1.getDistTo().getPos());
+		double r2s = c2.getDistFrom().getPos().distanceSquared(
+				c2.getDistTo().getPos());
 		double r1 = Math.sqrt(r1s);
 		double r2 = Math.sqrt(r2s);
 
@@ -58,7 +59,7 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 					mul * yt));
 			return inter;
 		} catch (NullVectorException e) {
-			throw new ImaginaryPointException();
+			return null;
 		}
 	}
 
@@ -67,21 +68,25 @@ public class CircleCircleIntersectionPoint extends AbstractPoint {
 		c2.collectAssumptions(collect);
 	}
 
-	public Point instantiate(PointBinding binding) throws UnboundPointException {
-		return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
-				.instantiate(binding), mul);
+	public void elementChanged(Circle e) {
+		// TODO uitrekenen van uitkomst getPos hier doen.
 	}
 
-	public void writeElement(ElementWriter out) throws IOException {
-		out.writeRef(c1);
-		out.writeRef(c2);
-		out.writeDouble(mul);
-	}
-
-	public void readElement(ElementReader in) throws IOException {
-		c1 = (Circle) in.readRef();
-		c2 = (Circle) in.readRef();
-		mul = in.readDouble();
-	}
+//	public Point instantiate(PointBinding binding) throws UnboundPointException {
+//		return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
+//				.instantiate(binding), mul);
+//	}
+//
+//	public void writeElement(ElementWriter out) throws IOException {
+//		out.writeRef(c1);
+//		out.writeRef(c2);
+//		out.writeDouble(mul);
+//	}
+//
+//	public void readElement(ElementReader in) throws IOException {
+//		c1 = (Circle) in.readRef();
+//		c2 = (Circle) in.readRef();
+//		mul = in.readDouble();
+//	}
 
 }

@@ -1,13 +1,10 @@
 /* Created on Jun 20, 2008. */
 package spaken.model;
 
-import java.io.IOException;
+import java.awt.Graphics2D;
 import java.util.Set;
 
 import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
-import spaken.model.rendered.Rendered;
-import spaken.storage.*;
 
 public interface Element<T extends Element> {
 	/*
@@ -16,13 +13,17 @@ public interface Element<T extends Element> {
 	 * ==. Fix this first if you want equals.
 	 */
 
-	public Rendered render(PointBinding<Pos> binding)
-			throws ImaginaryPointException, UnboundPointException;
+	//TODO deze maken:
+	public void draw(Graphics2D g, double pixelSize);
 
 	public void collectAssumptions(Set<AssumedPoint> collect);
+	
+	public void addDependency(Dependency<? super T> d);
+	public void removeDependency(Dependency<? super T> d);
 
-	public T instantiate(PointBinding<Point> binding)
-			throws UnboundPointException;
+	// TODO copy ofzo
+//	public T instantiate(PointBinding<Point> binding)
+//			throws UnboundPointException;
 
 	/**
 	 * Write this <tt>Element</tt> using the specified <tt>ElementWriter</tt>.
@@ -32,7 +33,7 @@ public interface Element<T extends Element> {
 	 *            The <tt>ElementWriter</tt> that should be filled with data.
 	 * @throws IOException
 	 */
-	public void writeElement(ElementWriter out) throws IOException;
+//	public void writeElement(ElementWriter out) throws IOException;
 
 	/**
 	 * Restore this <tt>Element</tt> using the specified
@@ -49,6 +50,6 @@ public interface Element<T extends Element> {
 	 *            restoration.
 	 * @throws IOException
 	 */
-	public void readElement(ElementReader in) throws IOException;
+//	public void readElement(ElementReader in) throws IOException;
 
 }
