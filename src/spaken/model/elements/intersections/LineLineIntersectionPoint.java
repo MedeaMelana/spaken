@@ -1,14 +1,12 @@
 package spaken.model.elements.intersections;
 
-import java.io.IOException;
 import java.util.Set;
 
-import spaken.model.*;
+import spaken.model.Dependency;
+import spaken.model.Pos;
 import spaken.model.elements.*;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
 
-public class LineLineIntersectionPoint extends AbstractPoint {
+public class LineLineIntersectionPoint extends AbstractPoint implements Dependency<Line> {
 
 	private Line l1, l2;
 
@@ -21,14 +19,16 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 	LineLineIntersectionPoint(Line l1, Line l2) {
 		this.l1 = l1;
 		this.l2 = l2;
+		
+		l1.addDependency(this);
+		l2.addDependency(this);
 	}
 
-	public Pos getPos(PointBinding binding) throws ImaginaryPointException,
-			UnboundPointException {
-		Pos p1 = l1.getP1().getPos(binding);
-		Pos p2 = l1.getP2().getPos(binding);
-		Pos p3 = l2.getP1().getPos(binding);
-		Pos p4 = l2.getP2().getPos(binding);
+	public Pos getPos() {
+		Pos p1 = l1.getP1().getPos();
+		Pos p2 = l1.getP2().getPos();
+		Pos p3 = l2.getP1().getPos();
+		Pos p4 = l2.getP2().getPos();
 
 		// formule van
 		// http://en.wikipedia.org/w/index.php?title=Line-line_intersection&oldid=210305729
@@ -37,7 +37,7 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 				* (p3.x - p4.x);
 
 		if (w == 0) {
-			throw new ImaginaryPointException();
+			return null;
 		}
 
 		double u = p1.x * p2.y - p1.y * p2.x;
@@ -56,19 +56,23 @@ public class LineLineIntersectionPoint extends AbstractPoint {
 		l2.collectAssumptions(collect);
 	}
 
-	public Point instantiate(PointBinding binding) throws UnboundPointException {
-		return new LineLineIntersectionPoint(l1.instantiate(binding), l2
-				.instantiate(binding));
+	public void elementChanged(Line e) {
+		// TODO Uitkomst getPos hier uitrekenen.
 	}
 
-	public void writeElement(ElementWriter out) throws IOException {
-		out.writeRef(l1);
-		out.writeRef(l2);
-	}
-
-	public void readElement(ElementReader in) throws IOException {
-		l1 = (Line) in.readRef();
-		l2 = (Line) in.readRef();
-	}
+//	public Point instantiate(PointBinding binding) throws UnboundPointException {
+//		return new LineLineIntersectionPoint(l1.instantiate(binding), l2
+//				.instantiate(binding));
+//	}
+//
+//	public void writeElement(ElementWriter out) throws IOException {
+//		out.writeRef(l1);
+//		out.writeRef(l2);
+//	}
+//
+//	public void readElement(ElementReader in) throws IOException {
+//		l1 = (Line) in.readRef();
+//		l2 = (Line) in.readRef();
+//	}
 
 }

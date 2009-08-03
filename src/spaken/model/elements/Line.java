@@ -1,16 +1,14 @@
-/* Created on Jun 20, 2008. */
 package spaken.model.elements;
 
-import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.util.Set;
 
 import spaken.model.*;
-import spaken.model.rendered.Rendered;
-import spaken.model.rendered.RenderedLine;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
+import spaken.ui.swing.DrawingConstants;
 
-public class Line implements Element<Line> {
+public class Line extends AbstractElement<Line> implements
+		Dependency<Point> {
 
 	private Point p1;
 
@@ -29,6 +27,9 @@ public class Line implements Element<Line> {
 		}
 		this.p1 = p1;
 		this.p2 = p2;
+
+		p1.addDependency(this);
+		p2.addDependency(this);
 	}
 
 	public Point getP1() {
@@ -39,29 +40,54 @@ public class Line implements Element<Line> {
 		return p2;
 	}
 
-	public Rendered render(PointBinding<Pos> binding)
-			throws ImaginaryPointException, UnboundPointException {
-		return new RenderedLine(p1.getPos(binding), p2.getPos(binding));
-	}
+	// public Rendered render(PointBinding<Pos> binding)
+	// throws ImaginaryPointException, UnboundPointException {
+	// return new RenderedLine(p1.getPos(binding), p2.getPos(binding));
+	// }
 
 	public void collectAssumptions(Set<AssumedPoint> collect) {
 		p1.collectAssumptions(collect);
 		p2.collectAssumptions(collect);
 	}
 
-	public Line instantiate(PointBinding<Point> binding)
-			throws UnboundPointException {
-		return new Line(p1.instantiate(binding), p2.instantiate(binding));
+	// public Line instantiate(PointBinding<Point> binding)
+	// throws UnboundPointException {
+	// return new Line(p1.instantiate(binding), p2.instantiate(binding));
+	// }
+	//
+	// public void writeElement(ElementWriter out) throws IOException {
+	// out.writeRef(p1);
+	// out.writeRef(p2);
+	// }
+	//
+	// public void readElement(ElementReader in) throws IOException {
+	// p1 = (Point) in.readRef();
+	// p2 = (Point) in.readRef();
+	// }
+
+	public void elementChanged(Point e) {
+		notifyDependencies(this);
 	}
 
-	public void writeElement(ElementWriter out) throws IOException {
-		out.writeRef(p1);
-		out.writeRef(p2);
-	}
+	private static final double VERY_LARGE_NUMBER = Math.pow(10,4);
 
-	public void readElement(ElementReader in) throws IOException {
-		p1 = (Point) in.readRef();
-		p2 = (Point) in.readRef();
+	public void draw(Graphics2D g, double pixelSize) {
+		Pos pos1 = p1.getPos();
+		Pos pos2 = p2.getPos();
+		
+		if (pos1 == null || pos2 == null) return;
+		
+		Pos d = pos2.subtract(pos1);
+		try {
+			d = d.normalise().scale(VERY_LARGE_NUMBER);
+		} catch (NullVectorException e) {
+			d = Pos.ZERO;
+		}
+		Pos p1ext = pos1.add(d);
+		Pos p2ext = pos2.subtract(d);
+
+		g.setColor(DrawingConstants.FOREGROUND);
+		g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
 	}
 
 }
