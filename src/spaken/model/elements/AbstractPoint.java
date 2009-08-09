@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
+import spaken.model.ImaginaryPointException;
 import spaken.model.Pos;
-import spaken.model.elements.Point.Type;
 import spaken.ui.swing.DrawingConstants;
 
 public abstract class AbstractPoint extends AbstractElement<Point> implements
@@ -20,19 +20,21 @@ public abstract class AbstractPoint extends AbstractElement<Point> implements
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		Pos pos = getPos();
-		if (pos == null)
-			return;
+		try {
+			Pos pos = getPos();
 
-		double s = pixelSize * DrawingConstants.POINT_SIZE / 2;
-		Rectangle2D rect = new Rectangle2D.Double(pos.x - s, pos.y - s, 2 * s,
-				2 * s);
-		g.setColor(getColor());
-		g.fill(rect);
-		g.setColor(DrawingConstants.FOREGROUND);
-		g.draw(rect);
+			double s = pixelSize * DrawingConstants.POINT_SIZE / 2;
+			Rectangle2D rect = new Rectangle2D.Double(pos.x - s, pos.y - s,
+					2 * s, 2 * s);
+			g.setColor(getColor());
+			g.fill(rect);
+			g.setColor(DrawingConstants.FOREGROUND);
+			g.draw(rect);
+		} catch (ImaginaryPointException e) {
+			return;
+		}
 	}
-	
+
 	public Type getType() {
 		return Type.DERIVED;
 	}
