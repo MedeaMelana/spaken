@@ -2,15 +2,12 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.*;
-import java.io.IOException;
 import java.util.Set;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
 import spaken.model.elements.AssumedPoint;
 import spaken.model.elements.Point;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
 import spaken.ui.swing.*;
 
 public abstract class AbstractTool implements Tool {
@@ -90,11 +87,6 @@ public abstract class AbstractTool implements Tool {
 		addElement(p);
 	}
 
-	protected Pos getPos(Point p) {
-		// FIXME hoe nutteloos
-		return p.getPos();
-	}
-
 	/**
 	 * @return The current location of the mouse, in drawing coordinates (i.e.
 	 *         inverse transformed with the <tt>AffineTransform</tt> on the
@@ -127,12 +119,16 @@ public abstract class AbstractTool implements Tool {
 		if (p == null) {
 			return;
 		}
-		Pos pos = p.getPos();
-		if (pos == null) return;
+
+		try {
+			Pos pos = p.getPos();
 		
-		// TODO iets 
-		g.setColor(DrawingConstants.HIGHLIGHT);
-		g.drawOval((int) (pos.x - pixelSize * 5), (int) (pos.y - pixelSize * 5), (int) (pos.x + pixelSize * 10), (int) (pos.y + pixelSize * 10));
+			// TODO iets 
+			g.setColor(DrawingConstants.HIGHLIGHT);
+			g.drawOval((int) (pos.x - pixelSize * 5), (int) (pos.y - pixelSize * 5), (int) (pos.x + pixelSize * 10), (int) (pos.y + pixelSize * 10));
+		} catch (ImaginaryPointException e) {
+			return;
+		}
 	}
 
 	protected void mouseMoved(Pos current, Pos delta) {
@@ -218,11 +214,11 @@ public abstract class AbstractTool implements Tool {
 
 	private class MousePoint implements Point {
 
-		public Pos getPos() {
+		public Pos getPos() throws ImaginaryPointException {
 			if (isMouseInside()) {
 				return getMouse();
 			} else {
-				return null;
+				throw new ImaginaryPointException();
 			}
 		}
 

@@ -4,8 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.util.Set;
 
-import spaken.model.Dependency;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.ui.swing.DrawingConstants;
 
 public class Circle extends AbstractElement<Circle> implements Dependency<Point> {
@@ -79,18 +78,17 @@ public class Circle extends AbstractElement<Circle> implements Dependency<Point>
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {
-		Pos cent = center.getPos();
-		Pos dfr  = distFrom.getPos();
-		Pos dto  = distTo.getPos();
-		
-		// TODO hier moeten we iets slimmers voor bedenken
-		if (cent == null || dfr == null || dto == null) return;
-		
-		double radius = dfr.distance(dto);
-		double diam = 2 * radius;
-		g.setColor(DrawingConstants.FOREGROUND);
-		g.draw(new Ellipse2D.Double(cent.x - radius, cent.y - radius, diam,
-				diam));
+		try {
+			Pos cent = center.getPos();
+			
+			double radius = distFrom.getPos().distance(distTo.getPos());
+			double diam = 2 * radius;
+			g.setColor(DrawingConstants.FOREGROUND);
+			g.draw(new Ellipse2D.Double(cent.x - radius, cent.y - radius, diam,
+					diam));
+		} catch (ImaginaryPointException e) {
+			return;
+		}
 	}
 	
 }

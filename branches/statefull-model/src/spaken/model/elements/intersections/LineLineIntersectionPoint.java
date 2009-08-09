@@ -2,8 +2,7 @@ package spaken.model.elements.intersections;
 
 import java.util.Set;
 
-import spaken.model.Dependency;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.model.elements.*;
 
 public class LineLineIntersectionPoint extends AbstractPoint implements Dependency<Line> {
@@ -24,7 +23,7 @@ public class LineLineIntersectionPoint extends AbstractPoint implements Dependen
 		l2.addDependency(this);
 	}
 
-	public Pos getPos() {
+	public Pos getPos() throws ImaginaryPointException {
 		Pos p1 = l1.getP1().getPos();
 		Pos p2 = l1.getP2().getPos();
 		Pos p3 = l2.getP1().getPos();
@@ -37,7 +36,7 @@ public class LineLineIntersectionPoint extends AbstractPoint implements Dependen
 				* (p3.x - p4.x);
 
 		if (w == 0) {
-			return null;
+			throw new ImaginaryPointException();
 		}
 
 		double u = p1.x * p2.y - p1.y * p2.x;

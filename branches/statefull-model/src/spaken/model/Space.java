@@ -58,9 +58,12 @@ public class Space {
 		distance = distance * distance;
 		P minP = null;
 		for (P p : points) {
-			Pos pp = p.getPos();
-			if (pp != null && pp.distanceSquared(pos) < distance) {
-				minP = p;
+			try {
+				Pos pp = p.getPos();
+				if (pp.distanceSquared(pos) < distance) {
+					minP = p;
+				}
+			} catch (ImaginaryPointException e) {
 			}
 		}
 		return minP;

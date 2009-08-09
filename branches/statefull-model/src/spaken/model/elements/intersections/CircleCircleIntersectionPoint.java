@@ -29,7 +29,7 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Depe
 		c2.addDependency(this);
 	}
 
-	public Pos getPos() {
+	public Pos getPos() throws ImaginaryPointException {
 		// TODO uitrekenen van uitkomst in elementChanged doen.
 
 		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
@@ -59,7 +59,7 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Depe
 					mul * yt));
 			return inter;
 		} catch (NullVectorException e) {
-			return null;
+			throw new ImaginaryPointException();
 		}
 	}
 

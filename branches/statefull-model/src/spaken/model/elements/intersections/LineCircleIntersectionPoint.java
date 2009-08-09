@@ -31,12 +31,10 @@ class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<El
 		c.addDependency(this);
 	}
 
-	public Pos getPos() {
+	public Pos getPos() throws ImaginaryPointException {
 		Pos p1 = l.getP1().getPos();
 		Pos p2 = l.getP2().getPos();
 		Pos cc = c.getCenter().getPos();
-		Pos cf = c.getDistFrom().getPos();
-		Pos ct = c.getDistTo().getPos();
 
 		// transform line relative to center of circle
 		p1 = p1.subtract(cc);
@@ -45,7 +43,7 @@ class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<El
 		// formule van
 		// http://mathworld.wolfram.com/Circle-LineIntersection.html
 
-		double r = cf.distance(ct);
+		double r = c.getDistFrom().getPos().distance(c.getDistTo().getPos());
 
 		Pos d = p2.subtract(p1);
 		double dr = d.size();
@@ -57,7 +55,7 @@ class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<El
 		if (disc < 0 || c == 0) {
 			// eigenlijk een ongeldige lijn, ofzo, maar goed, dat levert ook
 			// geen punt op
-			return null;
+			throw new ImaginaryPointException();
 		}
 
 		double discR = Math.sqrt(disc);

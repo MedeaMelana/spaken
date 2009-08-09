@@ -72,22 +72,24 @@ public class Line extends AbstractElement<Line> implements
 	private static final double VERY_LARGE_NUMBER = Math.pow(10,4);
 
 	public void draw(Graphics2D g, double pixelSize) {
-		Pos pos1 = p1.getPos();
-		Pos pos2 = p2.getPos();
-		
-		if (pos1 == null || pos2 == null) return;
-		
-		Pos d = pos2.subtract(pos1);
 		try {
-			d = d.normalise().scale(VERY_LARGE_NUMBER);
-		} catch (NullVectorException e) {
-			d = Pos.ZERO;
+			Pos pos1 = p1.getPos();
+			Pos pos2 = p2.getPos();
+			
+			Pos d = pos2.subtract(pos1);
+			try {
+				d = d.normalise().scale(VERY_LARGE_NUMBER);
+			} catch (NullVectorException e) {
+				d = Pos.ZERO;
+			}
+			Pos p1ext = pos1.add(d);
+			Pos p2ext = pos2.subtract(d);
+	
+			g.setColor(DrawingConstants.FOREGROUND);
+			g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
+		} catch (ImaginaryPointException e) {
+			return;
 		}
-		Pos p1ext = pos1.add(d);
-		Pos p2ext = pos2.subtract(d);
-
-		g.setColor(DrawingConstants.FOREGROUND);
-		g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
 	}
 
 }
