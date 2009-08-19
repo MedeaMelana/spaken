@@ -6,7 +6,9 @@ import spaken.model.*;
 import spaken.model.elements.*;
 import spaken.util.Collector;
 
-public class CircleCircleIntersectionPoint extends AbstractPoint implements ElementListener<Circle> {
+public class CircleCircleIntersectionPoint extends
+		AbstractPoint<CircleCircleIntersectionPoint> implements
+		ElementListener<Circle> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Circle c1, c2;
@@ -25,11 +27,16 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Elem
 		this.c1 = c1;
 		this.c2 = c2;
 		this.mul = mul;
-		
+
 		c1.addElementListener(this);
 		c2.addElementListener(this);
 	}
-	
+
+	protected CircleCircleIntersectionPoint duplicateSub() {
+		return new CircleCircleIntersectionPoint(c1.duplicate(),
+				c2.duplicate(), mul);
+	}
+
 	public void collectDependencies(Collection<Element<?>> collect) {
 		collect.add(c1);
 		collect.add(c2);
@@ -78,21 +85,22 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Elem
 		// TODO uitrekenen van uitkomst getPos hier doen.
 	}
 
-//	public Point instantiate(PointBinding binding) throws UnboundPointException {
-//		return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
-//				.instantiate(binding), mul);
-//	}
-//
-//	public void writeElement(ElementWriter out) throws IOException {
-//		out.writeRef(c1);
-//		out.writeRef(c2);
-//		out.writeDouble(mul);
-//	}
-//
-//	public void readElement(ElementReader in) throws IOException {
-//		c1 = (Circle) in.readRef();
-//		c2 = (Circle) in.readRef();
-//		mul = in.readDouble();
-//	}
+	// public Point instantiate(PointBinding binding) throws
+	// UnboundPointException {
+	// return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
+	// .instantiate(binding), mul);
+	// }
+	//
+	// public void writeElement(ElementWriter out) throws IOException {
+	// out.writeRef(c1);
+	// out.writeRef(c2);
+	// out.writeDouble(mul);
+	// }
+	//
+	// public void readElement(ElementReader in) throws IOException {
+	// c1 = (Circle) in.readRef();
+	// c2 = (Circle) in.readRef();
+	// mul = in.readDouble();
+	// }
 
 }

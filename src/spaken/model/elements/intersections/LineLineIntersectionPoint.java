@@ -6,7 +6,7 @@ import spaken.model.*;
 import spaken.model.elements.*;
 import spaken.util.Collector;
 
-public class LineLineIntersectionPoint extends AbstractPoint implements ElementListener<Line> {
+public class LineLineIntersectionPoint extends AbstractPoint<LineLineIntersectionPoint> implements ElementListener<Line> {
 
 	private Line l1, l2;
 
@@ -22,6 +22,10 @@ public class LineLineIntersectionPoint extends AbstractPoint implements ElementL
 		
 		l1.addElementListener(this);
 		l2.addElementListener(this);
+	}
+	
+	protected LineLineIntersectionPoint duplicateSub() {
+		return new LineLineIntersectionPoint(l1.duplicate(), l2.duplicate());
 	}
 	
 	public void collectDependencies(Collection<Element<?>> collect) {

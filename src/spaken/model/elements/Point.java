@@ -2,7 +2,7 @@ package spaken.model.elements;
 
 import spaken.model.*;
 
-public interface Point extends Element<Point> {
+public interface Point<P extends Point> extends Element<P> {
 
 	public enum Type {
 		FIXED, DERIVED;

@@ -11,9 +11,9 @@ import spaken.util.Collector;
 public class Line extends AbstractElement<Line> implements
 		ElementListener<Point> {
 
-	private Point p1;
+	private Point<?> p1;
 
-	private Point p2;
+	private Point<?> p2;
 
 	/**
 	 * Only used internally for reading and writing!
@@ -21,7 +21,7 @@ public class Line extends AbstractElement<Line> implements
 	public Line() {
 	}
 
-	public Line(Point p1, Point p2) {
+	public Line(Point<?> p1, Point<?> p2) {
 		if (p1 == p2) {
 			throw new IllegalArgumentException(
 					"Don't create line from two equal points.");
@@ -31,6 +31,10 @@ public class Line extends AbstractElement<Line> implements
 
 		p1.addElementListener(this);
 		p2.addElementListener(this);
+	}
+	
+	protected Line duplicateSub() {
+		return new Line(p1.duplicate(), p2.duplicate());
 	}
 	
 	public void collectDependencies(Collection<Element<?>> collect) {

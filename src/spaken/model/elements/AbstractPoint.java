@@ -8,8 +8,8 @@ import spaken.model.ImaginaryPointException;
 import spaken.model.Pos;
 import spaken.ui.swing.DrawingConstants;
 
-public abstract class AbstractPoint extends AbstractElement<Point> implements
-		Point {
+public abstract class AbstractPoint<P extends Point> extends AbstractElement<P>
+		implements Point<P> {
 
 	private Color getColor() {
 		if (getType() == Type.DERIVED) {

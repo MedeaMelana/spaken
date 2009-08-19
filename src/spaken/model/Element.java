@@ -35,7 +35,8 @@ public interface Element<T extends Element> {
 	// niet zomaar aanroepen
 	public void theoremChanged(Theorem theorem);
 	
-	// TODO copy ofzo
+	public T duplicate();
+	
 //	public T instantiate(PointBinding<Point> binding)
 //			throws UnboundPointException;
 
