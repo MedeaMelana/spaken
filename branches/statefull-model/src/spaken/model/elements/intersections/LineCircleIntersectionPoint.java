@@ -1,11 +1,12 @@
 package spaken.model.elements.intersections;
 
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.elements.*;
+import spaken.util.Collector;
 
-class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<Element> {
+class LineCircleIntersectionPoint extends AbstractPoint implements ElementListener<Element> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Line l;
@@ -27,8 +28,13 @@ class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<El
 		this.c = c;
 		this.mul = mul;
 		
-		l.addDependency(this);
-		c.addDependency(this);
+		l.addElementListener(this);
+		c.addElementListener(this);
+	}
+	
+	public void collectDependencies(Collection<Element<?>> collect) {
+		collect.add(l);
+		collect.add(c);
 	}
 
 	public Pos getPos() throws ImaginaryPointException {
@@ -76,7 +82,7 @@ class LineCircleIntersectionPoint extends AbstractPoint implements Dependency<El
 		return new Pos(x, y).add(cc);
 	}
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
 		l.collectAssumptions(collect);
 		c.collectAssumptions(collect);
 	}

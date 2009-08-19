@@ -1,11 +1,12 @@
 package spaken.model.elements;
 
-import java.util.Set;
+import java.util.Collection;
 
-import spaken.model.Pos;
+import spaken.model.*;
+import spaken.util.Collector;
 
-public class AssumedPoint extends AbstractPoint { //implements
-		//Comparable<AssumedPoint> {
+public class AssumedPoint extends AbstractPoint implements ElementListener<Point> {
+	Point fallThrough;
 	Pos pos;
 
 	/**
@@ -15,11 +16,43 @@ public class AssumedPoint extends AbstractPoint { //implements
 	}
 	
 	public AssumedPoint(Pos pos) {
-		this.pos = pos;
+		fixAt(pos);
 	}
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
-		collect.add(this);
+	public AssumedPoint(Point point) {
+		plug(point);
+	}
+	
+	public void fixAt(Pos pos) {
+		if (fallThrough != null) {
+			fallThrough.removeElementListener(this);
+		}
+
+		this.pos = pos;
+		this.fallThrough = null;
+		
+		notifyElementListeners(this);
+	}
+	
+	public void plug(Point point) {
+		this.pos = null;
+		
+		this.fallThrough = point;
+		fallThrough.addElementListener(this);
+		
+		notifyElementListeners(this);
+	}
+	
+	public boolean isFixed() {
+		return (pos != null);
+	}
+
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
+		if (isFixed()) {
+			collect.collect(this);
+		} else {
+			fallThrough.collectAssumptions(collect);
+		}
 	}
 
 //	public Point instantiate(PointBinding<Point> binding)
@@ -27,16 +60,35 @@ public class AssumedPoint extends AbstractPoint { //implements
 //		return binding.getBindingFor(index);
 //	}
 
-	public Pos getPos() {
-		return pos;
+	public Pos getPos() throws ImaginaryPointException {
+		if (isFixed()) {
+			return pos;
+		} else {
+			return fallThrough.getPos();
+		}
 	}
 	
 	public void setPos(Pos pos) {
-		this.pos = pos;
+		fixAt(pos);
 	}
 
 	public Type getType() {
-		return Type.FIXED;
+		if (isFixed()) {
+			return Type.FIXED;
+		} else {
+			// TODO of iets anders ofzo
+			return Type.DERIVED;
+		}
+	}
+
+	public void collectDependencies(Collection<Element<?>> collect) {
+		if (! isFixed()) {
+			collect.add(fallThrough);
+		}
+	}
+
+	public void elementChanged(Point e) {
+		notifyElementListeners(this);
 	}
 
 //	public void writeElement(ElementWriter out) throws IOException {

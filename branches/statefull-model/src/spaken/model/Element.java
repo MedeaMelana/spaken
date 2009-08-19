@@ -2,9 +2,10 @@
 package spaken.model;
 
 import java.awt.Graphics2D;
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.elements.AssumedPoint;
+import spaken.util.Collector;
 
 public interface Element<T extends Element> {
 	/*
@@ -16,11 +17,24 @@ public interface Element<T extends Element> {
 	//TODO deze maken:
 	public void draw(Graphics2D g, double pixelSize);
 
-	public void collectAssumptions(Set<AssumedPoint> collect);
+	public void collectAssumptions(Collector<AssumedPoint> collect);
 	
-	public void addDependency(Dependency<? super T> d);
-	public void removeDependency(Dependency<? super T> d);
-
+	public void addElementListener(ElementListener<? super T> d);
+	public void removeElementListener(ElementListener<? super T> d);
+	
+	/**
+	 * Determines on which other <tt>Element</tt>s this <tt>Element</tt> depends.
+	 * @param collect A collection into which to collect the dependencies.
+	 */
+	public void collectDependencies(Collection<Element<?>> collect);
+	
+	public boolean isExported();
+	public void setExported(boolean export);
+	
+	public Theorem getTheorem();
+	// niet zomaar aanroepen
+	public void theoremChanged(Theorem theorem);
+	
 	// TODO copy ofzo
 //	public T instantiate(PointBinding<Point> binding)
 //			throws UnboundPointException;

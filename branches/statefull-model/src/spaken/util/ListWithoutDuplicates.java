@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
 
-public class ListWithoutDuplicates<E> implements List<E> {
+public class ListWithoutDuplicates<E> implements List<E>, Collector<E> {
 	List<E> innerList;
 
 	Set<E> innerSet;
@@ -213,6 +213,10 @@ public class ListWithoutDuplicates<E> implements List<E> {
 	@Override
 	public String toString() {
 		return innerList.toString();
+	}
+
+	public void collect(E i) {
+		add(i);
 	}
 
 }

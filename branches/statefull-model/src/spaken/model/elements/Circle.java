@@ -2,12 +2,13 @@ package spaken.model.elements;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.ui.swing.DrawingConstants;
+import spaken.util.Collector;
 
-public class Circle extends AbstractElement<Circle> implements Dependency<Point> {
+public class Circle extends AbstractElement<Circle> implements ElementListener<Point> {
 
 	private Point center;
 
@@ -26,9 +27,15 @@ public class Circle extends AbstractElement<Circle> implements Dependency<Point>
 		this.distFrom = distFrom;
 		this.distTo = distTo;
 		
-		center.addDependency(this);
-		distFrom.addDependency(this);
-		distTo.addDependency(this);
+		center.addElementListener(this);
+		distFrom.addElementListener(this);
+		distTo.addElementListener(this);
+	}
+
+	public void collectDependencies(Collection<Element<?>> collect) {
+		collect.add(center);
+		collect.add(distFrom);
+		collect.add(distTo);
 	}
 
 	public Point getCenter() {
@@ -49,7 +56,7 @@ public class Circle extends AbstractElement<Circle> implements Dependency<Point>
 //				.getPos(binding).distance(distFrom.getPos(binding)));
 //	}
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
 		center.collectAssumptions(collect);
 		distFrom.collectAssumptions(collect);
 		distTo.collectAssumptions(collect);
@@ -74,7 +81,7 @@ public class Circle extends AbstractElement<Circle> implements Dependency<Point>
 //	}
 
 	public void elementChanged(Point e) {
-		notifyDependencies(this);
+		notifyElementListeners(this);
 	}
 
 	public void draw(Graphics2D g, double pixelSize) {

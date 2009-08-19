@@ -2,11 +2,9 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.*;
+import spaken.model.Pos;
 import spaken.model.elements.Circle;
 import spaken.model.elements.Point;
-import spaken.model.rendered.RenderedCircle;
-import spaken.ui.swing.DrawingConstants;
 
 // Idea:
 // One stroke creates a circle from two points.
@@ -59,20 +57,12 @@ public class CreateCircleTool extends AbstractTool {
 		highlightPoint(g, pixelSize, distTo);
 
 		if (isMouseInside()) {
-			try {
-				Pos mouse = getMouse();
-
-				if (distTo != null) {
-					new RenderedCircle(mouse, getPos(distTo).distance(
-							getPos(distFrom)), DrawingConstants.OUTLINE).draw(
-							g, pixelSize);
-				} else if (distFrom != null) {
-					new RenderedCircle(mouse,
-							getPos(distFrom).distance(mouse),
-							DrawingConstants.OUTLINE).draw(g, pixelSize);
-				}
-			} catch (ImaginaryPointException e) {
-			} catch (UnboundPointException e) {
+			if (distTo != null) {
+				// TODO outlinekleur
+				new Circle(getMousePoint(), distFrom, distTo).draw(g, pixelSize);
+			} else if (distFrom != null) {
+				// TODO outlinekleur
+				new Circle(getMousePoint(), distFrom, getMousePoint()).draw(g,pixelSize);
 			}
 		}
 	}

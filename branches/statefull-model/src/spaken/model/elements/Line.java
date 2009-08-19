@@ -2,13 +2,14 @@ package spaken.model.elements;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.ui.swing.DrawingConstants;
+import spaken.util.Collector;
 
 public class Line extends AbstractElement<Line> implements
-		Dependency<Point> {
+		ElementListener<Point> {
 
 	private Point p1;
 
@@ -28,8 +29,13 @@ public class Line extends AbstractElement<Line> implements
 		this.p1 = p1;
 		this.p2 = p2;
 
-		p1.addDependency(this);
-		p2.addDependency(this);
+		p1.addElementListener(this);
+		p2.addElementListener(this);
+	}
+	
+	public void collectDependencies(Collection<Element<?>> collect) {
+		collect.add(p1);
+		collect.add(p2);
 	}
 
 	public Point getP1() {
@@ -45,7 +51,7 @@ public class Line extends AbstractElement<Line> implements
 	// return new RenderedLine(p1.getPos(binding), p2.getPos(binding));
 	// }
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
 		p1.collectAssumptions(collect);
 		p2.collectAssumptions(collect);
 	}
@@ -66,7 +72,7 @@ public class Line extends AbstractElement<Line> implements
 	// }
 
 	public void elementChanged(Point e) {
-		notifyDependencies(this);
+		notifyElementListeners(this);
 	}
 
 	private static final double VERY_LARGE_NUMBER = Math.pow(10,4);

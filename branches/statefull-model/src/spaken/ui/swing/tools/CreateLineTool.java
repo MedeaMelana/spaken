@@ -2,11 +2,9 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 
-import spaken.model.*;
+import spaken.model.Pos;
 import spaken.model.elements.Line;
 import spaken.model.elements.Point;
-import spaken.model.rendered.RenderedLine;
-import spaken.ui.swing.DrawingConstants;
 
 public class CreateLineTool extends AbstractTool {
 
@@ -52,13 +50,8 @@ public class CreateLineTool extends AbstractTool {
 			highlightPoint(g, pixelSize, p1);
 
 			if (isMouseInside()) {
-				Pos mouse = getMouse();
-				try {
-					new RenderedLine(getPos(p1), mouse,
-							DrawingConstants.OUTLINE).draw(g, pixelSize);
-				} catch (ImaginaryPointException e) {
-				} catch (UnboundPointException e) {
-				}
+				// TODO outlinekleur
+				new Line(p1, getMousePoint()).draw(g, pixelSize);
 			}
 		}
 	}

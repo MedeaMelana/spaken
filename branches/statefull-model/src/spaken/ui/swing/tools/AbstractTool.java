@@ -2,13 +2,13 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.*;
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.commands.AddElementCommand;
-import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
+import spaken.model.elements.*;
 import spaken.ui.swing.*;
+import spaken.util.Collector;
 
 public abstract class AbstractTool implements Tool {
 
@@ -18,7 +18,7 @@ public abstract class AbstractTool implements Tool {
 
 	private StrokeListener strokeListener = new StrokeListener();
 
-	private Point mousePoint = new MousePoint();
+	private MousePoint mousePoint = new MousePoint();
 
 	private KeyListener escapeListener = new KeyAdapter() {
 
@@ -125,7 +125,7 @@ public abstract class AbstractTool implements Tool {
 		
 			// TODO iets 
 			g.setColor(DrawingConstants.HIGHLIGHT);
-			g.drawOval((int) (pos.x - pixelSize * 5), (int) (pos.y - pixelSize * 5), (int) (pos.x + pixelSize * 10), (int) (pos.y + pixelSize * 10));
+			g.drawOval((int) (pos.x - pixelSize * 5), (int) (pos.y - pixelSize * 5), (int) (pixelSize * 10), (int) (pixelSize * 10));
 		} catch (ImaginaryPointException e) {
 			return;
 		}
@@ -153,13 +153,18 @@ public abstract class AbstractTool implements Tool {
 
 		private Pos setAndDelta(Pos newCurrent) {
 			Pos delta = current != null ? newCurrent.subtract(current) : null;
-			current = newCurrent;
+			setCurrent(newCurrent);
 			return delta;
+		}
+		
+		private void setCurrent(Pos current) {
+			this.current = current;
+			mousePoint.currentPosChanged();
 		}
 
 		public void reset() {
 			origin = null;
-			current = null;
+			setCurrent(null);
 		}
 
 		public void mouseMoved(MouseEvent e) {
@@ -169,7 +174,7 @@ public abstract class AbstractTool implements Tool {
 
 		public void mousePressed(MouseEvent e) {
 			origin = canvas.mouse2space(new Pos(e.getPoint()));
-			current = origin;
+			setCurrent(origin);
 			strokeStarted(origin);
 		}
 
@@ -212,7 +217,7 @@ public abstract class AbstractTool implements Tool {
 
 	}
 
-	private class MousePoint implements Point {
+	private class MousePoint extends AbstractPoint {
 
 		public Pos getPos() throws ImaginaryPointException {
 			if (isMouseInside()) {
@@ -222,25 +227,47 @@ public abstract class AbstractTool implements Tool {
 			}
 		}
 
-		public void draw(Graphics2D g, double pixelSize) {
-			throw new UnsupportedOperationException();
+		public void currentPosChanged() {
+			notifyElementListeners(this);
 		}
 
-		public void collectAssumptions(Set<AssumedPoint> collect) {
-			throw new UnsupportedOperationException();
+//		public void draw(Graphics2D g, double pixelSize) {
+//			throw new UnsupportedOperationException();
+//		}
+//
+		public void collectAssumptions(Collector<AssumedPoint> collect) {
 		}
-
-		public Type getType() {
-			throw new UnsupportedOperationException();
+//
+//		public Type getType() {
+//			throw new UnsupportedOperationException();
+//		}
+//
+//		public void addElementListener(ElementListener<? super Point> d) {
+//			throw new UnsupportedOperationException();
+//		}
+//
+//		public void removeElementListener(ElementListener<? super Point> d) {
+//			throw new UnsupportedOperationException();
+//		}
+//
+		public void collectDependencies(Collection<Element<?>> collect) {
 		}
-
-		public void addDependency(Dependency<? super Point> d) {
-			throw new UnsupportedOperationException();
-		}
-
-		public void removeDependency(Dependency<? super Point> d) {
-			throw new UnsupportedOperationException();
-		}
+//
+//		public Theorem getTheorem() {
+//			throw new UnsupportedOperationException();
+//		}
+//
+//		public boolean isExported() {
+//			throw new UnsupportedOperationException();
+//		}
+//
+//		public void setExported(boolean export) {
+//			throw new UnsupportedOperationException();
+//		}
+//
+//		public void theoremChanged(Theorem theorem) {
+//			throw new UnsupportedOperationException();
+//		}
 
 	}
 

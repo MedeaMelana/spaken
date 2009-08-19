@@ -1,11 +1,12 @@
 package spaken.model.elements.intersections;
 
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.elements.*;
+import spaken.util.Collector;
 
-public class LineLineIntersectionPoint extends AbstractPoint implements Dependency<Line> {
+public class LineLineIntersectionPoint extends AbstractPoint implements ElementListener<Line> {
 
 	private Line l1, l2;
 
@@ -19,8 +20,13 @@ public class LineLineIntersectionPoint extends AbstractPoint implements Dependen
 		this.l1 = l1;
 		this.l2 = l2;
 		
-		l1.addDependency(this);
-		l2.addDependency(this);
+		l1.addElementListener(this);
+		l2.addElementListener(this);
+	}
+	
+	public void collectDependencies(Collection<Element<?>> collect) {
+		collect.add(l1);
+		collect.add(l2);
 	}
 
 	public Pos getPos() throws ImaginaryPointException {
@@ -50,7 +56,7 @@ public class LineLineIntersectionPoint extends AbstractPoint implements Dependen
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
 	}
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
 		l1.collectAssumptions(collect);
 		l2.collectAssumptions(collect);
 	}
