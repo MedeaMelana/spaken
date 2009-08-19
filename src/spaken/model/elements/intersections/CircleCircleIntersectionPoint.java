@@ -1,11 +1,12 @@
 package spaken.model.elements.intersections;
 
-import java.util.Set;
+import java.util.Collection;
 
 import spaken.model.*;
 import spaken.model.elements.*;
+import spaken.util.Collector;
 
-public class CircleCircleIntersectionPoint extends AbstractPoint implements Dependency<Circle> {
+public class CircleCircleIntersectionPoint extends AbstractPoint implements ElementListener<Circle> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Circle c1, c2;
@@ -25,8 +26,13 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Depe
 		this.c2 = c2;
 		this.mul = mul;
 		
-		c1.addDependency(this);
-		c2.addDependency(this);
+		c1.addElementListener(this);
+		c2.addElementListener(this);
+	}
+	
+	public void collectDependencies(Collection<Element<?>> collect) {
+		collect.add(c1);
+		collect.add(c2);
 	}
 
 	public Pos getPos() throws ImaginaryPointException {
@@ -63,7 +69,7 @@ public class CircleCircleIntersectionPoint extends AbstractPoint implements Depe
 		}
 	}
 
-	public void collectAssumptions(Set<AssumedPoint> collect) {
+	public void collectAssumptions(Collector<AssumedPoint> collect) {
 		c1.collectAssumptions(collect);
 		c2.collectAssumptions(collect);
 	}

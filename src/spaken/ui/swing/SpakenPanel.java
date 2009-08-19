@@ -92,7 +92,7 @@ public class SpakenPanel extends JPanel {
 		tools.add(new PointCreateTool());
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
-		tools.add(new IntersectionTool());
+		// tools.add(new IntersectionTool());
 		
 //		// hack two theorems together:
 //		AssumedPoint p1 = new AssumedPoint();
@@ -119,8 +119,8 @@ public class SpakenPanel extends JPanel {
 
 	private JMenu createFileMenu() {
 		JMenu file = new JMenu("File");
-		file.add(new HackyLoadAction(canvas));
-		file.add(new HackySaveAction(canvas));
+		//file.add(new HackyLoadAction(canvas));
+		//file.add(new HackySaveAction(canvas));
 		file.add(new ExitAction());
 		return file;
 	}

@@ -12,6 +12,7 @@ import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
 import spaken.ui.swing.DrawingConstants;
 import spaken.ui.swing.SpaceCanvas;
+import spaken.util.Collector;
 import spaken.util.Iterables;
 
 public class IntersectionTool extends AbstractTool {
@@ -129,7 +130,7 @@ public class IntersectionTool extends AbstractTool {
 			impossible("written");
 		}
 
-		public void collectAssumptions(Set<AssumedPoint> collect) {
+		public void collectAssumptions(Collector<AssumedPoint> collect) {
 			impossible("collected");
 		}
 

@@ -3,8 +3,7 @@ package spaken.ui.swing.tools;
 import java.awt.Graphics2D;
 
 import spaken.model.Pos;
-import spaken.model.rendered.RenderedPoint;
-import spaken.ui.swing.DrawingConstants;
+import spaken.model.elements.AssumedPoint;
 
 public class PointCreateTool extends AbstractTool {
 
@@ -15,8 +14,8 @@ public class PointCreateTool extends AbstractTool {
 	@Override
 	public void drawState(Graphics2D g, double pixelSize) {
 		if (isMouseInside()) {
-			new RenderedPoint(getMouse(), RenderedPoint.Type.DERIVED,
-					DrawingConstants.OUTLINE).draw(g, pixelSize);
+			// TODO outlinekleur
+			new AssumedPoint(getMousePoint()).draw(g, pixelSize);
 		}
 	}
 

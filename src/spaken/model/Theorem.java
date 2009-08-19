@@ -1,87 +1,57 @@
 package spaken.model;
 
-import java.util.*;
+import java.awt.Graphics2D;
+import java.util.LinkedList;
+import java.util.List;
 
-import spaken.model.elements.*;
+import spaken.model.elements.AssumedPoint;
+import spaken.util.ListWithoutDuplicates;
 
 public class Theorem {
-	private List<Element<?>> targetElements;
+	
+	private List<Element<?>> elements;
+	private boolean exposed;
 
-	private List<AssumedPoint> assumptions;
-
-	/**
-	 * Only used internally for reading and writing!
-	 */
 	public Theorem() {
+		elements = new LinkedList<Element<?>>();
+		exposed = false;
 	}
-
-	public Theorem(Element<?> target) {
-		List<Element<?>> targets = new ArrayList<Element<?>>(1);
-		targets.add(target);
-		init(targets);
+	
+	public void addElement(Element<?> element) {
+		elements.add(element);
+		element.theoremChanged(this);
+		
+//		List<Element<?>> deps = new LinkedList<Element<?>>();
+//		element.collectDependencies(deps);
+//		for (Element<?> e : deps) {
+//			addElement(e);
+//		}
 	}
-
-	public Theorem(List<Element<?>> targets) {
-		init(new ArrayList<Element<?>>(targets));
-	}
-
-	private void init(List<Element<?>> targets) {
-		targetElements = targets;
-		Set<AssumedPoint> collect = new HashSet<AssumedPoint>();
-		for (Element<?> e : targets) {
-			e.collectAssumptions(collect);
+	
+	public List<AssumedPoint> getAssumptions() {
+		ListWithoutDuplicates<AssumedPoint> points = new ListWithoutDuplicates<AssumedPoint>();
+		for (Element<?> element : elements) {
+			element.collectAssumptions(points);
 		}
-		assumptions = new ArrayList<AssumedPoint>(collect);
-		Collections.sort(assumptions);
+		
+		return points;
+		
+	}
+	
+	public boolean isExposed() {
+		return exposed;
 	}
 
-	public int getAssumptionCount() {
-		return assumptions.size();
+	public void setExposed(boolean exposed) {
+		this.exposed = exposed;
 	}
 
-	public Group applyTheorem(final List<Point> points)
-			throws UnboundPointException {
-		return applyTheorem(new ListPointBinding<Point>(points));
-	}
-
-	public Group applyTheorem(final PointBinding<Point> binding)
-			throws UnboundPointException {
-		PointBinding<Point> newBinding = new PointBinding<Point>() {
-
-			public Point getBindingFor(int index) throws UnboundPointException {
-				for (int i = 0; i < assumptions.size(); i++) {
-					if (assumptions.get(i).getIndex() == index) {
-						return binding.getBindingFor(i);
-					}
-				}
-
-				throw new UnboundPointException(index);
+	public void draw(Graphics2D g, int pixelSize) {
+		for (Element<?> element : elements) {
+			if (exposed || element.isExported()) {
+				element.draw(g, pixelSize);
 			}
-
-			public void setBindingFor(int index, Point pos)
-					throws UnboundPointException {
-				// TODO
-				throw new UnsupportedOperationException();
-			}
-
-			public int createBinding(Point p) {
-				// TODO
-				throw new UnsupportedOperationException();
-			}
-
-		};
-
-		/*
-		 * This copies all targets individualy, which results in duplicating all
-		 * shared Elements. I think this is safe, but it doesn't feel desirable.
-		 */
-		List<Element<?>> newTargets = new ArrayList<Element<?>>(targetElements
-				.size());
-		for (Element<?> e : targetElements) {
-			newTargets.add(e.instantiate(newBinding));
 		}
-
-		return new Group(newTargets);
 	}
 
 }
