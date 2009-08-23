@@ -32,11 +32,8 @@ public interface Element<T extends Element> {
 	public void setExported(boolean export);
 	
 	public Theorem getTheorem();
-	// niet zomaar aanroepen
-	public void theoremChanged(Theorem theorem);
 	
-	public T duplicate();
-	
+	// TODO copy ofzo
 //	public T instantiate(PointBinding<Point> binding)
 //			throws UnboundPointException;
 

@@ -6,9 +6,7 @@ import spaken.model.*;
 import spaken.model.elements.*;
 import spaken.util.Collector;
 
-class LineCircleIntersectionPoint extends
-		AbstractPoint<LineCircleIntersectionPoint> implements
-		ElementListener<Element> {
+class LineCircleIntersectionPoint extends AbstractPoint implements ElementListener<Element> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Line l;
@@ -20,25 +18,23 @@ class LineCircleIntersectionPoint extends
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public LineCircleIntersectionPoint() {
+	public LineCircleIntersectionPoint(Theorem theorem) {
+		super(theorem);
 	}
 
-	LineCircleIntersectionPoint(Line l, Circle c, double mul) {
+	LineCircleIntersectionPoint(Theorem theorem, Line l, Circle c, double mul) {
+		super(theorem);
+		
 		assert mul == -1 || mul == 1;
 
 		this.l = l;
 		this.c = c;
 		this.mul = mul;
-
+		
 		l.addElementListener(this);
 		c.addElementListener(this);
 	}
-
-	protected LineCircleIntersectionPoint duplicateSub() {
-		return new LineCircleIntersectionPoint(l.duplicate(), c.duplicate(),
-				mul);
-	}
-
+	
 	public void collectDependencies(Collection<Element<?>> collect) {
 		collect.add(l);
 		collect.add(c);
@@ -94,11 +90,10 @@ class LineCircleIntersectionPoint extends
 		c.collectAssumptions(collect);
 	}
 
-	// public Point instantiate(PointBinding binding) throws
-	// UnboundPointException {
-	// return new LineCircleIntersectionPoint(l.instantiate(binding), c
-	// .instantiate(binding), mul);
-	// }
+//	public Point instantiate(PointBinding binding) throws UnboundPointException {
+//		return new LineCircleIntersectionPoint(l.instantiate(binding), c
+//				.instantiate(binding), mul);
+//	}
 
 	private static double sgn(double v) {
 		// Math.signum, met één uitzondering:
@@ -115,16 +110,16 @@ class LineCircleIntersectionPoint extends
 		// TODO Uitrekenen getPos hier doen.
 	}
 
-	// public void writeElement(ElementWriter out) throws IOException {
-	// out.writeRef(l);
-	// out.writeRef(c);
-	// out.writeDouble(mul);
-	// }
-	//
-	// public void readElement(ElementReader in) throws IOException {
-	// l = (Line) in.readRef();
-	// c = (Circle) in.readRef();
-	// mul = in.readDouble();
-	// }
+//	public void writeElement(ElementWriter out) throws IOException {
+//		out.writeRef(l);
+//		out.writeRef(c);
+//		out.writeDouble(mul);
+//	}
+//
+//	public void readElement(ElementReader in) throws IOException {
+//		l = (Line) in.readRef();
+//		c = (Circle) in.readRef();
+//		mul = in.readDouble();
+//	}
 
 }

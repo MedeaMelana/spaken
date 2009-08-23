@@ -6,9 +6,7 @@ import spaken.model.*;
 import spaken.model.elements.*;
 import spaken.util.Collector;
 
-public class CircleCircleIntersectionPoint extends
-		AbstractPoint<CircleCircleIntersectionPoint> implements
-		ElementListener<Circle> {
+public class CircleCircleIntersectionPoint extends AbstractPoint implements ElementListener<Circle> {
 	// :( had to remove final from the fields, because of readElement
 
 	private Circle c1, c2;
@@ -18,25 +16,23 @@ public class CircleCircleIntersectionPoint extends
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public CircleCircleIntersectionPoint() {
+	public CircleCircleIntersectionPoint(Theorem theorem) {
+		super(theorem);
 	}
 
-	CircleCircleIntersectionPoint(Circle c1, Circle c2, double mul) {
+	CircleCircleIntersectionPoint(Theorem theorem, Circle c1, Circle c2, double mul) {
+		super(theorem);
+		
 		assert mul == -1 || mul == 1;
 
 		this.c1 = c1;
 		this.c2 = c2;
 		this.mul = mul;
-
+		
 		c1.addElementListener(this);
 		c2.addElementListener(this);
 	}
-
-	protected CircleCircleIntersectionPoint duplicateSub() {
-		return new CircleCircleIntersectionPoint(c1.duplicate(),
-				c2.duplicate(), mul);
-	}
-
+	
 	public void collectDependencies(Collection<Element<?>> collect) {
 		collect.add(c1);
 		collect.add(c2);
@@ -85,22 +81,21 @@ public class CircleCircleIntersectionPoint extends
 		// TODO uitrekenen van uitkomst getPos hier doen.
 	}
 
-	// public Point instantiate(PointBinding binding) throws
-	// UnboundPointException {
-	// return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
-	// .instantiate(binding), mul);
-	// }
-	//
-	// public void writeElement(ElementWriter out) throws IOException {
-	// out.writeRef(c1);
-	// out.writeRef(c2);
-	// out.writeDouble(mul);
-	// }
-	//
-	// public void readElement(ElementReader in) throws IOException {
-	// c1 = (Circle) in.readRef();
-	// c2 = (Circle) in.readRef();
-	// mul = in.readDouble();
-	// }
+//	public Point instantiate(PointBinding binding) throws UnboundPointException {
+//		return new CircleCircleIntersectionPoint(c1.instantiate(binding), c2
+//				.instantiate(binding), mul);
+//	}
+//
+//	public void writeElement(ElementWriter out) throws IOException {
+//		out.writeRef(c1);
+//		out.writeRef(c2);
+//		out.writeDouble(mul);
+//	}
+//
+//	public void readElement(ElementReader in) throws IOException {
+//		c1 = (Circle) in.readRef();
+//		c2 = (Circle) in.readRef();
+//		mul = in.readDouble();
+//	}
 
 }
