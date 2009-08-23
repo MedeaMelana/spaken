@@ -22,21 +22,8 @@ public class Theorem {
 		this.exposed = false;
 	}
 
-	public Theorem duplicate() {
-		// TODO We need to duplicate the underlying elements, maintaining
-		// sharing between them. How?
-		LinkedList<Element<?>> copyElems = new LinkedList<Element<?>>();
-		copyElems.addAll(elements);
-
-		Theorem copy = new Theorem(copyElems);
-		copy.exposed = exposed;
-
-		return copy;
-	}
-
 	public void addElement(Element<?> element) {
 		elements.add(element);
-		element.theoremChanged(this);
 
 		// List<Element<?>> deps = new LinkedList<Element<?>>();
 		// element.collectDependencies(deps);

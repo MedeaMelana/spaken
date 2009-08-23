@@ -10,21 +10,11 @@ public abstract class AbstractElement<E extends Element> implements Element<E> {
 	private List<ElementListener<? super E>> elementListeners;
 	private boolean export;
 	
-	public AbstractElement() {
+	public AbstractElement(Theorem theorem) {
+		this.theorem = theorem;
 		export = false;
 		elementListeners = new LinkedList<ElementListener<? super E>>();
 	}
-	
-	public final E duplicate() {
-		E dupE = duplicateSub();
-		AbstractElement<E> dup = (AbstractElement<E>) dupE;
-		dup.theorem = theorem;
-		dup.elementListeners.addAll(elementListeners);
-		dup.export = export;
-		return dupE;
-	}
-	
-	protected abstract E duplicateSub();
 	
 	public void addElementListener(ElementListener<? super E> e) {
 		elementListeners.add(e);
@@ -47,10 +37,6 @@ public abstract class AbstractElement<E extends Element> implements Element<E> {
 	
 	public Theorem getTheorem() {
 		return theorem;
-	}
-	
-	public void theoremChanged(Theorem theorem) {
-		this.theorem = theorem;
 	}
 	
 	public boolean isExported() {

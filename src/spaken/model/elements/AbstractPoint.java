@@ -4,12 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import spaken.model.ImaginaryPointException;
-import spaken.model.Pos;
+import spaken.model.*;
 import spaken.ui.swing.DrawingConstants;
 
-public abstract class AbstractPoint<P extends Point> extends AbstractElement<P>
-		implements Point<P> {
+public abstract class AbstractPoint extends AbstractElement<Point> implements
+		Point {
+
+	public AbstractPoint(Theorem theorem) {
+		super(theorem);
+	}
 
 	private Color getColor() {
 		if (getType() == Type.DERIVED) {

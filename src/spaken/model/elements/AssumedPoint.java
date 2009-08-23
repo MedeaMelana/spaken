@@ -5,34 +5,25 @@ import java.util.Collection;
 import spaken.model.*;
 import spaken.util.Collector;
 
-public class AssumedPoint extends AbstractPoint<AssumedPoint> implements ElementListener<Point> {
-	Point<?> fallThrough;
+public class AssumedPoint extends AbstractPoint implements ElementListener<Point> {
+	Point fallThrough;
 	Pos pos;
 
 	/**
 	 * Only used internally for reading and writing!
 	 */
-	public AssumedPoint() {
+	public AssumedPoint(Theorem theorem) {
+		super(theorem);
 	}
 	
-	public AssumedPoint(Pos pos) {
+	public AssumedPoint(Theorem theorem, Pos pos) {
+		super(theorem);
 		fixAt(pos);
 	}
 
-	public AssumedPoint(Point point) {
+	public AssumedPoint(Theorem theorem, Point point) {
+		super(theorem);
 		plug(point);
-	}
-	
-	protected AssumedPoint duplicateSub() {
-		AssumedPoint copy = new AssumedPoint();
-		
-		if (isFixed()) {
-			copy.pos = pos;
-		} else {
-			copy.fallThrough = fallThrough.duplicate();
-		}
-		
-		return copy;
 	}
 	
 	public void fixAt(Pos pos) {
