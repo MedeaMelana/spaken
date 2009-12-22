@@ -7,7 +7,7 @@
 
 module MonadSpaken where
 
-import Control.Monad.State
+import Control.Monad.State.Strict
 import Control.Arrow (first, second)
 import Data.Type.Equality  -- from package type-equality
 import Debug.Trace
@@ -227,6 +227,7 @@ traceShowM x = trace (show x) (return ())
 deserializeStmts :: MonadSpaken m r => [SpakenStmt] -> StateT [StackEl r] m ()
 deserializeStmts [] = return ()
 deserializeStmts (s:ss) = do
+  traceShowM s
   stack <- get
   case s of
     StmtLine p1ref p2ref -> do
