@@ -84,6 +84,11 @@ instance Show SomeIx where
     IxCircle -> "IxCircle"
     IxPoints -> "IxPoints"
 
+instance Eq SomeIx where
+  SomeIx ix1 == SomeIx ix2 = case eqT ix1 ix2 of
+    Just Refl -> True
+    Nothing -> False
+
 -- class    El a      where el :: Ix a
 -- instance El Point  where el = IxPoint
 -- instance El Line   where el = IxLine
@@ -263,5 +268,8 @@ deserializeStmts (s:ss) = do
           deserializeStmts ss
         _ -> error "incompatible types"
 
-test :: SerialState
-test = serialize . deserialize . serialize $ bisectionWrapped
+propSerialiseId :: SerialState -> Bool
+propSerialiseId ser = serialize (deserialize ser) == ser
+
+test :: Bool
+test = propSerialiseId (serialize bisectionWrapped)
