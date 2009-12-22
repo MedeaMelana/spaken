@@ -3,13 +3,15 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module MonadSpaken where
 
 import Control.Monad.State
 import Control.Arrow (first, second)
 import Data.Type.Equality  -- from package type-equality
-
+import Debug.Trace
+import Data.List
 
 
 -- An API for compass and straightedge constructions.
@@ -49,7 +51,7 @@ bisection p1 p2 = do
 data ArgSpaken m r where
   -- The construction takes no more arguments. The Ix value indicates its
   -- return type.
-  ArgSpaken0 :: m (Ix ix, r ix) -> ArgSpaken m r
+  ArgSpaken0 :: Ix ix -> m (r ix) -> ArgSpaken m r
   
   -- The construction takes an argument whose type is indicated by the Ix.
   -- More arguments may follow.
@@ -96,9 +98,7 @@ bisectionWrapped :: MonadSpaken m r => ArgSpaken m r
 bisectionWrapped =
   ArgSpaken1 IxPoint $ \p1 ->
   ArgSpaken1 IxPoint $ \p2 ->
-  ArgSpaken0 $ do
-    l <- bisection p1 p2
-    return (IxLine, l)
+  ArgSpaken0 IxLine  $ bisection p1 p2
 
 
 
@@ -145,7 +145,7 @@ serialize sp = execState sp' ([], [])
     Serialize sp' = serialize' sp
 
 serialize' :: ArgSpaken Serialize Ref -> Serialize ()
-serialize' (ArgSpaken0 sp) = sp >> return ()
+serialize' (ArgSpaken0 ix sp) = sp >> return ()
   -- The result is thrown away under the assumption that the last statement's
   -- output equals the entire construction's output. This needs to be refined
   -- a bit, later on.
@@ -192,7 +192,7 @@ andGetRef2 sp = do
 -- information needs to be recovered. But we already know deserialize's type:
 
 deserialize :: MonadSpaken m r => SerialState -> ArgSpaken m r
-deserialize = undefined
+deserialize = deserializeAll []
 
 
 
@@ -201,16 +201,66 @@ deserialize = undefined
 data StackEl r where
   StackEl :: Ix ix -> r ix -> StackEl r
 
-toSpaken :: MonadSpaken m r => SerialState -> [StackEl r] -> ArgSpaken m r
-toSpaken (SomeIx ty : tys, stmts) stack =
-  ArgSpaken1 ty $ \arg -> toSpaken (tys, stmts) (stack ++ [StackEl ty arg])
-toSpaken ([], (s:ss)) stack = case s of
-    StmtLine p1ref p2ref ->
+deserializeAll :: forall m r. MonadSpaken m r =>
+  [StackEl r] -> SerialState -> ArgSpaken m r
+deserializeAll stack (SomeIx ty : tys, stmts) =
+    ArgSpaken1 ty $ \arg ->
+      deserializeAll (stack ++ [StackEl ty arg]) (tys, stmts)
+deserializeAll stack ([], stmts) =
+    ArgSpaken0 IxLine (getFinalStack >>= getLastEl)
+  where
+    getFinalStack :: m [StackEl r]
+    getFinalStack = execStateT (deserializeStmts stmts) stack
+    -- To do: allow return types other than Line.
+    getLastEl :: [StackEl r] -> m (r Line)
+    getLastEl stack = case last stack of
+      StackEl IxLine l -> return l
+
+stackIxs :: [StackEl r] -> [SomeIx]
+stackIxs = map f
+  where
+    f (StackEl ix _) = SomeIx ix
+
+traceShowM :: (Show a, Monad m) => a -> m ()
+traceShowM x = trace (show x) (return ())
+
+deserializeStmts :: MonadSpaken m r => [SpakenStmt] -> StateT [StackEl r] m ()
+deserializeStmts [] = return ()
+deserializeStmts (s:ss) = do
+  stack <- get
+  case s of
+    StmtLine p1ref p2ref -> do
+      traceShowM (p1ref, p2ref, stackIxs stack)
       case (stack !! p1ref, stack !! p2ref) of
-        (StackEl IxPoint p1, StackEl IxPoint p2) ->
-          undefined
---           CNoArg $ do
---             l <- line p1 p2
---             case toSpaken (SerializeState [] ss) (stack ++ [StackEl IxLine l]) of
---               CNoArg sp -> sp
+        (StackEl IxPoint p1, StackEl IxPoint p2) -> do
+          l <- lift $ line p1 p2
+          modify (++ [StackEl IxLine l])
+          deserializeStmts ss
         _ -> error "incompatible types"
+    StmtCircle pcRef prRef -> do
+      traceShowM (pcRef, prRef, stackIxs stack)
+      case (stack !! pcRef, stack !! prRef) of
+        (StackEl IxPoint pc, StackEl IxPoint pr) -> do
+          c <- lift $ circle pc pr
+          modify (++ [StackEl IxCircle c])
+          deserializeStmts ss
+        _ -> error "incompatible types"
+    StmtIntersectCC c1ref c2ref -> do
+      traceShowM (c1ref, c2ref, stackIxs stack)
+      case (stack !! c1ref, stack !! c2ref) of
+        (StackEl IxCircle c1, StackEl IxCircle c2) -> do
+          ps <- lift $ intersectCC c1 c2
+          modify (++ [StackEl IxPoints ps])
+          deserializeStmts ss
+        _ -> error "incompatible types"
+    StmtBothPoints psRef -> do
+      traceShowM (psRef, stackIxs stack)
+      case stack !! psRef of
+        StackEl IxPoints ps -> do
+          (p1, p2) <- lift $ bothPoints ps
+          modify (++ [StackEl IxPoint p1, StackEl IxPoint p2])
+          deserializeStmts ss
+        _ -> error "incompatible types"
+
+test :: SerialState
+test = serialize . deserialize . serialize $ bisectionWrapped
