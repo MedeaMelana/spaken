@@ -181,15 +181,17 @@ countNames = do
 
 andGetRef :: Serialize a -> Serialize (Ref b)
 andGetRef sp = do
+  -- get >>= traceShowM
   n <- countNames
+  -- traceShowM n
   sp
-  return (Ref $ n + 1)
+  return (Ref n)
 
 andGetRef2 :: Serialize a -> Serialize (Ref b, Ref c)
 andGetRef2 sp = do
   n <- countNames
   sp
-  return (Ref $ n + 1, Ref $ n + 2)
+  return (Ref n, Ref $ n + 1)
 
 
 
