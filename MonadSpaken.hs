@@ -3,7 +3,6 @@
 {-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 
 module MonadSpaken where
 
@@ -72,7 +71,7 @@ instance EqT Ix where
   eqT IxLine   IxLine   = Just Refl
   eqT IxCircle IxCircle = Just Refl
   eqT IxPoints IxPoints = Just Refl
-  eqT _        _        = undefined
+  eqT _        _        = Nothing
 
 data SomeIx where
   SomeIx :: Ix a -> SomeIx
@@ -114,7 +113,13 @@ bisectionWrapped =
 -- now we assume that the last step in the list produces the result of the
 -- entire construction.
 
-type SerialState = ([SomeIx], [SpakenStmt])
+data SerialSpaken = SerialSpaken
+    { serialArgTypes     :: [SomeIx]
+    , serialConstruction :: [SpakenStmt]
+    , serialReturnType   :: SomeIx
+    , serialReturnRef    :: Int
+    }
+  deriving (Eq, Show)
 
 data SpakenStmt
   = StmtLine         Int  Int
@@ -135,7 +140,14 @@ newNamesMade _                  = 1
 
 -- This is what bisection looks like when it is serialized:
 -- > serialize bisectionWrapped
--- ([IxPoint,IxPoint],[StmtCircle 0 1,StmtCircle 1 0,StmtIntersectCC 3 4,StmtBothPoints 5,StmtLine 6 7])
+-- SerialSpaken
+--   { serialArgTypes     = [IxPoint,IxPoint]
+--   , serialConstruction = [StmtCircle 0 1,StmtCircle 1 0,
+--         StmtIntersectCC 2 3,StmtBothPoints 4,StmtLine 5 6]
+--   , serialReturnType   = IxLine
+--   , serialReturnRef    = 7
+--   }
+
 
 
 
@@ -144,23 +156,26 @@ newNamesMade _                  = 1
 -- SerialState is handled by the state monad Serialize, which is an instance
 -- of MonadSpaken.
 
-serialize :: ArgSpaken Serialize Ref -> SerialState
-serialize sp = execState sp' ([], [])
+serialize :: ArgSpaken Serialize Ref -> SerialSpaken
+serialize sp = evalState sp' ([], [])
   where
     Serialize sp' = serialize' sp
 
-serialize' :: ArgSpaken Serialize Ref -> Serialize ()
-serialize' (ArgSpaken0 ix sp) = sp >> return ()
-  -- The result is thrown away under the assumption that the last statement's
-  -- output equals the entire construction's output. This needs to be refined
-  -- a bit, later on.
-serialize' (ArgSpaken1 ix f) = do
-  argTypes <- gets fst
-  modify (first (++ [SomeIx ix]))
-  serialize' . f . Ref . length $ argTypes
+serialize' :: ArgSpaken Serialize Ref -> Serialize SerialSpaken
+serialize' arg = case arg of
+  ArgSpaken0 ix sp -> do
+    Ref r <- sp
+    (argTypes, stmts) <- get
+    return (SerialSpaken argTypes stmts (SomeIx ix) r)
+  ArgSpaken1 ix f -> do
+    argTypes <- gets fst
+    modify (first (++ [SomeIx ix]))
+    serialize' . f . Ref . length $ argTypes
 
-newtype Serialize a = Serialize (State SerialState a)
-  deriving (Monad, MonadState SerialState)
+type SerializeState = ([SomeIx], [SpakenStmt])
+
+newtype Serialize a = Serialize (State SerializeState a)
+  deriving (Monad, MonadState SerializeState)
 
 instance MonadSpaken Serialize Ref where
   line        (Ref p1) (Ref p2) = andGetRef  $ addStmt (StmtLine p1 p2)
@@ -181,9 +196,7 @@ countNames = do
 
 andGetRef :: Serialize a -> Serialize (Ref b)
 andGetRef sp = do
-  -- get >>= traceShowM
   n <- countNames
-  -- traceShowM n
   sp
   return (Ref n)
 
@@ -198,47 +211,43 @@ andGetRef2 sp = do
 -- Now the fun part: deserialization. This is hard because all the type
 -- information needs to be recovered. But we already know deserialize's type:
 
-deserialize :: MonadSpaken m r => SerialState -> ArgSpaken m r
+deserialize :: MonadSpaken m r => SerialSpaken -> ArgSpaken m r
 deserialize = deserializeAll []
-
-
-
--- What follows is an attempt at deserialize's implementation.
 
 data StackEl r where
   StackEl :: Ix ix -> r ix -> StackEl r
 
-deserializeAll :: forall m r. MonadSpaken m r =>
-  [StackEl r] -> SerialState -> ArgSpaken m r
-deserializeAll stack (SomeIx ty : tys, stmts) =
-    ArgSpaken1 ty $ \arg ->
-      deserializeAll (stack ++ [StackEl ty arg]) (tys, stmts)
-deserializeAll stack ([], stmts) =
-    ArgSpaken0 IxLine (getFinalStack >>= getLastEl)
-  where
-    getFinalStack :: m [StackEl r]
-    getFinalStack = execStateT (deserializeStmts stmts) stack
-    -- To do: allow return types other than Line.
-    getLastEl :: [StackEl r] -> m (r Line)
-    getLastEl stack = case last stack of
-      StackEl IxLine l -> return l
+deserializeAll :: MonadSpaken m r =>
+  [StackEl r] -> SerialSpaken -> ArgSpaken m r
+deserializeAll stack
+    serial@(SerialSpaken argTypes stmts (SomeIx retTy) retRef) =
+  case argTypes of
+    SomeIx ty : tys ->
+      -- Push argument on stack
+      ArgSpaken1 ty $ \arg ->
+        deserializeAll
+            (stack ++ [StackEl ty arg])
+            (serial { serialArgTypes = tys })
+    [] ->
+      -- All arguments have been processed. Process statements.
+      ArgSpaken0 retTy $ do
+        finalStack <- execStateT (deserializeStmts stmts) stack
+        case finalStack !! retRef of
+          StackEl ty' value -> return (coerceRetTy ty' retTy value)
 
-stackIxs :: [StackEl r] -> [SomeIx]
-stackIxs = map f
-  where
-    f (StackEl ix _) = SomeIx ix
-
-traceShowM :: (Show a, Monad m) => a -> m ()
-traceShowM x = trace (show x) (return ())
+coerceRetTy :: Ix ix1 -> Ix ix2 -> r ix1 -> r ix2
+coerceRetTy ty1 ty2 = case eqT ty1 ty2 of
+  Just Refl -> id
+  Nothing   -> fail $
+      "Declared return type " ++ show (SomeIx ty2) ++
+      " does not match computed return type " ++ show (SomeIx ty1)
 
 deserializeStmts :: MonadSpaken m r => [SpakenStmt] -> StateT [StackEl r] m ()
 deserializeStmts [] = return ()
 deserializeStmts (s:ss) = do
-  traceShowM s
   stack <- get
   case s of
     StmtLine p1ref p2ref -> do
-      traceShowM (p1ref, p2ref, stackIxs stack)
       case (stack !! p1ref, stack !! p2ref) of
         (StackEl IxPoint p1, StackEl IxPoint p2) -> do
           l <- lift $ line p1 p2
@@ -246,7 +255,6 @@ deserializeStmts (s:ss) = do
           deserializeStmts ss
         _ -> error "incompatible types"
     StmtCircle pcRef prRef -> do
-      traceShowM (pcRef, prRef, stackIxs stack)
       case (stack !! pcRef, stack !! prRef) of
         (StackEl IxPoint pc, StackEl IxPoint pr) -> do
           c <- lift $ circle pc pr
@@ -254,7 +262,6 @@ deserializeStmts (s:ss) = do
           deserializeStmts ss
         _ -> error "incompatible types"
     StmtIntersectCC c1ref c2ref -> do
-      traceShowM (c1ref, c2ref, stackIxs stack)
       case (stack !! c1ref, stack !! c2ref) of
         (StackEl IxCircle c1, StackEl IxCircle c2) -> do
           ps <- lift $ intersectCC c1 c2
@@ -262,7 +269,6 @@ deserializeStmts (s:ss) = do
           deserializeStmts ss
         _ -> error "incompatible types"
     StmtBothPoints psRef -> do
-      traceShowM (psRef, stackIxs stack)
       case stack !! psRef of
         StackEl IxPoints ps -> do
           (p1, p2) <- lift $ bothPoints ps
@@ -270,7 +276,7 @@ deserializeStmts (s:ss) = do
           deserializeStmts ss
         _ -> error "incompatible types"
 
-propSerialiseId :: SerialState -> Bool
+propSerialiseId :: SerialSpaken -> Bool
 propSerialiseId ser = serialize (deserialize ser) == ser
 
 test :: Bool
