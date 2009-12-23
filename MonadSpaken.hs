@@ -22,7 +22,10 @@ data Line
 data Circle
 data Points
 
+type Pos = (Double, Double)
+
 class Monad m => MonadSpaken m r | m -> r where
+  point       :: Pos                  -> m (r Point)
   line        :: r Point  -> r Point  -> m (r Line)
   circle      :: r Point  -> r Point  -> m (r Circle)
   intersectCC :: r Circle -> r Circle -> m (r Points)
@@ -40,6 +43,11 @@ bisection p1 p2 = do
   (i1, i2) <- bothPoints ps
   line i1 i2
 
+bisectionExample :: MonadSpaken m r => m (r Line)
+bisectionExample = do
+  p1 <- point (0,0)
+  p2 <- point (10,10)
+  bisection p1 p2
 
 
 -- Our example construction takes two arguments.
@@ -104,6 +112,8 @@ bisectionWrapped =
   ArgSpaken1 IxPoint $ \p2 ->
   ArgSpaken0 IxLine  $ bisection p1 p2
 
+bisectionExampleWrapped :: MonadSpaken m r => ArgSpaken m r
+bisectionExampleWrapped = ArgSpaken0 IxLine bisectionExample
 
 
 -- Now we are ready to serialize constructions that take arguments. A
@@ -122,7 +132,8 @@ data SerialSpaken = SerialSpaken
   deriving (Eq, Show)
 
 data SpakenStmt
-  = StmtLine         Int  Int
+  = StmtPoint        Pos
+  | StmtLine         Int  Int
   | StmtCircle       Int  Int
   | StmtIntersectCC  Int  Int
   | StmtBothPoints   Int
@@ -178,6 +189,7 @@ newtype Serialize a = Serialize (State SerializeState a)
   deriving (Monad, MonadState SerializeState)
 
 instance MonadSpaken Serialize Ref where
+  point       pos               = andGetRef  $ addStmt (StmtPoint pos)
   line        (Ref p1) (Ref p2) = andGetRef  $ addStmt (StmtLine p1 p2)
   circle      (Ref pc) (Ref pr) = andGetRef  $ addStmt (StmtCircle pc pr)
   intersectCC (Ref c1) (Ref c2) = andGetRef  $ addStmt (StmtIntersectCC c1 c2)
@@ -247,6 +259,10 @@ deserializeStmts [] = return ()
 deserializeStmts (s:ss) = do
   stack <- get
   case s of
+    StmtPoint pos -> do
+      p <- lift $ point pos
+      modify (++ [StackEl IxPoint p])
+      deserializeStmts ss
     StmtLine p1ref p2ref -> do
       case (stack !! p1ref, stack !! p2ref) of
         (StackEl IxPoint p1, StackEl IxPoint p2) -> do
