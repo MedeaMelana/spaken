@@ -1,8 +1,11 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module Shape (
   Shape(..), PointType(..),
+
+  toShape,
   
   posOf, radius, center
 ) where
@@ -32,7 +35,15 @@ radius (Circle _ r) = r
 center :: Shape Circle -> Pos
 center (Circle p _) = p
 
-instance MonadSpaken Identity Shape where
+-- Use toShape on a generic MonadSpaken-thingy to get the result as a Shape.
+
+toShape :: ToShape i -> i
+toShape (ToShape m) = runIdentity m
+
+newtype ToShape a = ToShape (Identity a)
+  deriving (Monad)
+
+instance MonadSpaken ToShape Shape where
   point        = return . Point Postulated
   line   p1 p2 = return $ Line (posOf p1) (posOf p2)
   circle p1 p2 = return $ Circle p1' (distance p1' p2')
