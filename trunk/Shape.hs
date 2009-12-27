@@ -93,18 +93,18 @@ instance MonadSpaken ToShapeHist ShapeHist where
           p2'  = posOf $ shape p2
 
   intersectCC c1 c2 = return $ mergeHist (TwoPoints (Point Derived $ i (-1)) (Point Derived $ i 1)) c1 c2
-    where i m  = (m * yt) *^ (lens + (normalized $ cross2 dist))
-          lens = p1 + xt *^ (normalized dist)
-          dist = p2 - p1
-          p1   = center $ shape c1
+    where p1   = center $ shape c1
           p2   = center $ shape c2
           r1   = radius $ shape c1
           r1s  = r1 * r1
           r2   = radius $ shape c2
           r2s  = r2 * r2
+          dist = p2 - p1
           d    = magnitude dist
           xt   = (d * d - r2s + r1s) / (2 * d)
-          yt   = sqrt ((-d + r2 - r1) * (-d -r2 + r1) * (-d + r2 + r1) * (d + r2 + r1)) / (2 * d)
+          yt   = sqrt ((-d + r2 - r1) * (-d - r2 + r1) * (-d + r2 + r1) * (d + r2 + r1)) / (2 * d)
+          lens = p1 + xt *^ (normalized dist)
+          i m  = lens + (m * yt) *^ (normalized $ cross2 dist)
 
   bothPoints (ShapeHist s h) = case s of
     (TwoPoints p1 p2) -> return (ShapeHist p1 h, ShapeHist p2 h)
