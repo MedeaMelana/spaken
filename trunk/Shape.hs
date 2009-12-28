@@ -7,6 +7,8 @@ module Shape (
 
   ShapeHist(..),
 
+  ToShape, ToShapeHist,
+
   toShape, toShapeHist,
   
   posOf, radius, center,
