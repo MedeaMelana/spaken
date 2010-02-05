@@ -16,5 +16,5 @@ public class DrawingConstants {
 	
 	public static final double ZOOM_MAX = 50;
 	public static final double ZOOM_MIN = 1e-12;
-	public static final double ZOOM_INITIAL = 1e-6;
+	public static final double ZOOM_INITIAL = 1; // 1e-6;
 }
