@@ -10,7 +10,6 @@ import javax.swing.*;
 import spaken.model.*;
 import spaken.model.commands.ClearCanvasCommand;
 import spaken.model.elements.*;
-import spaken.model.elements.intersections.Intersections;
 import spaken.ui.swing.actions.*;
 import spaken.ui.swing.tools.*;
 

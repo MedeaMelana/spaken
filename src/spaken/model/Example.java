@@ -1,0 +1,19 @@
+package spaken.model;
+
+import spaken.model.elements.*;
+
+public class Example {
+	public static void main(String[] args) throws ImaginaryPointException {
+		Construct sp = new Construct();
+		Element p1 = sp.makePoint(null, new Pos(0, 0));
+		Element p2 = sp.makePoint(null, new Pos(10,6));
+		Element c1 = sp.circle(p1, p1, p2);
+		Element c2 = sp.circle(p2, p1, p2);
+		Points  is = (Points) sp.intersectCC(c1, c2);
+		Element ll = sp.line(is.getPoint(0), is.getPoint(1));
+		Element lo = sp.line(p1, p2);
+		Point middel = ((Points) sp.intersectLL(ll, lo)).getPoint(0);
+		
+		System.out.println(middel.getPos());
+	}
+}

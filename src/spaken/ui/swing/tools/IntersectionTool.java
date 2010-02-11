@@ -6,7 +6,6 @@ import java.util.*;
 
 import spaken.model.*;
 import spaken.model.elements.*;
-import spaken.model.elements.intersections.Intersections;
 import spaken.model.rendered.RenderedPoint;
 import spaken.storage.ElementReader;
 import spaken.storage.ElementWriter;
