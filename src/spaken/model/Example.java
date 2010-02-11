@@ -1,6 +1,8 @@
 package spaken.model;
 
 import spaken.model.elements.*;
+import spaken.model.serialize.SerialPattern;
+import spaken.model.serialize.Serialize;
 
 public class Example {
 	public static void main(String[] args) throws ImaginaryPointException {
@@ -15,5 +17,14 @@ public class Example {
 		Point middel = ((Points) sp.intersectLL(ll, lo)).getPoint(0);
 		
 		System.out.println(middel.getPos());
+		
+		// serialize and deserialize the whole bunch
+		Serialize ser = new Serialize();
+		middel.visit(ser);
+		SerialPattern pat = ser.makePattern();
+		Element re = pat.reconstruct(new Construct());
+		
+		System.out.println(middel);
+		System.out.println(re);
 	}
 }
