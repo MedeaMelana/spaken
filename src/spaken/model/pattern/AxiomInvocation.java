@@ -1,4 +1,4 @@
-package spaken.model.serialize;
+package spaken.model.pattern;
 
 import java.util.Arrays;
 
