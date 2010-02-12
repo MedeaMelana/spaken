@@ -23,8 +23,6 @@ public class AxiomInvocation {
 		return type;
 	}
 
-	// TODO Elem[] stack vervangen door een fatsoenlijke abstractie die het raar
-	// indexeren (zie methode stack) zelf afhandelt.
 	public <Elem, Err extends Throwable> Elem invoke(Spaken<Elem, Err> sp,
 			Lookup<Integer,Elem> stack) throws Err {
 		switch (type) {

@@ -2,18 +2,16 @@ package spaken.model.elements;
 
 import spaken.model.*;
 
-public class IntersectLL extends AbstractElement implements Points {
+public class IntersectLL extends AbstractElement implements Point {
 
 	private final Line l1, l2;
-	private final IPoint point;
 
 	IntersectLL(Line l1, Line l2) {
 		this.l1 = l1;
 		this.l2 = l2;
-		this.point = new IPoint();
 	}
-
-	private Pos getPointPos() throws ImaginaryPointException {
+	
+	public Pos getPos() throws ImaginaryPointException {
 		Pos p1 = l1.getP1().getPos();
 		Pos p2 = l1.getP2().getPos();
 		Pos p3 = l2.getP1().getPos();
@@ -40,28 +38,6 @@ public class IntersectLL extends AbstractElement implements Points {
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
 	}
 	
-	private class IPoint extends AbstractElement implements Point {
-		public Pos getPos() throws ImaginaryPointException {
-			return getPointPos();
-		}
-
-		public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
-			Elem ll = IntersectLL.this.visit(sp);
-			return sp.getPoint(ll, 0);
-		}
-	}
-
-	public Point getPoint(int index) {
-		if (index != 0) {
-			throw new PointIndexOutOfRangeException(index);
-		}
-		return point;
-	}
-
-	public int getPointCount() {
-		return 1;
-	}
-
 	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
 		Elem e1 = l1.visit(sp);
 		Elem e2 = l2.visit(sp);

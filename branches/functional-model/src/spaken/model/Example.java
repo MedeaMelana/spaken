@@ -14,7 +14,7 @@ public class Example {
 		Points  is = (Points) sp.intersectCC(c1, c2);
 		Element ll = sp.line(is.getPoint(0), is.getPoint(1));
 		Element lo = sp.line(p1, p2);
-		Point middel = ((Points) sp.intersectLL(ll, lo)).getPoint(0);
+		Point middel = (Point) sp.intersectLL(ll, lo);
 		
 		System.out.println(middel.getPos());
 		
