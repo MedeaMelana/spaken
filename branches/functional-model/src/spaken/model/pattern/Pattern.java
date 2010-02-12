@@ -1,4 +1,4 @@
-package spaken.model.serialize;
+package spaken.model.pattern;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.Arrays;
 import spaken.model.*;
 import spaken.model.util.Lookup;
 
-public class SerialPattern {
+public class Pattern {
 	private Pos[] args;
 
 	private AxiomInvocation[] construction;
@@ -15,7 +15,7 @@ public class SerialPattern {
 
 	private int returnRef;
 
-	SerialPattern(Pos[] args, AxiomInvocation[] construction,
+	Pattern(Pos[] args, AxiomInvocation[] construction,
 			ElemType returnType, int returnRef) {
 		this.args = Arrays.copyOf(args, args.length);
 		this.construction = Arrays.copyOf(construction, construction.length);

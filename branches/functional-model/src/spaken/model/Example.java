@@ -1,8 +1,8 @@
 package spaken.model;
 
 import spaken.model.elements.*;
-import spaken.model.serialize.SerialPattern;
-import spaken.model.serialize.Serialize;
+import spaken.model.pattern.Pattern;
+import spaken.model.pattern.ExtractPattern;
 
 public class Example {
 	public static void main(String[] args) throws ImaginaryPointException {
@@ -19,9 +19,9 @@ public class Example {
 		System.out.println(middel.getPos());
 		
 		// serialize and deserialize the whole bunch
-		Serialize ser = new Serialize();
+		ExtractPattern ser = new ExtractPattern();
 		middel.visit(ser);
-		SerialPattern pat = ser.makePattern();
+		Pattern pat = ser.makePattern();
 		Element re = pat.reconstruct(new Construct());
 		
 		System.out.println(middel);

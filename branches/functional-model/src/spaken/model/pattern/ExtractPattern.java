@@ -1,25 +1,25 @@
-package spaken.model.serialize;
+package spaken.model.pattern;
 
 import java.util.*;
 
 import spaken.model.*;
 import spaken.model.util.Unique;
 
-public class Serialize implements Spaken<Serialize.Ref, NoException> {
+public class ExtractPattern implements Spaken<ExtractPattern.Ref, NoException> {
 	private List<Pos> inputs;
 
 	private Map<Unique, Ref> knownPoints;
 
 	private List<AxiomInvocation> construct;
 
-	public Serialize() {
+	public ExtractPattern() {
 		inputs = new ArrayList<Pos>();
 		knownPoints = new HashMap<Unique, Ref>();
 		construct = new LinkedList<AxiomInvocation>();
 	}
 
-	public SerialPattern makePattern() {
-		return new SerialPattern(inputs.toArray(new Pos[inputs.size()]),
+	public Pattern makePattern() {
+		return new Pattern(inputs.toArray(new Pos[inputs.size()]),
 				construct.toArray(new AxiomInvocation[construct.size()]), null,
 				inputs.size() + construct.size() - 1);
 	}
