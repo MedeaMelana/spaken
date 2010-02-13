@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import spaken.model.*;
-import spaken.model.util.Unique;
+import spaken.util.Unique;
 
 public class Construct implements Spaken<Element, ClassCastException> {
 	

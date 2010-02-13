@@ -1,8 +1,9 @@
-package spaken.model;
+package spaken.model.commands;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+
 
 /** Provides undo and redo support. */
 public class CommandHistory {

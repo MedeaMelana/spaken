@@ -1,4 +1,4 @@
-package spaken.model.util;
+package spaken.util;
 
 public final class Unique {
 	private Unique() {}
