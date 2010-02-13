@@ -1,6 +1,6 @@
 package spaken.model;
 
-import spaken.model.util.Unique;
+import spaken.util.Unique;
 
 public interface Spaken<Elem, Err extends Throwable> {
   public Elem makePoint(Unique id, Pos pos) throws Err;

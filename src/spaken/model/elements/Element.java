@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import spaken.model.ImaginaryPointException;
 import spaken.model.Spaken;
-import spaken.model.util.Unique;
+import spaken.util.Unique;
 
 public interface Element {
 	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)

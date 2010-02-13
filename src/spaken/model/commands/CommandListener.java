@@ -1,4 +1,5 @@
-package spaken.model;
+package spaken.model.commands;
+
 
 public interface CommandListener {
 

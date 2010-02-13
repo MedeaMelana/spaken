@@ -3,7 +3,7 @@ package spaken.model.pattern;
 import java.util.Arrays;
 
 import spaken.model.Spaken;
-import spaken.model.util.Lookup;
+import spaken.util.Lookup;
 
 public class AxiomInvocation {
 	private final AxiomType type;

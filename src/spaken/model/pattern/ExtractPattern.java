@@ -3,7 +3,7 @@ package spaken.model.pattern;
 import java.util.*;
 
 import spaken.model.*;
-import spaken.model.util.Unique;
+import spaken.util.Unique;
 
 public class ExtractPattern implements Spaken<ExtractPattern.Ref, NoException> {
 	private List<Pos> inputs;

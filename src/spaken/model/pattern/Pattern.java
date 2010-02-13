@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import spaken.model.*;
-import spaken.model.util.Lookup;
+import spaken.util.Lookup;
 
 public class Pattern {
 	private Pos[] args;
