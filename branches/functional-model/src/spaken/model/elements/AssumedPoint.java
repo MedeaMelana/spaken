@@ -1,23 +1,35 @@
 package spaken.model.elements;
 
-import spaken.model.*;
-import spaken.model.util.Unique;
+import java.awt.Color;
 
-public class AssumedPoint extends AbstractElement implements Point {
-	private final Unique id;
-	private final Pos pos;
+import spaken.model.*;
+import spaken.ui.swing.DrawingConstants;
+
+public class AssumedPoint extends AbstractPoint {
+	private Pos pos;
 	
 	AssumedPoint(Pos pos) {
-		id = Unique.create();
 		this.pos = pos;
 	}
-
-	public Pos getPos() throws ImaginaryPointException {
+	
+	public void setPointPos(Pos pos) {
+		this.pos = pos;
+	}
+	
+	public Pos getPointPos() {
 		return pos;
 	}
 
+	public Pos getPos() throws ImaginaryPointException {
+		return getPointPos();
+	}
+
 	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
-		return sp.makePoint(id, pos);
+		return sp.makePoint(getId(), pos);
+	}
+	
+	protected Color getPointColor() {
+		return DrawingConstants.CONTROLLABLE;
 	}
 	
 }

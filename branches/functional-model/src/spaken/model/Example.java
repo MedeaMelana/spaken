@@ -1,8 +1,7 @@
 package spaken.model;
 
 import spaken.model.elements.*;
-import spaken.model.pattern.Pattern;
-import spaken.model.pattern.ExtractPattern;
+import spaken.model.pattern.*;
 
 public class Example {
 	public static void main(String[] args) throws ImaginaryPointException {

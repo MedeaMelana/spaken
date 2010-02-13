@@ -1,14 +1,14 @@
 package spaken.model.elements;
 
+import java.awt.Graphics2D;
+
 import spaken.model.*;
 
 class IntersectLC extends AbstractElement implements Points {
-	// :( had to remove final from the fields, because of readElement
-
 	private final Line line;
 
 	private final Circle circle;
-	
+
 	private final IPoint point1, point2;
 
 	IntersectLC(Line l, Circle c) {
@@ -20,7 +20,7 @@ class IntersectLC extends AbstractElement implements Points {
 
 	public Pos getPointPos(double mul) throws ImaginaryPointException {
 		assert mul == -1 || mul == 2;
-		
+
 		Pos p1 = line.getP1().getPos();
 		Pos p2 = line.getP2().getPos();
 		Pos cc = circle.getCenter().getPos();
@@ -66,25 +66,27 @@ class IntersectLC extends AbstractElement implements Points {
 
 		return new Pos(x, y).add(cc);
 	}
-	
-	private class IPoint extends AbstractElement implements Point {
+
+	private class IPoint extends AbstractPoint {
 		private final double mul;
+
 		private final int i;
 
 		private IPoint(int i, double mul) {
 			this.i = i;
 			this.mul = mul;
 		}
-		
+
 		public Pos getPos() throws ImaginaryPointException {
 			return getPointPos(mul);
 		}
 
-		public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
+		public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)
+				throws Err {
 			Elem e = IntersectLC.this.visit(sp);
 			return sp.getPoint(e, i);
 		}
-		
+
 	}
 
 	private static double sgn(double v) {
@@ -112,10 +114,15 @@ class IntersectLC extends AbstractElement implements Points {
 		return 2;
 	}
 
-	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
+	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)
+			throws Err {
 		Elem el = line.visit(sp);
 		Elem ec = circle.visit(sp);
 		return sp.intersectLC(el, ec);
+	}
+
+	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+			throws ImaginaryPointException {
 	}
 
 }
