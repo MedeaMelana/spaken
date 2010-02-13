@@ -1,7 +1,7 @@
-package spaken.model.commands;
+package spaken.ui.swing.commands;
 
-import spaken.model.Command;
-import spaken.model.Element;
+import spaken.model.commands.Command;
+import spaken.model.elements.Element;
 import spaken.ui.swing.SpaceCanvas;
 
 public class AddElementCommand implements Command {

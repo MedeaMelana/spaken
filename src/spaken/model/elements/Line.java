@@ -1,10 +1,10 @@
 package spaken.model.elements;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 import spaken.model.*;
-import spaken.ui.swing.DrawingConstants;
 
 public class Line extends AbstractElement {
 	private static final double VERY_LARGE_NUMBER = Math.pow(10, 4);
@@ -35,7 +35,7 @@ public class Line extends AbstractElement {
 		return sp.line(r1, r2);
 	}
 
-	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+	public void draw(Graphics2D g, double pixelSize, Color color)
 			throws ImaginaryPointException {
 		Pos v1 = p1.getPos();
 		Pos v2 = p2.getPos();
@@ -48,7 +48,7 @@ public class Line extends AbstractElement {
 		Pos p1ext = v1.add(d);
 		Pos p2ext = v2.subtract(d);
 
-		g.setColor(DrawingConstants.FOREGROUND);
+		g.setColor(color);
 		g.draw(new Line2D.Double(p1ext.x, p1ext.y, p2ext.x, p2ext.y));
 	}
 }

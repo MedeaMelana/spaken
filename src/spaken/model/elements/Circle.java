@@ -1,10 +1,10 @@
 package spaken.model.elements;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 import spaken.model.*;
-import spaken.ui.swing.DrawingConstants;
 
 public class Circle extends AbstractElement {
 
@@ -36,14 +36,14 @@ public class Circle extends AbstractElement {
 		return sp.circle(c, df, dt);
 	}
 
-	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+	public void draw(Graphics2D g, double pixelSize, Color color)
 			throws ImaginaryPointException {
 		Pos c = center.getPos();
 		Pos from = distFrom.getPos();
 		Pos to = distTo.getPos();
 		double radius = from.distance(to);
 		double diam = 2 * radius;
-		g.setColor(DrawingConstants.FOREGROUND);
+		g.setColor(color);
 		g.draw(new Ellipse2D.Double(c.x - radius, c.y - radius, diam, diam));
 	}
 

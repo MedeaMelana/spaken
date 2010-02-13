@@ -1,4 +1,3 @@
-/* Created on Jun 26, 2008. */
 package spaken.ui.swing;
 
 import java.awt.BasicStroke;
@@ -14,16 +13,15 @@ import java.awt.geom.Line2D;
 
 import javax.swing.JPanel;
 
-import spaken.model.CommandHistory;
+import spaken.model.commands.CommandHistory;
 import spaken.model.Pos;
 import spaken.model.Space;
-import spaken.model.elements.AssumedPoint;
-import spaken.model.elements.Point;
-import spaken.model.rendered.Rendered;
+import spaken.model.elements.*;
 
 public class SpaceCanvas extends JPanel {
 
 	private Space space;
+	private Construct construct;
 
 	private Tool currentTool;
 
@@ -31,6 +29,7 @@ public class SpaceCanvas extends JPanel {
 
 	private AffineTransform transform;
 
+	// wtf?
 	{
 		addMouseListener(new MouseAdapter() {
 
@@ -57,6 +56,7 @@ public class SpaceCanvas extends JPanel {
 	public SpaceCanvas(Space space, CommandHistory history) {
 		this.space = space;
 		this.history = history;
+		this.construct = new Construct();
 
 		setOpaque(true);
 		setBackground(DrawingConstants.BACKGROUND);
@@ -86,13 +86,19 @@ public class SpaceCanvas extends JPanel {
 		line.setLine(0, lb.y, 0, ro.y);
 		g.draw(line);
 
-		for (Rendered r : space.render()) {
-			r.draw(g, pixelSize);
-		}
+		space.draw(g, pixelSize);
 
 		if (currentTool != null) {
 			currentTool.drawState(g, pixelSize);
 		}
+	}
+	
+	/**
+	 * 
+	 * @return A <tt>Construct</tt> object with which to make Elements.
+	 */
+	public Construct getConstruct() {
+		return construct;
 	}
 
 	public Space getSpace() {

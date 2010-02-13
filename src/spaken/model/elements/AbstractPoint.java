@@ -13,7 +13,7 @@ public abstract class AbstractPoint extends AbstractElement implements Point {
 		return DrawingConstants.BACKGROUND;
 	}
 
-	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+	public void draw(Graphics2D g, double pixelSize, Color color)
 			throws ImaginaryPointException {
 		double s = pixelSize * DrawingConstants.POINT_SIZE / 2;
 		Pos pos = this.getPos();
@@ -21,7 +21,7 @@ public abstract class AbstractPoint extends AbstractElement implements Point {
 				2 * s);
 		g.setColor(getPointColor());
 		g.fill(rect);
-		g.setColor(DrawingConstants.FOREGROUND);
+		g.setColor(color);
 		g.draw(rect);
 	}
 }

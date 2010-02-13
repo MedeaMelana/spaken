@@ -1,5 +1,10 @@
 package spaken.model.elements;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
+import spaken.model.ImaginaryPointException;
+import spaken.ui.swing.DrawingConstants;
 import spaken.util.Unique;
 
 public abstract class AbstractElement implements Element {
@@ -24,4 +29,18 @@ public abstract class AbstractElement implements Element {
 		}
 		return false;
 	}
+	
+	public void draw(Graphics2D g, double pixelSize) throws ImaginaryPointException {
+		draw(g, pixelSize, DrawingConstants.FOREGROUND);
+	}
+	
+	public void highlight(Graphics2D g, double pixelSize) throws ImaginaryPointException {
+		draw(g, pixelSize, DrawingConstants.HIGHLIGHT);
+	}
+	
+	public void outline(Graphics2D g, double pixelSize) throws ImaginaryPointException {
+		draw(g, pixelSize, DrawingConstants.OUTLINE);
+	}
+	
+	protected abstract void draw(Graphics2D g, double pixelSize, Color color) throws ImaginaryPointException;
 }

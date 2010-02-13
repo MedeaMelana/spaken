@@ -1,5 +1,6 @@
 package spaken.model.elements;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 
 import spaken.model.*;
@@ -93,7 +94,7 @@ public class IntersectCC extends AbstractElement implements Points {
 		return sp.intersectCC(e1, e2);
 	}
 
-	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+	public void draw(Graphics2D g, double pixelSize, Color color)
 			throws ImaginaryPointException {
 	}
 

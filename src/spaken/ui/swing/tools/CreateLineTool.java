@@ -3,10 +3,7 @@ package spaken.ui.swing.tools;
 import java.awt.Graphics2D;
 
 import spaken.model.*;
-import spaken.model.elements.Line;
-import spaken.model.elements.Point;
-import spaken.model.rendered.RenderedLine;
-import spaken.ui.swing.DrawingConstants;
+import spaken.model.elements.*;
 
 public class CreateLineTool extends AbstractTool {
 
@@ -33,7 +30,8 @@ public class CreateLineTool extends AbstractTool {
 		if (p1 != null) {
 			Point p2 = getCanvas().getPointAt(end);
 			if (p2 != null && p2 != p1) {
-				addElement(new Line(p1, p2));
+				Element e = getConstruct().line(p1, p2);
+				addElement(e);
 				p1 = null;
 			}
 		} else {
@@ -52,12 +50,10 @@ public class CreateLineTool extends AbstractTool {
 			highlightPoint(g, pixelSize, p1);
 
 			if (isMouseInside()) {
-				Pos mouse = getMouse();
+				Element mouse = getMousePoint();
 				try {
-					new RenderedLine(getPos(p1), mouse,
-							DrawingConstants.OUTLINE).draw(g, pixelSize);
+					getConstruct().line(p1, mouse).outline(g, pixelSize);
 				} catch (ImaginaryPointException e) {
-				} catch (UnboundPointException e) {
 				}
 			}
 		}

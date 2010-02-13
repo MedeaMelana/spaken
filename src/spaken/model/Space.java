@@ -80,7 +80,7 @@ public class Space {
 	public void draw(Graphics2D g, double pixelSize) {
 		for (Element e : getElements()) {
 			try {
-				e.draw(g, pixelSize, false);
+				e.draw(g, pixelSize);
 			} catch (ImaginaryPointException ex) {
 				// No problem
 			}

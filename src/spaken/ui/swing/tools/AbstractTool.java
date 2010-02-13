@@ -2,18 +2,13 @@ package spaken.ui.swing.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.*;
-import java.io.IOException;
-import java.util.Set;
 
 import spaken.model.*;
-import spaken.model.commands.AddElementCommand;
-import spaken.model.commands.AddGroupCommand;
+import spaken.model.commands.Command;
 import spaken.model.elements.*;
-import spaken.model.rendered.Rendered;
-import spaken.model.rendered.RenderedPoint;
-import spaken.storage.ElementReader;
-import spaken.storage.ElementWriter;
-import spaken.ui.swing.*;
+import spaken.ui.swing.SpaceCanvas;
+import spaken.ui.swing.Tool;
+import spaken.ui.swing.commands.AddElementCommand;
 
 public abstract class AbstractTool implements Tool {
 
@@ -22,8 +17,6 @@ public abstract class AbstractTool implements Tool {
 	private String name;
 
 	private StrokeListener strokeListener = new StrokeListener();
-
-	private Point mousePoint = new MousePoint();
 
 	private KeyListener escapeListener = new KeyAdapter() {
 
@@ -74,6 +67,14 @@ public abstract class AbstractTool implements Tool {
 			return canvas.getSpace();
 		}
 	}
+	
+	protected Construct getConstruct() {
+		if (canvas == null) {
+			return null;
+		} else {
+			return canvas.getConstruct();
+		}
+	}
 
 	public String getName() {
 		return name;
@@ -87,18 +88,13 @@ public abstract class AbstractTool implements Tool {
 		execute(new AddElementCommand(canvas, e));
 	}
 	
-	protected void addGroup(Group g) {
-		execute(new AddGroupCommand(canvas, g));
-	}
-
 	protected void addPoint(Pos pos) {
-		Point p = new AssumedPoint(getSpace().getPointBinding(), pos);
+		Element p = getConstruct().makePoint(null, pos);
 		addElement(p);
 	}
 
-	protected Pos getPos(Point p) throws ImaginaryPointException,
-			UnboundPointException {
-		return p.getPos(getSpace().getPointBinding());
+	protected Pos getPos(Point p) throws ImaginaryPointException {
+		return p.getPos();
 	}
 
 	/**
@@ -110,13 +106,13 @@ public abstract class AbstractTool implements Tool {
 	protected Pos getMouse() {
 		return strokeListener.getCurrent();
 	}
-
+	
 	/**
-	 * @return A <tt>Point</tt> always reflecting the current position of the
-	 *         mouse.
+	 * 
+	 * @return A Point representing the current location of the mouse.
 	 */
-	protected Point getMousePoint() {
-		return mousePoint;
+	protected Element getMousePoint() {
+		return getConstruct().makePoint(null, getMouse());
 	}
 
 	protected boolean isMouseInside() {
@@ -134,11 +130,8 @@ public abstract class AbstractTool implements Tool {
 			return;
 		}
 		try {
-			new RenderedPoint(getPos(p), RenderedPoint.Type.DERIVED,
-					DrawingConstants.HIGHLIGHT).draw(g, pixelSize);
+			p.highlight(g, pixelSize);
 		} catch (ImaginaryPointException e) {
-			// Blah.
-		} catch (UnboundPointException e) {
 			// Blah.
 		}
 	}
@@ -223,44 +216,4 @@ public abstract class AbstractTool implements Tool {
 		}
 
 	}
-
-	private class MousePoint implements Point {
-
-		public Pos getPos(PointBinding<Pos> binding)
-				throws ImaginaryPointException {
-			if (isMouseInside()) {
-				return getMouse();
-			} else {
-				throw new ImaginaryPointException(this);
-			}
-		}
-
-		public void readElement(ElementReader in) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-
-		public Rendered render() throws ImaginaryPointException {
-			throw new UnsupportedOperationException();
-		}
-
-		public void writeElement(ElementWriter out) throws IOException {
-			throw new UnsupportedOperationException();
-		}
-
-		public void collectAssumptions(Set<AssumedPoint> collect) {
-			throw new UnsupportedOperationException();
-		}
-
-		public Point instantiate(PointBinding<Point> binding)
-				throws UnboundPointException {
-			throw new UnsupportedOperationException();
-		}
-
-		public Rendered render(PointBinding<Pos> binding)
-				throws ImaginaryPointException, UnboundPointException {
-			throw new UnsupportedOperationException();
-		}
-
-	}
-
 }
