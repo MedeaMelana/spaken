@@ -2,9 +2,7 @@ package spaken.ui.swing;
 
 import javax.swing.AbstractListModel;
 
-import spaken.model.Command;
-import spaken.model.CommandHistory;
-import spaken.model.CommandListener;
+import spaken.model.commands.*;
 
 public class CommandListModel extends AbstractListModel implements
 		CommandListener {

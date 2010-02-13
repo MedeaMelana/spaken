@@ -42,18 +42,7 @@ public class SelectTool extends AbstractTool {
 	@Override
 	protected void strokeInProgress(Pos origin, Pos current, Pos delta) {
 		if (dragging != null) {
-			PointBinding<Pos> binding = getSpace().getPointBinding();
-			try {
-				dragging.setPos(binding, dragging.getPos(binding).add(delta));
-			} catch (ImaginaryPointException e) {
-				// TODO kan dit echt niet?
-				throw new RuntimeException(
-						"A imaginary Point is being dragged. Mind boggling.");
-			} catch (UnboundPointException e) {
-				// TODO kan dit echt niet?
-				throw new RuntimeException(
-						"An unbound Point is being dragged. Mind boggling.");
-			}
+			dragging.setPointPos(dragging.getPointPos().add(delta));
 			getCanvas().refresh();
 		}
 	}

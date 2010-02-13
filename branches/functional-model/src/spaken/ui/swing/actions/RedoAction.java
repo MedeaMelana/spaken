@@ -7,9 +7,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import spaken.model.Command;
-import spaken.model.CommandHistory;
-import spaken.model.CommandListener;
+import spaken.model.commands.*;
 
 public class RedoAction extends AbstractAction implements CommandListener {
 

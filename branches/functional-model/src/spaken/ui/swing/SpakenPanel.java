@@ -8,9 +8,9 @@ import java.util.List;
 import javax.swing.*;
 
 import spaken.model.*;
-import spaken.model.commands.ClearCanvasCommand;
 import spaken.model.elements.*;
 import spaken.ui.swing.actions.*;
+import spaken.ui.swing.commands.ClearCanvasCommand;
 import spaken.ui.swing.tools.*;
 
 public class SpakenPanel extends JPanel {
@@ -91,19 +91,6 @@ public class SpakenPanel extends JPanel {
 		tools.add(new CreateLineTool());
 		tools.add(new CreateCircleTool());
 		tools.add(new IntersectionTool());
-		
-		// hack two theorems together:
-		AssumedPoint p1 = new AssumedPoint(0);
-		AssumedPoint p2 = new AssumedPoint(1);
-		Circle c = new Circle(p1, p1, p2);
-		tools.add(new ApplyTheoremTool("circle", new Theorem(c)));
-		
-		Circle c2 = new Circle(p2, p1, p2);
-		spaken.model.elements.Point[] ps = Intersections.intersect(c, c2);
-		List<Element<?>> goals = new ArrayList<Element<?>>(3);
-		Collections.addAll(goals, ps);
-		goals.add(new Line(ps[0], ps[1]));
-		tools.add(new ApplyTheoremTool("middelloodlijn", new Theorem(goals)));
 		
 		return tools;
 	}

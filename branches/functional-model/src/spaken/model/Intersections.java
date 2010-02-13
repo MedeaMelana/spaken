@@ -26,7 +26,7 @@ public class Intersections {
 				return sp.intersectLC(e2, e1);
 			}
 		}
-		throw new RuntimeException("Non-intersectable elements"); // TODO betere exception
+		return null;
 	}
-
+	
 }

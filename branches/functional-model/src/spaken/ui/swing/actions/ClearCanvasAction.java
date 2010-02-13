@@ -4,10 +4,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import spaken.model.Command;
-import spaken.model.CommandListener;
-import spaken.model.commands.ClearCanvasCommand;
+import spaken.model.commands.*;
 import spaken.ui.swing.SpaceCanvas;
+import spaken.ui.swing.commands.ClearCanvasCommand;
 
 public class ClearCanvasAction extends AbstractAction implements
 		CommandListener {

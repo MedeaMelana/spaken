@@ -2,7 +2,7 @@ package spaken.model.elements;
 
 import spaken.model.*;
 
-public class IntersectLL extends AbstractPoint {
+public class IntersectLL extends AbstractPoint implements Points {
 
 	private final Line l1, l2;
 
@@ -43,6 +43,14 @@ public class IntersectLL extends AbstractPoint {
 		Elem e1 = l1.visit(sp);
 		Elem e2 = l2.visit(sp);
 		return sp.intersectLL(e1, e2);
+	}
+
+	public Point getPoint(int index) {
+		return this;
+	}
+
+	public int getPointCount() {
+		return 1;
 	}
 
 }

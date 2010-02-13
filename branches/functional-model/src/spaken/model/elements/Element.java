@@ -12,6 +12,12 @@ public interface Element {
 
 	public Unique getId();
 
-	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+	public void draw(Graphics2D g, double pixelSize)
+			throws ImaginaryPointException;
+
+	public void outline(Graphics2D g, double pixelSize)
+			throws ImaginaryPointException;
+
+	public void highlight(Graphics2D g, double pixelSize)
 			throws ImaginaryPointException;
 }
