@@ -2,7 +2,7 @@ package spaken.model.elements;
 
 import spaken.model.*;
 
-public class IntersectLL extends AbstractElement implements Point {
+public class IntersectLL extends AbstractPoint {
 
 	private final Line l1, l2;
 
@@ -10,7 +10,7 @@ public class IntersectLL extends AbstractElement implements Point {
 		this.l1 = l1;
 		this.l2 = l2;
 	}
-	
+
 	public Pos getPos() throws ImaginaryPointException {
 		Pos p1 = l1.getP1().getPos();
 		Pos p2 = l1.getP2().getPos();
@@ -37,8 +37,9 @@ public class IntersectLL extends AbstractElement implements Point {
 
 		return new Pos((u * ax - bx * v) / w, (u * ay - by * v) / w);
 	}
-	
-	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
+
+	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)
+			throws Err {
 		Elem e1 = l1.visit(sp);
 		Elem e2 = l2.visit(sp);
 		return sp.intersectLL(e1, e2);

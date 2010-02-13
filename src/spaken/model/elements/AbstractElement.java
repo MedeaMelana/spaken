@@ -1,6 +1,5 @@
 package spaken.model.elements;
 
-import spaken.model.Element;
 import spaken.model.util.Unique;
 
 public abstract class AbstractElement implements Element {

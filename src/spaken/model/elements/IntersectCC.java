@@ -1,9 +1,12 @@
 package spaken.model.elements;
 
+import java.awt.Graphics2D;
+
 import spaken.model.*;
 
 public class IntersectCC extends AbstractElement implements Points {
 	private final Circle c1, c2;
+
 	private final Point point1, point2;
 
 	IntersectCC(Circle c1, Circle c2) {
@@ -15,7 +18,7 @@ public class IntersectCC extends AbstractElement implements Points {
 
 	public Pos getPointPos(double mul) throws ImaginaryPointException {
 		assert mul == -1 || mul == 1;
-		
+
 		// http://mathworld.wolfram.com/Circle-CircleIntersection.html
 
 		Pos p1 = c1.getCenter().getPos();
@@ -46,25 +49,27 @@ public class IntersectCC extends AbstractElement implements Points {
 			throw new ImaginaryPointException();
 		}
 	}
-	
-	private class IPoint extends AbstractElement implements Point {
+
+	private class IPoint extends AbstractPoint {
 		private final double mul;
+
 		private final int i;
 
 		private IPoint(int i, double mul) {
 			this.i = i;
 			this.mul = mul;
 		}
-		
+
 		public Pos getPos() throws ImaginaryPointException {
 			return getPointPos(mul);
 		}
 
-		public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
+		public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)
+				throws Err {
 			Elem e = IntersectCC.this.visit(sp);
 			return sp.getPoint(e, i);
 		}
-		
+
 	}
 
 	public Point getPoint(int index) {
@@ -81,10 +86,15 @@ public class IntersectCC extends AbstractElement implements Points {
 		return 2;
 	}
 
-	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp) throws Err {
+	public <Elem, Err extends Throwable> Elem visit(Spaken<Elem, Err> sp)
+			throws Err {
 		Elem e1 = c1.visit(sp);
 		Elem e2 = c2.visit(sp);
 		return sp.intersectCC(e1, e2);
+	}
+
+	public void draw(Graphics2D g, double pixelSize, boolean highlight)
+			throws ImaginaryPointException {
 	}
 
 }
